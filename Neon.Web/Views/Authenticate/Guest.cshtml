@@ -1,0 +1,15 @@
+﻿@model GuestModel
+
+@{
+    Layout = "_Layout";
+    ViewData.Set(new LayoutData
+    {
+        Title = Resources.Layout_Title_Guest,
+        Username = Model.Username
+    });
+}
+
+<form asp-controller="Authenticate" asp-action="Guest" method="post">
+    <input placeholder="Username"/>
+    <button type="submit">Play</button>
+</form>

@@ -1,0 +1,60 @@
+﻿* {
+  margin: 0;
+}
+*::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+.neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
+  background: #040606;
+}
+.neon-palette-theme-dark.neon-palette-base-mignight .neon-header-bg,
+.neon-palette-theme-dark.neon-palette-base-mignight .neon-footer-bg {
+  background: #020303;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-common {
+  color: #AAAAAA;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-special {
+  color: #00ADB5;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common {
+  color: #AAAAAA;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common:hover {
+  color: #AAAAAA;
+  background: #161D1D;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special {
+  color: #00ADB5;
+}
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special:hover {
+  color: #00ADB5;
+  background: #161D1D;
+}
+
+.neon-nav-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}

@@ -1,0 +1,52 @@
+﻿@{
+    var data = ViewData.Get<LayoutData>();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@data.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Neon.Web.styles.css" asp-append-version="true" />
+</head>
+<body class="neon-palette-theme-dark neon-palette-base-mignight neon-palette-accent-sea neon-body-bg">
+    <header class="neon-header-bg">
+        <nav class="navbar navbar-expand-sm navbar-dark box-shadow">
+            <div class="container-fluid gap-1">
+                <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="Home" asp-action="Index">Neon</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 gap-1">
+                        <li>
+                            <a class="neon-link-common neon-nav-btn" asp-area="" asp-controller="Authenticate" asp-action="Login">Login</a>
+                        </li>
+                        <li>
+                            <a class="neon-link-common neon-nav-btn" asp-area="" asp-controller="Authenticate" asp-action="Register">Register</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="neon-footer-bg footer">
+        <div class="container-fluid d-flex gap-1 justify-content-center">
+            <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="User" asp-action="Index">@data.Username</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
