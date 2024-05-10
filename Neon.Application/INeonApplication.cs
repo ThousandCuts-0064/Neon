@@ -1,5 +1,3 @@
-﻿using Neon.Domain;
+﻿namespace Neon.Application;
 
-namespace Neon.Application;
-
-public interface INeonApplication : INeonDomain;
+public interface INeonApplication;

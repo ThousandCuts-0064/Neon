@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Data;
+using Neon.Data.Entities;
 
 namespace Neon.Domain.Abstractions;
 

@@ -8,5 +8,5 @@ public class User : IEntity
     public string Username { get; set; }
     public string Secret { get; set; }
     public UserRole Role { get; set; }
-    public DateTime LastlyActiveAt { get; set; }
+    public DateTime LastActiveAt { get; set; }
 }

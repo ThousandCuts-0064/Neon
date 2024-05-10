@@ -1,4 +1,4 @@
-﻿namespace Neon.Data;
+﻿namespace Neon.Data.Entities;
 
 public interface IEntity
 {

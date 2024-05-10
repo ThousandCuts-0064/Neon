@@ -29,6 +29,8 @@ public class NeonDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Default"));
+        optionsBuilder
+            .UseNpgsql(_configuration.GetConnectionString("Default"))
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 }

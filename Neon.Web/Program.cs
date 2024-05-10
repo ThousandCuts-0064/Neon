@@ -15,7 +15,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddSingleton<INeonApplication>(x => new NeonApplication(new NeonDomain(new NeonDbContext(x.GetService<IConfiguration>()!))));
+builder.Services.AddSingleton<INeonApplication>(x =>
+    new NeonApplication(new NeonDomain(new NeonDbContext(x.GetRequiredService<IConfiguration>()))));
 
 var app = builder.Build();
 
