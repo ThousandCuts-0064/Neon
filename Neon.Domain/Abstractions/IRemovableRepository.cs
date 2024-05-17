@@ -1,8 +1,6 @@
-﻿using Neon.Data.Entities;
+﻿namespace Neon.Domain.Abstractions;
 
-namespace Neon.Domain.Abstractions;
-
-public interface IRemovableRepository<in TEntity> where TEntity : class, IEntity
+public interface IRemovableRepository<in TEntity> where TEntity : Entity
 {
     public void Remove(TEntity entity);
     public void RemoveRange(IEnumerable<TEntity> entities);

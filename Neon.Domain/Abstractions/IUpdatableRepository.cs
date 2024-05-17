@@ -1,8 +1,6 @@
-﻿using Neon.Data.Entities;
+﻿namespace Neon.Domain.Abstractions;
 
-namespace Neon.Domain.Abstractions;
-
-public interface IUpdatableRepository<in TEntity> where TEntity : class, IEntity
+public interface IUpdatableRepository<in TEntity> where TEntity : Entity
 {
     public void Update(TEntity entity);
     public void UpdateRange(IEnumerable<TEntity> entities);

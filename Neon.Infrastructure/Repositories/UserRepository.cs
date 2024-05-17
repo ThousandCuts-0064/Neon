@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Data;
-using Neon.Data.Entities;
-using Neon.Domain.Abstractions;
+using Neon.Domain.Users;
 
-namespace Neon.Domain.Users;
+namespace Neon.Infrastructure.Repositories;
 
 internal class UserRepository : Repository<User>, IUserRepository
 {

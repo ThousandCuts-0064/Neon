@@ -1,0 +1,27 @@
+﻿body {
+	height: 100svh;
+	display: flex;
+	flex-direction: column;
+}
+
+header, footer {
+	position: sticky;
+	width: 100%;
+	white-space: nowrap;
+	padding: 0.5rem;
+}
+
+header {
+	top: 0;
+}
+
+footer {
+	bottom: 0;
+}
+
+main {
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}

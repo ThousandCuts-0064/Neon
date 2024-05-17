@@ -120,4 +120,10 @@
   <data name="Layout_Title_Guest" xml:space="preserve">
     <value>Guest</value>
   </data>
+  <data name="User_Button_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="User_Property_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>

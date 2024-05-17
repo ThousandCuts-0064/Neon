@@ -23,6 +23,34 @@ p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
+body {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+header, footer {
+  position: sticky;
+  width: 100%;
+  white-space: nowrap;
+  padding: 0.5rem;
+}
+
+header {
+  top: 0;
+}
+
+footer {
+  bottom: 0;
+}
+
+main {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
   background: #040606;
 }
@@ -50,6 +78,11 @@ p, h1, h2, h3, h4, h5, h6 {
   color: #00ADB5;
   background: #161D1D;
 }
+.neon-palette-theme-dark.neon-palette-accent-sea .neon-btn-special {
+  color: #FFFFFF;
+  background: #00ADB5;
+  font-weight: bold;
+}
 
 .neon-nav-btn {
   padding: 0.5rem;
@@ -57,4 +90,13 @@ p, h1, h2, h3, h4, h5, h6 {
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.neon-form {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+.neon-form input {
+  text-align: center;
 }

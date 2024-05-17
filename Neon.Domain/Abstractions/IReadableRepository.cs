@@ -1,8 +1,6 @@
-﻿using Neon.Data.Entities;
+﻿namespace Neon.Domain.Abstractions;
 
-namespace Neon.Domain.Abstractions;
-
-public interface IReadableRepository<out TEntity> where TEntity : class, IEntity
+public interface IReadableRepository<out TEntity> where TEntity : Entity
 {
     public IQueryable<TEntity> GetAll();
     public TEntity? GetById(int id);

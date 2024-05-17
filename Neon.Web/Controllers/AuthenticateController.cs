@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Neon.Application;
-using Neon.Web.Models;
+using Neon.Web.Requests;
 
 namespace Neon.Web.Controllers;
 
@@ -19,17 +20,18 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IActionResult Guest([FromBody] GuestModel guest)
+    public IStatusCodeActionResult Guest([FromForm] AuthenticateGuestRequest request)
     {
-        if (!Application.UserRepository.ContainsUsername(guest.Username))
-        {
-            Application.UserRepository.Add(new GuestModel
-            {
-                guest.Username
-            });
-        }
+        var isAuthenticated = !string.IsNullOrEmpty(request.Secret) &&
+            Application.UserService.AuthenticateGuest(request.Username, request.Secret);
 
-        return RedirectToAction("Index", "Gameplay");
+        if (!isAuthenticated)
+            return Ok();
+
+        if (Application.UserService.CreateGuest(request.Username, out var secret))
+            return CreatedAtAction("Guest", secret);
+
+        return Conflict();
     }
 
     public IActionResult Login()

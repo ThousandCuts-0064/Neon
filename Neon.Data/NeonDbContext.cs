@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Neon.Data.Entities;
+using Neon.Domain.Users;
 
 namespace Neon.Data;
 
@@ -20,7 +20,7 @@ public class NeonDbContext : DbContext
 
     public const string SCHEMA = "public";
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<User> Users { get; init; } = null!;
 
     public NeonDbContext(IConfiguration configuration)
     {

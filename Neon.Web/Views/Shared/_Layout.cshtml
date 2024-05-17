@@ -10,19 +10,18 @@
     <title>@data.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Neon.Web.styles.css" asp-append-version="true" />
 </head>
 <body class="neon-palette-theme-dark neon-palette-base-mignight neon-palette-accent-sea neon-body-bg">
     <header class="neon-header-bg">
-        <nav class="navbar navbar-expand-sm navbar-dark box-shadow">
-            <div class="container-fluid gap-1">
+        <nav class="navbar navbar-expand-sm navbar-dark">
+            <div class="container-fluid">
                 <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="Home" asp-action="Index">Neon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 gap-1">
+                    <ul class="navbar-nav flex-grow-1">
                         <li>
                             <a class="neon-link-common neon-nav-btn" asp-area="" asp-controller="Authenticate" asp-action="Login">Login</a>
                         </li>
@@ -34,13 +33,11 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="neon-footer-bg footer">
-        <div class="container-fluid d-flex gap-1 justify-content-center">
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+    <footer class="neon-footer-bg">
+        <div class="container-fluid d-flex justify-content-center">
             <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="User" asp-action="Index">@data.Username</a>
         </div>
     </footer>

@@ -1,4 +1,4 @@
-﻿namespace Neon.Data.Enums;
+﻿namespace Neon.Domain.Users;
 
 public enum UserRole
 {

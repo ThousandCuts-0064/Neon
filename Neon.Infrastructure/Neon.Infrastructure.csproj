@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Neon.Application\Neon.Application.csproj" />
+    <ProjectReference Include="..\Neon.Data\Neon.Data.csproj" />
+  </ItemGroup>
+
 </Project>

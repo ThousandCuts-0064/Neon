@@ -1,3 +1,8 @@
-﻿namespace Neon.Application;
+﻿using Neon.Application.Services.Users;
 
-public interface INeonApplication;
+namespace Neon.Application;
+
+public interface INeonApplication
+{
+    public IUserService UserService { get; }
+}

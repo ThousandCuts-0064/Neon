@@ -1,22 +1,19 @@
-using Neon.Application;
-using Neon.Data;
-using Neon.Domain;
+using Neon.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();;
 
-builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.MaxValue;
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+//builder.Services.AddSession(options =>
+//{
+//    options.IdleTimeout = TimeSpan.MaxValue;
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
-builder.Services.AddSingleton<INeonApplication>(x =>
-    new NeonApplication(new NeonDomain(new NeonDbContext(x.GetRequiredService<IConfiguration>()))));
+builder.Services.AddNeonApplication();
 
 var app = builder.Build();
 
@@ -33,7 +30,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSession();
+//app.UseSession();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 

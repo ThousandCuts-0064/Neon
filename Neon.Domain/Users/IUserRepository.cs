@@ -1,5 +1,4 @@
-﻿using Neon.Data.Entities;
-using Neon.Domain.Abstractions;
+﻿using Neon.Domain.Abstractions;
 
 namespace Neon.Domain.Users;
 

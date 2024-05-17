@@ -10,6 +10,7 @@ $palette-dark-base-9: #141A1A;
 $palette-dark-base-10: #161D1D;
 
 $palette-accent-common: #AAAAAA;
+$palette-accent-contrast: #FFFFFF;
 $palette-accent-special: #00ADB5;
 
 .neon-palette-theme-dark {
@@ -52,6 +53,12 @@ $palette-accent-special: #00ADB5;
 				color: $palette-accent-special;
 				background: $palette-dark-base-10;
 			}
+		}
+
+		.neon-btn-special {
+			color: $palette-accent-contrast;
+			background: $palette-accent-special;
+			font-weight: bold;
 		}
 	}
 }

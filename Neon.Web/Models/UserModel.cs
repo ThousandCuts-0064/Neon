@@ -1,11 +1,11 @@
-﻿using Neon.Data.Enums;
+﻿using Neon.Domain.Users;
 
 namespace Neon.Web.Models;
 
-public abstract class UserModel
+public class UserModel
 {
-    public string Username { get; set; }
-    public string Secret { get; set; }
-    public abstract UserRole Role { get; }
+    public required string Username { get; set; }
+    public string? Secret { get; set; }
+    public required UserRole Role { get; set;}
     public DateTime? LastActiveAt { get; set; }
 }

@@ -1,8 +1,8 @@
-﻿using Neon.Data.Enums;
+﻿namespace Neon.Web.Models;
 
-namespace Neon.Web.Models;
-
-public class GuestModel : UserModel
+public class GuestModel
 {
-    public override UserRole Role => UserRole.Guest;
+    public string Username { get; set; }
+    public string Secret { get; set; }
+    public bool IsUsernameTaken { get; set; }
 }

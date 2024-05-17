@@ -1,15 +1,33 @@
-﻿@model GuestModel
+﻿@model GuestModel?
 
 @{
     Layout = "_Layout";
     ViewData.Set(new LayoutData
     {
         Title = Resources.Layout_Title_Guest,
-        Username = Model.Username
+        Username = Model?.Username
     });
+
+    var request = new AuthenticateGuestRequest
+    {
+        Username = Model?.Username ?? ""
+    };
 }
 
-<form asp-controller="Authenticate" asp-action="Guest" method="post">
-    <input placeholder="Username" required/>
-    <button type="submit">Play</button>
+<form id="guestFrom" class="neon-form" method="post">
+    <input asp-for="@request.Username" placeholder="@Resources.User_Property_Username"/>
+    <span asp-validation-for="@request.Username" class="text-danger"></span>
+    <input id="secret" asp-for="@request.Secret" hidden/>
+    <button type="submit" class="neon-btn-special">@Resources.User_Button_Play</button>
 </form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#secret").val(localStorage.getItem("secret"));
+        });
+    </script>
+}

@@ -68,5 +68,23 @@ namespace Neon.Web.Resources {
                 return ResourceManager.GetString("Layout_Title_Guest", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        internal static string User_Button_Play {
+            get {
+                return ResourceManager.GetString("User_Button_Play", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        internal static string User_Property_Username {
+            get {
+                return ResourceManager.GetString("User_Property_Username", resourceCulture);
+            }
+        }
     }
 }
