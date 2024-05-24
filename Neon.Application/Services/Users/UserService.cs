@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Neon.Domain;
-using Neon.Domain.Users;
 
 namespace Neon.Application.Services.Users;
 
@@ -35,8 +34,15 @@ internal class UserService : IUserService
         return true;
     }
 
-    public bool AuthenticateGuest(string username, string secret)
+    public AuthenticateResult Authenticate(string username, string secret)
     {
-        return false;
+        return AuthenticateResult.Success;
     }
+}
+
+public enum AuthenticateResult
+{
+    UsernameNotFound,
+    SecretMismatch,
+    Success
 }

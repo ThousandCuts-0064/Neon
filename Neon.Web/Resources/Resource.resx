@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Error_Validation_UsernameTaken" xml:space="preserve">
+    <value>Username is taken.</value>
+  </data>
+  <data name="Error_Validation_Required" xml:space="preserve">
+    <value>{0} is required.</value>
+  </data>
+  <data name="Error_Validation_StringLengthWithMin" xml:space="preserve">
+    <value>{0} must have length between {2} and {1}.</value>
+  </data>
+  <data name="Layout_Title_Gameplay" xml:space="preserve">
+    <value>Gameplay</value>
+  </data>
   <data name="Layout_Title_Guest" xml:space="preserve">
     <value>Guest</value>
   </data>

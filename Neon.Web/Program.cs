@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Neon.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();;
+builder.Services.AddControllersWithViews();
+;
 
 //builder.Services.AddDistributedMemoryCache();
 
@@ -14,6 +17,20 @@ builder.Services.AddControllersWithViews();;
 //});
 
 builder.Services.AddNeonApplication();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x =>
+    {
+        x.Cookie.HttpOnly = true;
+        x.Cookie.SameSite = SameSiteMode.Strict;
+        x.LoginPath = "/Authenticate";
+    });
+
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
 
 var app = builder.Build();
 
@@ -28,6 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 //app.UseSession();

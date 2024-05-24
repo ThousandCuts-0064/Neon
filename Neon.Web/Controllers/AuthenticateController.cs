@@ -1,10 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+﻿using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Neon.Application;
-using Neon.Web.Requests;
+using Neon.Domain.Users;
+using Neon.Web.Models;
+using Neon.Web.Resources;
+using AuthenticateResult = Neon.Application.Services.Users.AuthenticateResult;
 
 namespace Neon.Web.Controllers;
 
+[AllowAnonymous]
 public class AuthenticateController : NeonControllerBase
 {
     public AuthenticateController(INeonApplication application) : base(application) { }
@@ -20,18 +28,18 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IStatusCodeActionResult Guest([FromForm] AuthenticateGuestRequest request)
+    public IActionResult Guest([FromForm] LoginModel model)
     {
-        var isAuthenticated = !string.IsNullOrEmpty(request.Secret) &&
-            Application.UserService.AuthenticateGuest(request.Username, request.Secret);
+        if (string.IsNullOrEmpty(model.Secret))
+            return HandleNewGuest(model);
 
-        if (!isAuthenticated)
-            return Ok();
-
-        if (Application.UserService.CreateGuest(request.Username, out var secret))
-            return CreatedAtAction("Guest", secret);
-
-        return Conflict();
+        return Application.UserService.Authenticate(model.Username, model.Secret) switch
+        {
+            AuthenticateResult.UsernameNotFound => HandleNewGuest(model),
+            AuthenticateResult.SecretMismatch => ViewUsernameTaken(model),
+            AuthenticateResult.Success => RedirectToAction("Index", "Gameplay"),
+            _ => throw new UnreachableException()
+        };
     }
 
     public IActionResult Login()
@@ -42,5 +50,35 @@ public class AuthenticateController : NeonControllerBase
     public IActionResult Register()
     {
         return View();
+    }
+
+    private IActionResult SignIn(string username, UserRole role)
+    {
+        return SignIn(
+            new ClaimsPrincipal(new ClaimsIdentity(
+                [
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, role.ToString())
+                ],
+                CookieAuthenticationDefaults.AuthenticationScheme)),
+            new AuthenticationProperties
+            {
+                IsPersistent = true,
+                RedirectUri = Url.Action("Index", "Gameplay")
+            });
+    }
+
+    private IActionResult HandleNewGuest(LoginModel model)
+    {
+        return Application.UserService.CreateGuest(model.Username, out var secret)
+            ? SignIn(model.Username, UserRole.Guest)
+            : ViewUsernameTaken(model);
+    }
+
+    private IActionResult ViewUsernameTaken(LoginModel model)
+    {
+        ModelState.AddModelError(nameof(model.Username), Resource.Error_Validation_UsernameTaken);
+
+        return View(model);
     }
 }

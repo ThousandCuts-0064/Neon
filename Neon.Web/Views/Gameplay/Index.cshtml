@@ -2,15 +2,9 @@
 
 @{
     Layout = "_Layout";
+    ViewData.Set(new LayoutData
+    {
+        Title = Resource.Layout_Title_Gameplay,
+        Username = Model.User.Username
+    });
 }
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-    <div>
-    </div>
-</body>
-</html>

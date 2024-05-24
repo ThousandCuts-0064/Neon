@@ -2,4 +2,5 @@
 
 public class GameplayModel
 {
+    public required UserModel User { get; init; }
 }
