@@ -12,19 +12,17 @@ internal class UserService : IUserService
         _domain = domain;
     }
 
-    public bool CreateGuest(string username, [NotNullWhen(true)] out string? secret)
+    public bool CreateGuest(string username, out int id)
     {
-        secret = null;
-
         //if (_domain.UserRepository.ContainsUsername(username))
         //    return false;
 
-        secret = Guid.NewGuid().ToString();
+        id = 1;
 
         //_domain.UserRepository.Add(new User
         //{
         //    Username = username,
-        //    Secret = secret,
+        //    Secret = id,
         //    Role = UserRole.Guest,
         //    LastActiveAt = DateTime.Now
         //});

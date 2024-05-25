@@ -52,11 +52,12 @@ public class AuthenticateController : NeonControllerBase
         return View();
     }
 
-    private IActionResult SignIn(string username, UserRole role)
+    private IActionResult SignIn(int id, string username, UserRole role)
     {
         return SignIn(
             new ClaimsPrincipal(new ClaimsIdentity(
                 [
+                    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
                     new Claim(ClaimTypes.Name, username),
                     new Claim(ClaimTypes.Role, role.ToString())
                 ],
@@ -70,8 +71,8 @@ public class AuthenticateController : NeonControllerBase
 
     private IActionResult HandleNewGuest(LoginModel model)
     {
-        return Application.UserService.CreateGuest(model.Username, out var secret)
-            ? SignIn(model.Username, UserRole.Guest)
+        return Application.UserService.CreateGuest(model.Username, out var id)
+            ? SignIn(id, model.Username, UserRole.Guest)
             : ViewUsernameTaken(model);
     }
 

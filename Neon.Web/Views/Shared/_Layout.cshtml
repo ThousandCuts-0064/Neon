@@ -1,15 +1,17 @@
-﻿@{
+﻿@using System.Security.Claims
+
+@{
     var data = ViewData.Get<LayoutData>();
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@data.Title</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
 <body class="neon-palette-theme-dark neon-palette-base-mignight neon-palette-accent-sea neon-body-bg">
     <header class="neon-header-bg">
@@ -38,7 +40,7 @@
     </main>
     <footer class="neon-footer-bg">
         <div class="container-fluid d-flex justify-content-center">
-            <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="User" asp-action="Index">@data.Username</a>
+            <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="User" asp-action="Index">@User.FindFirstValue(ClaimTypes.Name)</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

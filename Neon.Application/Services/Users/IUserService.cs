@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Neon.Application.Services.Users;
+﻿namespace Neon.Application.Services.Users;
 
 public interface IUserService
 {
-    public bool CreateGuest(string username, [NotNullWhen(true)] out string? secret);
+    public bool CreateGuest(string username, out int id);
     public AuthenticateResult Authenticate(string username, string secret);
 }
