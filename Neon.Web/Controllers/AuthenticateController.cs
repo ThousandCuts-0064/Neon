@@ -1,14 +1,13 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Neon.Application;
+using Neon.Application.Services.Users;
 using Neon.Domain.Users;
 using Neon.Web.Models;
 using Neon.Web.Resources;
-using AuthenticateResult = Neon.Application.Services.Users.AuthenticateResult;
 
 namespace Neon.Web.Controllers;
 
@@ -28,17 +27,17 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IActionResult Guest([FromForm] LoginModel model)
+    public IActionResult Guest([FromForm] GuestModel model)
     {
-        if (string.IsNullOrEmpty(model.Secret))
-            return HandleNewGuest(model);
-
-        return Application.UserService.Authenticate(model.Username, model.Secret) switch
+        return Application.UserService.Guest(model.Username, out var id) switch
         {
-            AuthenticateResult.UsernameNotFound => HandleNewGuest(model),
-            AuthenticateResult.SecretMismatch => ViewUsernameTaken(model),
-            AuthenticateResult.Success => RedirectToAction("Index", "Gameplay"),
-            _ => throw new UnreachableException()
+            RegisterResult.Success =>
+                SignIn(id, model.Username, UserRole.Guest, model.RememberMe),
+
+            RegisterResult.UsernameTaken =>
+                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
+
+            _ => throw new InvalidOperationException()
         };
     }
 
@@ -47,12 +46,45 @@ public class AuthenticateController : NeonControllerBase
         return View();
     }
 
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult Login([FromForm] LoginModel model)
+    {
+        return Application.UserService.Login(model.Username, model.Password, out var id) switch
+        {
+            LoginResult.UsernameNotFound =>
+                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameNotFound),
+
+            LoginResult.WrongPassword =>
+                ViewWithError(model, nameof(model.Password), Resource.Error_Validation_WrongPassword),
+
+            LoginResult.Success =>
+                SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
+
+            _ => throw new InvalidOperationException()
+        };
+    }
+
     public IActionResult Register()
     {
         return View();
     }
 
-    private IActionResult SignIn(int id, string username, UserRole role)
+    [HttpPost, ValidateAntiForgeryToken]
+    public IActionResult Register([FromForm] RegisterModel model)
+    {
+        return Application.UserService.Register(model.Username, model.Password, out var id) switch
+        {
+            RegisterResult.Success =>
+                SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
+
+            RegisterResult.UsernameTaken =>
+                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
+
+            _ => throw new InvalidOperationException()
+        };
+    }
+
+    private IActionResult SignIn(int id, string username, UserRole role, bool rememberMe)
     {
         return SignIn(
             new ClaimsPrincipal(new ClaimsIdentity(
@@ -64,21 +96,14 @@ public class AuthenticateController : NeonControllerBase
                 CookieAuthenticationDefaults.AuthenticationScheme)),
             new AuthenticationProperties
             {
-                IsPersistent = true,
+                IsPersistent = rememberMe,
                 RedirectUri = Url.Action("Index", "Gameplay")
             });
     }
 
-    private IActionResult HandleNewGuest(LoginModel model)
+    private IActionResult ViewWithError(GuestModel model, string key, string message)
     {
-        return Application.UserService.CreateGuest(model.Username, out var id)
-            ? SignIn(id, model.Username, UserRole.Guest)
-            : ViewUsernameTaken(model);
-    }
-
-    private IActionResult ViewUsernameTaken(LoginModel model)
-    {
-        ModelState.AddModelError(nameof(model.Username), Resource.Error_Validation_UsernameTaken);
+        ModelState.AddModelError(key, message);
 
         return View(model);
     }

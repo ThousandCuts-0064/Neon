@@ -124,7 +124,7 @@
     <value>{0} is required.</value>
   </data>
   <data name="Error_Validation_StringLengthWithMin" xml:space="preserve">
-    <value>{0} must have length between {2} and {1}.</value>
+    <value>{0} must have a length between {2} and {1}.</value>
   </data>
   <data name="Layout_Title_Gameplay" xml:space="preserve">
     <value>Gameplay</value>
@@ -137,5 +137,41 @@
   </data>
   <data name="User_Property_Username" xml:space="preserve">
     <value>Username</value>
+  </data>
+  <data name="Layout_Nav_Guest" xml:space="preserve">
+    <value>Guest</value>
+  </data>
+  <data name="Layout_Nav_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Layout_Nav_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Layout_Title_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Layout_Title_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="User_Property_RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="Error_Validation_Invalid" xml:space="preserve">
+    <value>{0} is invalid.</value>
+  </data>
+  <data name="Error_Validation_UsernameNotFound" xml:space="preserve">
+    <value>Username not found.</value>
+  </data>
+  <data name="Error_Validation_WrongPassword" xml:space="preserve">
+    <value>Wrong password.</value>
+  </data>
+  <data name="User_Property_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Error_Validation_Compare" xml:space="preserve">
+    <value>"{0} and {1} do not match."</value>
+  </data>
+  <data name="Error_Validation_StringLength" xml:space="preserve">
+    <value>{0} must have a length up to {1}</value>
   </data>
 </root>

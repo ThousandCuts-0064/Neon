@@ -25,7 +25,6 @@ p, h1, h2, h3, h4, h5, h6 {
 
 body {
   height: 100svh;
-  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -96,8 +95,13 @@ main {
 .neon-form {
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  gap: 0.25rem;
+  width: auto;
 }
 .neon-form input {
   text-align: center;
+}
+.neon-form .neon-form-col {
+  display: flex;
+  flex-direction: column;
 }

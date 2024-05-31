@@ -1,9 +1,15 @@
 ﻿.neon-form {
 	display: flex;
 	flex-direction: column;
-	width: fit-content;
+	gap: 0.25rem;
+	width: auto;
 
-	& input {
-		text-align: center;
+	input {
+		text-align: center
+	}
+
+	.neon-form-col {
+		display: flex;
+		flex-direction: column;
 	}
 }

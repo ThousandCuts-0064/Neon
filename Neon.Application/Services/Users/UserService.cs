@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Neon.Domain;
+﻿using Neon.Domain;
 
 namespace Neon.Application.Services.Users;
 
@@ -12,7 +11,7 @@ internal class UserService : IUserService
         _domain = domain;
     }
 
-    public bool CreateGuest(string username, out int id)
+    public RegisterResult Guest(string username, out int id)
     {
         //if (_domain.UserRepository.ContainsUsername(username))
         //    return false;
@@ -22,25 +21,27 @@ internal class UserService : IUserService
         //_domain.UserRepository.Add(new User
         //{
         //    Username = username,
-        //    Secret = id,
+        //    Password = id,
         //    Role = UserRole.Guest,
         //    LastActiveAt = DateTime.Now
         //});
 
         //_domain.SaveChanges();
 
-        return true;
+        return RegisterResult.Success;
     }
 
-    public AuthenticateResult Authenticate(string username, string secret)
+    public LoginResult Login(string username, string password, out int id)
     {
-        return AuthenticateResult.Success;
-    }
-}
+        id = 2;
 
-public enum AuthenticateResult
-{
-    UsernameNotFound,
-    SecretMismatch,
-    Success
+        return LoginResult.Success;
+    }
+
+    public RegisterResult Register(string username, string password, out int id)
+    {
+        id = 2;
+
+        return RegisterResult.Success;
+    }
 }

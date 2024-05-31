@@ -22,7 +22,7 @@ namespace Neon.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Neon.Web.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Neon.Web.Resources.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace Neon.Web.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,36 +61,108 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0} and {1} do not match.&quot;.
+        /// </summary>
+        public static string Error_Validation_Compare {
+            get {
+                return ResourceManager.GetString("Error_Validation_Compare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is invalid..
+        /// </summary>
+        public static string Error_Validation_Invalid {
+            get {
+                return ResourceManager.GetString("Error_Validation_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is required..
         /// </summary>
-        internal static string Error_Validation_Required {
+        public static string Error_Validation_Required {
             get {
                 return ResourceManager.GetString("Error_Validation_Required", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must have length between {2} and {1}..
+        ///   Looks up a localized string similar to {0} must have a length up to {1}.
         /// </summary>
-        internal static string Error_Validation_StringLengthWithMin {
+        public static string Error_Validation_StringLength {
+            get {
+                return ResourceManager.GetString("Error_Validation_StringLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must have a length between {2} and {1}..
+        /// </summary>
+        public static string Error_Validation_StringLengthWithMin {
             get {
                 return ResourceManager.GetString("Error_Validation_StringLengthWithMin", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username not found..
+        /// </summary>
+        public static string Error_Validation_UsernameNotFound {
+            get {
+                return ResourceManager.GetString("Error_Validation_UsernameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username is taken..
         /// </summary>
-        internal static string Error_Validation_UsernameTaken {
+        public static string Error_Validation_UsernameTaken {
             get {
                 return ResourceManager.GetString("Error_Validation_UsernameTaken", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrong password..
+        /// </summary>
+        public static string Error_Validation_WrongPassword {
+            get {
+                return ResourceManager.GetString("Error_Validation_WrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guest.
+        /// </summary>
+        public static string Layout_Nav_Guest {
+            get {
+                return ResourceManager.GetString("Layout_Nav_Guest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string Layout_Nav_Login {
+            get {
+                return ResourceManager.GetString("Layout_Nav_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string Layout_Nav_Register {
+            get {
+                return ResourceManager.GetString("Layout_Nav_Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gameplay.
         /// </summary>
-        internal static string Layout_Title_Gameplay {
+        public static string Layout_Title_Gameplay {
             get {
                 return ResourceManager.GetString("Layout_Title_Gameplay", resourceCulture);
             }
@@ -99,25 +171,61 @@ namespace Neon.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Guest.
         /// </summary>
-        internal static string Layout_Title_Guest {
+        public static string Layout_Title_Guest {
             get {
                 return ResourceManager.GetString("Layout_Title_Guest", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string Layout_Title_Login {
+            get {
+                return ResourceManager.GetString("Layout_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string Layout_Title_Register {
+            get {
+                return ResourceManager.GetString("Layout_Title_Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Play.
         /// </summary>
-        internal static string User_Button_Play {
+        public static string User_Button_Play {
             get {
                 return ResourceManager.GetString("User_Button_Play", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string User_Property_Password {
+            get {
+                return ResourceManager.GetString("User_Property_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me.
+        /// </summary>
+        public static string User_Property_RememberMe {
+            get {
+                return ResourceManager.GetString("User_Property_RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
-        internal static string User_Property_Username {
+        public static string User_Property_Username {
             get {
                 return ResourceManager.GetString("User_Property_Username", resourceCulture);
             }

@@ -2,17 +2,33 @@
 
 @{
     Layout = "_Layout";
+    ViewData.Set(new LayoutData
+    {
+        Title = Resource.Layout_Title_Login
+    });
 }
 
-<!DOCTYPE html>
+<form class="neon-form" method="post">
+    <div class="neon-form-col">
+        <input asp-for="Username"/>
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div>
+        <input asp-for="Password"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div>
+        <input asp-for="RepeatPassword"/>
+        <span asp-validation-for="RepeatPassword" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="RememberMe" class="neon-text-common"></label>
+        <input asp-for="RememberMe" type="checkbox"/>
+    </div>
+    <button type="submit" class="neon-btn-special">@Resource.User_Button_Play</button>
+</form>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-
-</div>
-</body>
-</html>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}

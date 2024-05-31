@@ -1,10 +1,22 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Neon.Infrastructure;
+using Neon.Web.Resources;
+using Neon.Web.Utils.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddControllersWithViews()
+    .AddMvcOptions(x =>
+    {
+        x.ModelBindingMessageProvider.CopyFrom<LocalizedBindingMessageProvider>();
+        x.ModelMetadataDetailsProviders.Add(new LocalizedMetadataDetailsProvider());
+    })
+    .AddDataAnnotationsLocalization(x =>
+    {
+        x.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(Resource));
+    });
 
 //builder.Services.AddDistributedMemoryCache();
 
@@ -24,9 +36,11 @@ builder.Services
         x.Cookie.HttpOnly = true;
         x.Cookie.SameSite = SameSiteMode.Strict;
         x.LoginPath = "/Authenticate";
+        x.LogoutPath = x.LoginPath;
     });
 
-builder.Services.AddAuthorizationBuilder()
+builder.Services
+    .AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build());

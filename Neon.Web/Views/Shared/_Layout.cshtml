@@ -17,19 +17,25 @@
     <header class="neon-header-bg">
         <nav class="navbar navbar-expand-sm navbar-dark">
             <div class="container-fluid">
-                <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="Home" asp-action="Index">Neon</a>
+                <a class="neon-link-special neon-nav-btn" asp-controller="Home" asp-action="Index">Neon</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li>
-                            <a class="neon-link-common neon-nav-btn" asp-area="" asp-controller="Authenticate" asp-action="Login">Login</a>
-                        </li>
-                        <li>
-                            <a class="neon-link-common neon-nav-btn" asp-area="" asp-controller="Authenticate" asp-action="Register">Register</a>
-                        </li>
+                        @if (!User.IsAuthenticated())
+                        {
+                            <li>
+                                <a class="neon-link-common neon-nav-btn" asp-controller="Authenticate" asp-action="Register">@Resource.Layout_Nav_Register</a>
+                            </li>
+                            <li>
+                                <a class="neon-link-common neon-nav-btn" asp-controller="Authenticate" asp-action="Login">@Resource.Layout_Nav_Login</a>
+                            </li>
+                            <li>
+                                <a class="neon-link-common neon-nav-btn" asp-controller="Authenticate" asp-action="Guest">@Resource.Layout_Nav_Guest</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -40,7 +46,7 @@
     </main>
     <footer class="neon-footer-bg">
         <div class="container-fluid d-flex justify-content-center">
-            <a class="neon-link-special neon-nav-btn" asp-area="" asp-controller="User" asp-action="Index">@User.FindFirstValue(ClaimTypes.Name)</a>
+            <a class="neon-link-special neon-nav-btn" asp-controller="User" asp-action="Index">@User.FindFirstValue(ClaimTypes.Name)</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

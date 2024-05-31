@@ -1,17 +1,24 @@
-﻿@model LoginModel?
+﻿@model GuestModel?
 
 @{
     Layout = "_Layout";
     ViewData.Set(new LayoutData
     {
-        Title = Resource.Layout_Title_Guest,
+        Title = Resource.Layout_Title_Guest
     });
 }
 
 <form class="neon-form" method="post">
-    <input asp-for="Username" placeholder="@Resource.User_Property_Username"/>
-    <span asp-validation-for="Username" class="text-danger"></span>
-    <input id="guest-form-secret" asp-for="Secret" hidden/>
+    @* <div class="neon-form-col">
+        <input asp-for="Username"/>
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div> *@
+    @* <partial name="_Field" for="Username"/> *@
+    <field for="Username"/>
+    <div>
+        <label asp-for="RememberMe" class="neon-text-common"></label>
+        <input asp-for="RememberMe" type="checkbox"/>
+    </div>
     <button type="submit" class="neon-btn-special">@Resource.User_Button_Play</button>
 </form>
 

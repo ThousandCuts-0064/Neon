@@ -2,6 +2,7 @@
 
 public interface IUserService
 {
-    public bool CreateGuest(string username, out int id);
-    public AuthenticateResult Authenticate(string username, string secret);
+    public RegisterResult Guest(string username, out int id);
+    public LoginResult Login(string username, string password, out int id);
+    public RegisterResult Register(string username, string password, out int id);
 }
