@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Neon.Infrastructure;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
+using WebMarkupMin.AspNetCore8;
+using WebMarkupMin.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,16 +20,25 @@ builder.Services
         x.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(Resource));
     });
 
-//builder.Services.AddDistributedMemoryCache();
-
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.MaxValue;
-//    options.Cookie.HttpOnly = true;
-//    options.Cookie.IsEssential = true;
-//});
-
-builder.Services.AddNeonApplication();
+builder.Services
+    .AddWebMarkupMin(x =>
+    {
+        x.AllowMinificationInDevelopmentEnvironment = true;
+        x.AllowCompressionInDevelopmentEnvironment = true;
+    })
+    .AddHtmlMinification(x =>
+    {
+        x.MinificationSettings.EmptyTagRenderMode = HtmlEmptyTagRenderMode.NoSlash;
+        x.MinificationSettings.RemoveOptionalEndTags = true;
+        x.MinificationSettings.CollapseBooleanAttributes = true;
+        x.MinificationSettings.AttributeQuotesRemovalMode = HtmlAttributeQuotesRemovalMode.Html5;
+        x.MinificationSettings.RemoveRedundantAttributes = true;
+        x.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
+        x.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
+        x.MinificationSettings.RemoveEmptyAttributes = true;
+        x.MinificationSettings.RemoveTagsWithoutContent = true;
+        x.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Aggressive;
+    });
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -45,6 +56,8 @@ builder.Services
         .RequireAuthenticatedUser()
         .Build());
 
+builder.Services.AddNeonApplication();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -55,13 +68,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseWebMarkupMin();
 app.UseAuthentication();
 app.UseAuthorization();
-
-//app.UseSession();
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 

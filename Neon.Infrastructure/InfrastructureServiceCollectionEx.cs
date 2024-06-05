@@ -10,7 +10,7 @@ public static class InfrastructureServiceCollectionEx
     public static IServiceCollection AddNeonApplication(this IServiceCollection services)
     {
         services.AddSingleton<INeonApplication>(x =>
-            new NeonApplication(new NeonDomain(new NeonDbContext(x.GetRequiredService<IConfiguration>()))));
+            new NeonApplication(new NeonDomain(new NeonDbContext(x.GetRequiredService<IConfiguration>().GetConnectionString("Default")))));
 
         return services;
     }

@@ -151,6 +151,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neon.
+        /// </summary>
+        public static string Layout_Nav_Neon {
+            get {
+                return ResourceManager.GetString("Layout_Nav_Neon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register.
         /// </summary>
         public static string Layout_Nav_Register {

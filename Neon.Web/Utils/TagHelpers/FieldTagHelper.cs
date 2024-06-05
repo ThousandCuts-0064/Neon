@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Neon.Web.Models;
 
 namespace Neon.Web.Utils.TagHelpers;
 
@@ -25,21 +25,17 @@ public class FieldTagHelper : TagHelper
         output.TagName = null;
         output.TagMode = TagMode.StartTagAndEndTag;
 
-        var viewData = new ViewDataDictionary<GuestModel>(ViewContext.ViewData, For.Model);
+        var viewData = new ViewDataDictionary<ModelExpression>(ViewContext.ViewData) { Model = For };
+        var viewContext = new ViewContext(ViewContext, ViewContext.View, viewData, new StringWriter());
 
-        var viewContext = new ViewContext(ViewContext, ViewContext.View, ViewContext.ViewData, new StringWriter());
-
-        await FindView("_Field").RenderAsync(viewContext);
+        await GetView("_Field").RenderAsync(viewContext);
 
         output.Content.AppendHtml(viewContext.Writer.ToString()!);
     }
 
-    private IView FindView(string partialName)
+    private IView GetView([AspMvcPartialView] string partialName)
     {
-        var view = _viewEngine.GetView(ViewContext.ExecutingFilePath, partialName, false);
-
-        if (!view.Success)
-            view = _viewEngine.FindView(ViewContext, partialName, false);
+        var view = _viewEngine.GetView("Views/Shared/", partialName + ".cshtml", false);
 
         return view.View!;
     }

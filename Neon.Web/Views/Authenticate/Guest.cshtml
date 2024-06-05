@@ -8,17 +8,9 @@
     });
 }
 
-<form class="neon-form" method="post">
-    @* <div class="neon-form-col">
-        <input asp-for="Username"/>
-        <span asp-validation-for="Username" class="text-danger"></span>
-    </div> *@
-    @* <partial name="_Field" for="Username"/> *@
+<form method="post" class="neon-form">
     <field for="Username"/>
-    <div>
-        <label asp-for="RememberMe" class="neon-text-common"></label>
-        <input asp-for="RememberMe" type="checkbox"/>
-    </div>
+    <field for="RememberMe"/>
     <button type="submit" class="neon-btn-special">@Resource.User_Button_Play</button>
 </form>
 

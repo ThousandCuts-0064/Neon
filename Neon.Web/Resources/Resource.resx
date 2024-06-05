@@ -174,4 +174,7 @@
   <data name="Error_Validation_StringLength" xml:space="preserve">
     <value>{0} must have a length up to {1}</value>
   </data>
+  <data name="Layout_Nav_Neon" xml:space="preserve">
+    <value>Neon</value>
+  </data>
 </root>

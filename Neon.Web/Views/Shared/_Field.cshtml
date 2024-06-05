@@ -1,11 +1,19 @@
-﻿@model GuestModel
+﻿@model ModelExpression
 
-@{
-    var a = nameof(GuestModel.Username);
+@if (Model.Metadata.ModelType == typeof(bool))
+{
+    <div class="neon-form-row">
+        <label asp-for-model class="neon-text-common"></label>
+        <label class="neon-switch">
+            <input asp-for-model type="checkbox"/>
+            <span class="neon-slider"></span>
+        </label>
+    </div>
 }
-
-<div class="neon-form-col">
-    @Html.Editor(a)
-    @* <input asp-for="" /> *@
-    @* <span asp-validation-for="" class="text-danger"></span> *@
-</div>
+else
+{
+    <div class="neon-form-col">
+        <input asp-for-model/>
+        <span asp-validation-for-model class="text-danger"></span>
+    </div>
+}
