@@ -56,7 +56,9 @@ builder.Services
         .RequireAuthenticatedUser()
         .Build());
 
-builder.Services.AddNeonApplication();
+builder.Services
+    .AddNeonIdentity()
+    .AddNeonApplication();
 
 var app = builder.Build();
 

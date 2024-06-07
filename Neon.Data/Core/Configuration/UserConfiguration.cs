@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Neon.Domain.Users;
 
-namespace Neon.Data.Configuration;
+namespace Neon.Data.Core.Configuration;
 
 internal class UserConfiguration : IEntityTypeConfiguration<User>
 {

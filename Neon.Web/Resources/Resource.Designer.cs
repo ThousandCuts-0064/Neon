@@ -232,6 +232,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repeat Password.
+        /// </summary>
+        public static string User_Property_RepeatPassword {
+            get {
+                return ResourceManager.GetString("User_Property_RepeatPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         public static string User_Property_Username {

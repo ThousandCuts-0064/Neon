@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Neon.Data;
+using Neon.Data.Core;
 using Neon.Domain.Abstractions;
 
 namespace Neon.Infrastructure.Repositories;

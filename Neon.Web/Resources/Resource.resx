@@ -177,4 +177,7 @@
   <data name="Layout_Nav_Neon" xml:space="preserve">
     <value>Neon</value>
   </data>
+  <data name="User_Property_RepeatPassword" xml:space="preserve">
+    <value>Repeat Password</value>
+  </data>
 </root>
