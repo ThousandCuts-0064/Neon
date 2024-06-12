@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Neon.Data.Core;
+using Neon.Data;
 using Neon.Domain.Abstractions;
 
 namespace Neon.Infrastructure.Repositories;
 
-internal abstract class Repository<TEntity> where TEntity : Entity
+internal abstract class Repository<TEntity> where TEntity : class, IEntity
 {
     protected NeonDbContext DbContext { get; }
     protected abstract DbSet<TEntity> DbSet { get; }

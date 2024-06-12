@@ -15,7 +15,12 @@ namespace Neon.Web.Controllers;
 [AllowAnonymous]
 public class AuthenticateController : NeonControllerBase
 {
-    public AuthenticateController(INeonApplication application) : base(application) { }
+    private readonly SignInManager<User> _signInManager;
+
+    public AuthenticateController(INeonApplication application, SignInManager<User> signInManager) : base(application)
+    {
+        _signInManager = signInManager;
+    }
 
     public IActionResult Index()
     {
@@ -28,18 +33,17 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IActionResult Guest([FromForm] GuestModel model)
+    public async Task<IActionResult> Guest([FromForm] GuestModel model)
     {
-        return Application.UserService.Guest(model.Username, out var id) switch
-        {
-            RegisterResult.Success =>
-                SignIn(id, model.Username, UserRole.Guest, model.RememberMe),
+        var guestResult = await Application.UserService.GuestAsync(model.Username);
 
-            RegisterResult.UsernameTaken =>
-                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
-
-            _ => throw new InvalidOperationException()
-        };
+        //return guestResult.Succeeded
+        //    ? _signInManager.SignInAsync(new User { UserName = model.Username }, new AuthenticationProperties
+        //    {
+        //        IsPersistent = model.RememberMe,
+        //        RedirectUri = Url.Action("Index", "Gameplay")
+        //    })
+        //    : ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken);
     }
 
     public IActionResult Login()
@@ -87,11 +91,9 @@ public class AuthenticateController : NeonControllerBase
 
     private IActionResult SignIn(int id, string username, UserRole role, bool rememberMe)
     {
-        return SignIn(
-            new ClaimsPrincipal(new ClaimsIdentity(
+        return SignIn(new ClaimsPrincipal(new ClaimsIdentity(
                 [
-                    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
-                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.NameIdentifier, id.ToString()), new Claim(ClaimTypes.Name, username),
                     new Claim(ClaimTypes.Role, role.ToString())
                 ],
                 CookieAuthenticationDefaults.AuthenticationScheme)),

@@ -1,4 +1,4 @@
-﻿using Neon.Data.Core;
+﻿using Neon.Data;
 using Neon.Domain;
 using Neon.Domain.Users;
 using Neon.Infrastructure.Repositories;

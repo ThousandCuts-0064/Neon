@@ -1,47 +1,43 @@
-﻿using Neon.Domain;
+﻿using Microsoft.AspNetCore.Identity;
+using Neon.Domain;
+using Neon.Domain.Users;
 
 namespace Neon.Application.Services.Users;
 
 internal class UserService : IUserService
 {
     private readonly INeonDomain _domain;
+    private readonly UserManager<User> _userManager;
 
-    public UserService(INeonDomain domain)
+    public UserService(INeonDomain domain, UserManager<User> userManager)
     {
         _domain = domain;
+        _userManager = userManager;
     }
 
-    public RegisterResult Guest(string username, out int id)
+    public async Task<IdentityResult> GuestAsync(string username)
     {
-        //if (_domain.UserRepository.ContainsUsername(username))
-        //    return false;
+        var user = new User
+        {
+            UserName = username,
+            Role = UserRole.Guest,
+            LastActiveAt = DateTime.Now,
+            RegisteredAt = DateTime.Now,
+        };
 
-        id = 1;
+        if (await _userManager.FindByNameAsync(username) is null)
+            return await _userManager.CreateAsync(user);
 
-        //_domain.UserRepository.Add(new User
-        //{
-        //    Username = username,
-        //    Password = id,
-        //    Role = UserRole.Guest,
-        //    LastActiveAt = DateTime.Now
-        //});
-
-        //_domain.SaveChanges();
-
-        return RegisterResult.Success;
+        return IdentityResult.Success;
     }
 
-    public LoginResult Login(string username, string password, out int id)
+    public Task<LoginResult> LoginAsync(string username, string password)
     {
-        id = 2;
-
         return LoginResult.Success;
     }
 
-    public RegisterResult Register(string username, string password, out int id)
+    public Task<RegisterResult> RegisterAsync(string username, string password)
     {
-        id = 2;
-
         return RegisterResult.Success;
     }
 }

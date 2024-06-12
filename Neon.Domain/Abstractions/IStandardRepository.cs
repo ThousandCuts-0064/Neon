@@ -5,4 +5,4 @@ public interface IStandardRepository<TEntity> :
     IAddableRepository<TEntity>,
     IUpdatableRepository<TEntity>,
     IRemovableRepository<TEntity>
-    where TEntity : Entity;
+    where TEntity : IEntity;

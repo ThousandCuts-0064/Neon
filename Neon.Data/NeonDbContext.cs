@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Neon.Domain.Users;
 
-namespace Neon.Data.Core;
+namespace Neon.Data;
 
-public class NeonDbContext : DbContext
+public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     private const string CONNECTION_STRING =
         $"""
@@ -20,8 +23,6 @@ public class NeonDbContext : DbContext
 
     private readonly string? _connectionString;
 
-    public DbSet<User> Users { get; init; } = null!;
-
     public NeonDbContext() : this(CONNECTION_STRING) { }
     public NeonDbContext(string? connectionString) => _connectionString = connectionString;
 
@@ -30,13 +31,15 @@ public class NeonDbContext : DbContext
         optionsBuilder
             .UseNpgsql(_connectionString, x =>
             {
-                x.MigrationsHistoryTable("__EFMigrationsHistory", SCHEMA);
+                x.MigrationsHistoryTable(HistoryRepository.DefaultTableName, SCHEMA);
             })
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(NeonDbContext).Assembly);
     }
 }

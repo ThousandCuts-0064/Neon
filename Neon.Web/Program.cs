@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Neon.Data;
+using Neon.Domain.Users;
 using Neon.Infrastructure;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -40,25 +42,43 @@ builder.Services
         x.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Aggressive;
     });
 
+
 builder.Services
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x =>
+    .AddDbContext<NeonDbContext>((x, _) => x
+        .GetRequiredService<IConfiguration>()
+        .GetConnectionString("Default"))
+    .AddNeonApplication()
+    .AddIdentity<User, IdentityRole<int>>(x =>
     {
-        x.Cookie.HttpOnly = true;
-        x.Cookie.SameSite = SameSiteMode.Strict;
-        x.LoginPath = "/Authenticate";
-        x.LogoutPath = x.LoginPath;
-    });
+        x.User.AllowedUserNameCharacters = new string(Enumerable
+            .Range('a', 'z' - 'a')
+            .Concat(Enumerable.Range('A', 'Z' - 'A'))
+            .Concat(Enumerable.Range('0', '9' - '0'))
+            .Select(y => (char)y)
+            .Concat([' ', '_', '-'])
+            .ToArray());
+
+        x.Password.RequiredLength = 4;
+        x.Password.RequireLowercase = true;
+        x.Password.RequireUppercase = true;
+        x.Password.RequireDigit = true;
+    })
+    .AddEntityFrameworkStores<NeonDbContext>();
+
+builder.Services.ConfigureApplicationCookie(x =>
+{
+    x.Cookie.HttpOnly = true;
+    x.Cookie.SameSite = SameSiteMode.Strict;
+    x.Cookie.IsEssential = true;
+    x.LoginPath = "/Authenticate";
+    x.LogoutPath = x.LoginPath;
+});
 
 builder.Services
     .AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build());
-
-builder.Services
-    .AddNeonIdentity()
-    .AddNeonApplication();
 
 var app = builder.Build();
 
