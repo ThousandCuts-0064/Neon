@@ -58,7 +58,7 @@ builder.Services
             .Concat([' ', '_', '-'])
             .ToArray());
 
-        x.Password.RequiredLength = 4;
+        x.Password.RequiredLength = User.PASSWORD_MIN_LENGTH;
         x.Password.RequireLowercase = true;
         x.Password.RequireUppercase = true;
         x.Password.RequireDigit = true;
@@ -78,6 +78,7 @@ builder.Services
     .AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
+        .RequireRole(Enum.GetNames<UserRole>())
         .Build());
 
 var app = builder.Build();

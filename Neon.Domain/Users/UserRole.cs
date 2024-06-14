@@ -2,7 +2,7 @@
 
 public enum UserRole
 {
-    Guest,
+    Guest = 1,
     Standard,
     Admin
 }

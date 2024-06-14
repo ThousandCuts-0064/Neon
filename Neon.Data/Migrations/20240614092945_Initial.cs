@@ -33,7 +33,6 @@ namespace Neon.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Role = table.Column<int>(type: "integer", nullable: false),
                     RegisteredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastActiveAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
@@ -54,7 +53,6 @@ namespace Neon.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.CheckConstraint("CK_PasswordHash", "\"Role\" = 0 AND \"PasswordHash\" IS NULL\r\nOR\r\n\"Role\" != 0 AND \"PasswordHash\" IS NOT NULL");
                 });
 
             migrationBuilder.CreateTable(

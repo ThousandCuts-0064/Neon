@@ -206,9 +206,6 @@ namespace Neon.Data.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -229,10 +226,7 @@ namespace Neon.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_PasswordHash", "\"Role\" = 0 AND \"PasswordHash\" IS NULL\r\nOR\r\n\"Role\" != 0 AND \"PasswordHash\" IS NOT NULL");
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

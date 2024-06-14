@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Neon.Application;
-using Neon.Application.Services.Users;
 using Neon.Domain.Users;
 using Neon.Web.Models;
-using Neon.Web.Resources;
 
 namespace Neon.Web.Controllers;
 
@@ -37,13 +35,12 @@ public class AuthenticateController : NeonControllerBase
     {
         var guestResult = await Application.UserService.GuestAsync(model.Username);
 
-        //return guestResult.Succeeded
-        //    ? _signInManager.SignInAsync(new User { UserName = model.Username }, new AuthenticationProperties
-        //    {
-        //        IsPersistent = model.RememberMe,
-        //        RedirectUri = Url.Action("Index", "Gameplay")
-        //    })
-        //    : ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken);
+        if (!guestResult.Succeeded)
+            return View(model);
+
+        await _signInManager.SignInAsync(new User { UserName = model.Username }, model.RememberMe);
+
+        return RedirectToAction("Index", "Gameplay");
     }
 
     public IActionResult Login()
@@ -54,19 +51,21 @@ public class AuthenticateController : NeonControllerBase
     [HttpPost, ValidateAntiForgeryToken]
     public IActionResult Login([FromForm] LoginModel model)
     {
-        return Application.UserService.Login(model.Username, model.Password, out var id) switch
-        {
-            LoginResult.UsernameNotFound =>
-                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameNotFound),
+        //return Application.UserService.Login(model.Username, model.Password, out var id) switch
+        //{
+        //    LoginResult.UsernameNotFound =>
+        //        ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameNotFound),
 
-            LoginResult.WrongPassword =>
-                ViewWithError(model, nameof(model.Password), Resource.Error_Validation_WrongPassword),
+        //    LoginResult.WrongPassword =>
+        //        ViewWithError(model, nameof(model.Password), Resource.Error_Validation_WrongPassword),
 
-            LoginResult.Success =>
-                SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
+        //    LoginResult.Success =>
+        //        SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
 
-            _ => throw new InvalidOperationException()
-        };
+        //    _ => throw new InvalidOperationException()
+        //};
+
+        throw new NotImplementedException();
     }
 
     public IActionResult Register()
@@ -77,16 +76,18 @@ public class AuthenticateController : NeonControllerBase
     [HttpPost, ValidateAntiForgeryToken]
     public IActionResult Register([FromForm] RegisterModel model)
     {
-        return Application.UserService.Register(model.Username, model.Password, out var id) switch
-        {
-            RegisterResult.Success =>
-                SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
+        //return Application.UserService.Register(model.Username, model.Password, out var id) switch
+        //{
+        //    RegisterResult.Success =>
+        //        SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
 
-            RegisterResult.UsernameTaken =>
-                ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
+        //    RegisterResult.UsernameTaken =>
+        //        ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
 
-            _ => throw new InvalidOperationException()
-        };
+        //    _ => throw new InvalidOperationException()
+        //};
+
+        throw new NotImplementedException();
     }
 
     private IActionResult SignIn(int id, string username, UserRole role, bool rememberMe)

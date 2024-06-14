@@ -20,23 +20,28 @@ internal class UserService : IUserService
         var user = new User
         {
             UserName = username,
-            Role = UserRole.Guest,
-            LastActiveAt = DateTime.Now,
-            RegisteredAt = DateTime.Now,
+            LastActiveAt = DateTime.UtcNow,
+            RegisteredAt = DateTime.UtcNow
         };
 
-        if (await _userManager.FindByNameAsync(username) is null)
-            return await _userManager.CreateAsync(user);
+        if (await _userManager.FindByNameAsync(username) is not null)
+            return IdentityResult.Success;
 
-        return IdentityResult.Success;
+        var result = await _userManager.CreateAsync(user);
+
+        if (!result.Succeeded)
+            return result;
+
+        return await _userManager.AddToRoleAsync(user, nameof(UserRole.Guest));
+
     }
 
-    public Task<LoginResult> LoginAsync(string username, string password)
+    public async Task<LoginResult> LoginAsync(string username, string password)
     {
         return LoginResult.Success;
     }
 
-    public Task<RegisterResult> RegisterAsync(string username, string password)
+    public async Task<RegisterResult> RegisterAsync(string username, string password)
     {
         return RegisterResult.Success;
     }

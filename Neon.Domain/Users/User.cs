@@ -6,7 +6,7 @@ namespace Neon.Domain.Users;
 public class User : IdentityUser<int>, IEntity
 {
     public const int USERNAME_MAX_LENGTH = 16;
-    public UserRole Role { get; set; }
+    public const int PASSWORD_MIN_LENGTH = 4;
     public DateTime RegisteredAt { get; set; }
     public DateTime LastActiveAt { get; set; }
 }
