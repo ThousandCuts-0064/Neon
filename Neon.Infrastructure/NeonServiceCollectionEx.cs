@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Neon.Application;
-using Neon.Domain;
+using Neon.Application.Services;
+using Neon.Infrastructure.Services;
 
 namespace Neon.Infrastructure;
 
 public static class NeonServiceCollectionEx
 {
-    public static IServiceCollection AddNeonApplication(this IServiceCollection services)
+    public static IServiceCollection AddNeonInfrastructure(this IServiceCollection services)
     {
         return services
-            .AddScoped<INeonDomain, NeonDomain>()
-            .AddScoped<INeonApplication, NeonApplication>();
+            .AddScoped<IAuthenticateService, AuthenticateService>()
+            .AddScoped<IGameplayService, GameplayService>();
     }
 }

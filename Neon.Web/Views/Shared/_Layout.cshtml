@@ -55,7 +55,7 @@
     <footer class="neon-footer-bg">
         <div class="container-fluid d-flex justify-content-center">
             <a asp-controller="User" asp-action="Index" class="neon-link-special neon-nav-btn">
-                @User.FindFirstValue(ClaimTypes.Name)
+                @User.Identity?.Name
             </a>
         </div>
     </footer>

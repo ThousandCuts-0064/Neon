@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Neon.Application\Neon.Application.csproj" />
     <ProjectReference Include="..\Neon.Data\Neon.Data.csproj" />
   </ItemGroup>

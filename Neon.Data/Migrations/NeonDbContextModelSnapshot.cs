@@ -176,6 +176,9 @@ namespace Neon.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("LastActiveAt")
                         .HasColumnType("timestamp with time zone");
 

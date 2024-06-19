@@ -7,7 +7,7 @@ namespace Neon.Web.Models;
 public class GuestModel
 {
     [Display(Prompt = nameof(Resource.User_Property_Username))]
-    [StringLength(User.USERNAME_MAX_LENGTH, MinimumLength = User.PASSWORD_MIN_LENGTH)]
+    [StringLength(User.USERNAME_MAX_LENGTH, MinimumLength = User.USERNAME_MIN_LENGTH)]
     public required string Username { get; init; }
 
     [Display(Name = nameof(Resource.User_Property_RememberMe))]

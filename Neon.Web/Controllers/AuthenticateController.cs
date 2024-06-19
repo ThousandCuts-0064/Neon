@@ -1,23 +1,19 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Neon.Application;
+using Neon.Application.Services;
 using Neon.Domain.Users;
 using Neon.Web.Models;
 
 namespace Neon.Web.Controllers;
 
 [AllowAnonymous]
-public class AuthenticateController : NeonControllerBase
+public class AuthenticateController : Controller
 {
-    private readonly SignInManager<User> _signInManager;
+    private readonly IAuthenticateService _authenticateService;
 
-    public AuthenticateController(INeonApplication application, SignInManager<User> signInManager) : base(application)
+    public AuthenticateController(IAuthenticateService authenticateService)
     {
-        _signInManager = signInManager;
+        _authenticateService = authenticateService;
     }
 
     public IActionResult Index()
@@ -33,14 +29,12 @@ public class AuthenticateController : NeonControllerBase
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Guest([FromForm] GuestModel model)
     {
-        var guestResult = await Application.UserService.GuestAsync(model.Username);
+        var result = await _authenticateService.GuestAsync(model.Username, model.RememberMe);
 
-        if (!guestResult.Succeeded)
-            return View(model);
+        if (result == RegisterResult.Success)
+            return RedirectToAction("Index", "Gameplay");
 
-        await _signInManager.SignInAsync(new User { UserName = model.Username }, model.RememberMe);
-
-        return RedirectToAction("Index", "Gameplay");
+        return View(model);
     }
 
     public IActionResult Login()
@@ -49,23 +43,14 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IActionResult Login([FromForm] LoginModel model)
+    public async Task<IActionResult> Login([FromForm] LoginModel model)
     {
-        //return Application.UserService.Login(model.Username, model.Password, out var id) switch
-        //{
-        //    LoginResult.UsernameNotFound =>
-        //        ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameNotFound),
+        var result = await _authenticateService.LoginAsync(model.Username, model.Password, model.RememberMe);
 
-        //    LoginResult.WrongPassword =>
-        //        ViewWithError(model, nameof(model.Password), Resource.Error_Validation_WrongPassword),
+        if (result == LoginResult.Success)
+            return RedirectToAction("Index", "Gameplay");
 
-        //    LoginResult.Success =>
-        //        SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
-
-        //    _ => throw new InvalidOperationException()
-        //};
-
-        throw new NotImplementedException();
+        return View(model);
     }
 
     public IActionResult Register()
@@ -74,40 +59,12 @@ public class AuthenticateController : NeonControllerBase
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public IActionResult Register([FromForm] RegisterModel model)
+    public async Task<IActionResult> Register([FromForm] RegisterModel model)
     {
-        //return Application.UserService.Register(model.Username, model.Password, out var id) switch
-        //{
-        //    RegisterResult.Success =>
-        //        SignIn(id, model.Username, UserRole.Standard, model.RememberMe),
+        var result = await _authenticateService.RegisterAsync(model.Username, model.Password, model.RememberMe);
 
-        //    RegisterResult.UsernameTaken =>
-        //        ViewWithError(model, nameof(model.Username), Resource.Error_Validation_UsernameTaken),
-
-        //    _ => throw new InvalidOperationException()
-        //};
-
-        throw new NotImplementedException();
-    }
-
-    private IActionResult SignIn(int id, string username, UserRole role, bool rememberMe)
-    {
-        return SignIn(new ClaimsPrincipal(new ClaimsIdentity(
-                [
-                    new Claim(ClaimTypes.NameIdentifier, id.ToString()), new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, role.ToString())
-                ],
-                CookieAuthenticationDefaults.AuthenticationScheme)),
-            new AuthenticationProperties
-            {
-                IsPersistent = rememberMe,
-                RedirectUri = Url.Action("Index", "Gameplay")
-            });
-    }
-
-    private IActionResult ViewWithError(GuestModel model, string key, string message)
-    {
-        ModelState.AddModelError(key, message);
+        if (result == RegisterResult.Success)
+            return RedirectToAction("Index", "Gameplay");
 
         return View(model);
     }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Neon.Data.Migrations
 {
     [DbContext(typeof(NeonDbContext))]
-    [Migration("20240614092945_Initial")]
+    [Migration("20240617205831_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -177,6 +177,9 @@ namespace Neon.Data.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastActiveAt")

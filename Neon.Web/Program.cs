@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Neon.Data;
 using Neon.Domain.Users;
 using Neon.Infrastructure;
+using Neon.Web.Hubs;
 using Neon.Web.Resources;
+using Neon.Web.Utils.Extensions;
 using Neon.Web.Utils.Localization;
 using WebMarkupMin.AspNetCore8;
 using WebMarkupMin.Core;
@@ -21,6 +23,8 @@ builder.Services
     {
         x.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(Resource));
     });
+
+builder.Services.AddSignalR();
 
 builder.Services
     .AddWebMarkupMin(x =>
@@ -42,12 +46,11 @@ builder.Services
         x.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Aggressive;
     });
 
-
 builder.Services
     .AddDbContext<NeonDbContext>((x, _) => x
         .GetRequiredService<IConfiguration>()
         .GetConnectionString("Default"))
-    .AddNeonApplication()
+    .AddNeonInfrastructure()
     .AddIdentity<User, IdentityRole<int>>(x =>
     {
         x.User.AllowedUserNameCharacters = new string(Enumerable
@@ -95,6 +98,10 @@ app.UseRouting();
 app.UseWebMarkupMin();
 app.UseAuthentication();
 app.UseAuthorization();
+
+await app.EnsureRoles(Enum.GetNames<UserRole>());
+
+app.MapHub<GameplayHub>("Gameplay/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 

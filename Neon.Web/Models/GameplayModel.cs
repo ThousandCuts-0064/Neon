@@ -2,5 +2,5 @@
 
 public class GameplayModel
 {
-    public required UserModel User { get; init; }
+    public required List<OpponentModel> Opponents { get; init; }
 }

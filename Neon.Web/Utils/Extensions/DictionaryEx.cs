@@ -2,7 +2,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Neon.Web.Utils;
+namespace Neon.Web.Utils.Extensions;
 
 public static class DictionaryEx
 {
