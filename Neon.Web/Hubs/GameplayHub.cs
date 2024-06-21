@@ -1,16 +1,25 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Neon.Application.Services;
 
 namespace Neon.Web.Hubs;
 
 public class GameplayHub : Hub<IGameplayHubClient>
 {
-    public override Task OnConnectedAsync()
+    private readonly IGameplayService _gameplayService;
+    private int UserId => int.Parse(Context.UserIdentifier!);
+
+    public GameplayHub(IGameplayService gameplayService)
     {
-        return base.OnConnectedAsync();
+        _gameplayService = gameplayService;
     }
 
-    public override Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnConnectedAsync()
     {
-        return base.OnDisconnectedAsync(exception);
+        await _gameplayService.SetActiveAsync(UserId);
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        await _gameplayService.SetInactiveAsync(UserId);
     }
 }

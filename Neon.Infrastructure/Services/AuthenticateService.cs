@@ -52,20 +52,12 @@ internal class AuthenticateService : IAuthenticateService
         if (user is null)
             return LoginResult.UsernameNotFound;
 
-        user.LastActiveAt = DateTime.UtcNow;
-        user.IsActive = true;
-
-        var update = await UserManager.UpdateAsync(user);
-
-        if (!update.Succeeded)
-            return LoginResult.Error;
-
         var result = await _signInManager.PasswordSignInAsync(user, password, rememberMe, true);
 
         if (result.IsNotAllowed)
             return LoginResult.WrongPassword;
 
-        if (!update.Succeeded)
+        if (!result.Succeeded)
             return LoginResult.Error;
 
         await transaction.CommitAsync();
@@ -102,8 +94,6 @@ internal class AuthenticateService : IAuthenticateService
     private static User NewUser(string username) => new()
     {
         UserName = username,
-        LastActiveAt = DateTime.UtcNow,
         RegisteredAt = DateTime.UtcNow,
-        IsActive = true
     };
 }

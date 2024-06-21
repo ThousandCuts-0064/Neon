@@ -21,7 +21,7 @@ public class GameplayController : Controller
 
     public IActionResult Index()
     {
-        var opponents = _gameplayService.OnlineUsers
+        var opponents = _gameplayService.ActiveUsers
             .Where(x => x.UserName != User.GetUsername())
             .Select(x => new OpponentModel
             {

@@ -1,16 +1,35 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services;
+using Neon.Data;
 using Neon.Domain.Users;
 
 namespace Neon.Infrastructure.Services;
 
 internal class GameplayService : IGameplayService
 {
-    private readonly UserManager<User> _userManager;
-    public IQueryable<User> OnlineUsers => _userManager.Users.Where(x => x.IsActive);
+    private readonly NeonDbContext _dbContext;
+    public IQueryable<User> ActiveUsers => _dbContext.Users.Where(x => x.IsActive);
 
-    public GameplayService(UserManager<User> userManager)
+    public GameplayService(NeonDbContext dbContext)
     {
-        _userManager = userManager;
+        _dbContext = dbContext;
+    }
+
+    public async Task SetActiveAsync(int userId)
+    {
+        await _dbContext.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(y => y.IsActive, true));
+    }
+
+    public async Task SetInactiveAsync(int userId)
+    {
+        await _dbContext.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(y => y.IsActive, false)
+                .SetProperty(y => y.LastActiveAt, DateTime.UtcNow));
     }
 }
