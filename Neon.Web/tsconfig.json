@@ -10,7 +10,6 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "target": "ESNext",
-    "outDir": "wwwroot/js",
     "rootDir": "wwwroot/ts"
   }
 }
