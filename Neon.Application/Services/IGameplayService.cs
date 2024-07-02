@@ -6,6 +6,6 @@ public interface IGameplayService
 {
     public IQueryable<User> ActiveUsers { get; }
 
-    public Task SetActiveAsync(int userId);
-    public Task SetInactiveAsync(int userId);
+    public Task<bool> TrySetActiveAsync(int userId, string connectionId);
+    public Task<bool> TrySetInactiveAsync(int userId, string connectionId);
 }

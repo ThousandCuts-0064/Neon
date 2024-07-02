@@ -169,6 +169,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Already active.
+        /// </summary>
+        public static string Layout_Title_AlreadyActive {
+            get {
+                return ResourceManager.GetString("Layout_Title_AlreadyActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gameplay.
         /// </summary>
         public static string Layout_Title_Gameplay {

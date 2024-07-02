@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services;
 using Neon.Data;
 using Neon.Domain.Users;
@@ -9,27 +8,31 @@ namespace Neon.Infrastructure.Services;
 internal class GameplayService : IGameplayService
 {
     private readonly NeonDbContext _dbContext;
-    public IQueryable<User> ActiveUsers => _dbContext.Users.Where(x => x.IsActive);
+    public IQueryable<User> ActiveUsers => _dbContext.Users.Where(x => x.ActiveConnectionId != null);
 
     public GameplayService(NeonDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task SetActiveAsync(int userId)
+    public async Task<bool> TrySetActiveAsync(int userId, string connectionId)
     {
-        await _dbContext.Users
-            .Where(x => x.Id == userId)
+        var affected = await _dbContext.Users
+            .Where(x => x.Id == userId && x.ActiveConnectionId == null)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.IsActive, true));
+                .SetProperty(y => y.ActiveConnectionId, connectionId));
+
+        return affected != 0;
     }
 
-    public async Task SetInactiveAsync(int userId)
+    public async Task<bool> TrySetInactiveAsync(int userId, string connectionId)
     {
-        await _dbContext.Users
-            .Where(x => x.Id == userId)
+        var affected = await _dbContext.Users
+            .Where(x => x.Id == userId && x.ActiveConnectionId == connectionId)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.IsActive, false)
+                .SetProperty(y => y.ActiveConnectionId, (string?)null)
                 .SetProperty(y => y.LastActiveAt, DateTime.UtcNow));
+
+        return affected != 0;
     }
 }

@@ -180,4 +180,7 @@
   <data name="User_Property_RepeatPassword" xml:space="preserve">
     <value>Repeat Password</value>
   </data>
+  <data name="Layout_Title_AlreadyActive" xml:space="preserve">
+    <value>Already active</value>
+  </data>
 </root>

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Neon.Data.Migrations
 {
     [DbContext(typeof(NeonDbContext))]
-    [Migration("20240617205831_Initial")]
+    [Migration("20240623072550_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -168,6 +168,9 @@ namespace Neon.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ActiveConnectionId")
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -177,9 +180,6 @@ namespace Neon.Data.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastActiveAt")

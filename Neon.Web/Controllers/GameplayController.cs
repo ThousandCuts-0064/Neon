@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Neon.Application.Services;
-using Neon.Domain.Users;
-using Neon.Web.Hubs;
 using Neon.Web.Models;
 using Neon.Web.Utils.Extensions;
 
@@ -10,12 +7,10 @@ namespace Neon.Web.Controllers;
 
 public class GameplayController : Controller
 {
-    private readonly IHubContext<GameplayHub, IGameplayHubClient> _gameplayHub;
     private readonly IGameplayService _gameplayService;
 
-    public GameplayController(IHubContext<GameplayHub, IGameplayHubClient> gameplayHub, IGameplayService gameplayService)
+    public GameplayController(IGameplayService gameplayService)
     {
-        _gameplayHub = gameplayHub;
         _gameplayService = gameplayService;
     }
 
@@ -33,5 +28,10 @@ public class GameplayController : Controller
         {
             Opponents = opponents
         });
+    }
+
+    public IActionResult AlreadyActive()
+    {
+        return View();
     }
 }

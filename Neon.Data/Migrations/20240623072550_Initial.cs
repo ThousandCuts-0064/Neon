@@ -36,7 +36,7 @@ namespace Neon.Data.Migrations
                     UserName = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     RegisteredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastActiveAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    ActiveConnectionId = table.Column<string>(type: "text", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),

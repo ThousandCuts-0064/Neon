@@ -12,6 +12,6 @@ public static class ClaimsPrincipalEx
 
     public static string GetUsername(this ClaimsPrincipal claimsPrincipal)
     {
-        return claimsPrincipal.Identity?.Name ?? throw new UnreachableException();
+        return claimsPrincipal.Identity?.Name ?? throw new InvalidOperationException();
     }
 }
