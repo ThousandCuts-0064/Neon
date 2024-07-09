@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Neon.Domain.Users;
+using Neon.Domain.Entities;
 using Neon.Web.Resources;
 
 namespace Neon.Web.Models;

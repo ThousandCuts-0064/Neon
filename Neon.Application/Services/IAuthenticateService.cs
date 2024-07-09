@@ -1,4 +1,4 @@
-﻿using Neon.Domain.Users;
+﻿using Neon.Domain.Enums;
 
 namespace Neon.Application.Services;
 

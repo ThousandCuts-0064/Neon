@@ -1,4 +1,4 @@
-﻿namespace Neon.Domain.Abstractions;
+﻿namespace Neon.Domain.Abstracts;
 
 public class Entity
 {

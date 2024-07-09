@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Neon.Application.Services;
-using Neon.Domain.Users;
+using Neon.Domain.Enums;
 using Neon.Web.Models;
 
 namespace Neon.Web.Controllers;

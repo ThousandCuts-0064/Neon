@@ -1,8 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Identity;
-using Neon.Domain.Abstractions;
+﻿using Microsoft.AspNetCore.Identity;
+using Neon.Domain.Abstracts;
 
-namespace Neon.Domain.Users;
+namespace Neon.Domain.Entities;
 
 public class User : IdentityUser<int>, IEntity
 {

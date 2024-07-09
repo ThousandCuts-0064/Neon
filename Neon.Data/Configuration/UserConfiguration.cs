@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Neon.Domain.Users;
+using Neon.Domain.Entities;
 
 namespace Neon.Data.Configuration;
 

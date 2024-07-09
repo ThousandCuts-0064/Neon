@@ -1,4 +1,4 @@
-﻿namespace Neon.Domain.Users;
+﻿namespace Neon.Domain.Enums;
 
 public enum LoginResult
 {

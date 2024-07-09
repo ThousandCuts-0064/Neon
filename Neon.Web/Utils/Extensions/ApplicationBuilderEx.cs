@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Neon.Application.Services;
 
 namespace Neon.Web.Utils.Extensions;
 
 public static class ApplicationBuilderEx
 {
-    public static async Task<IApplicationBuilder> EnsureRoles(this IApplicationBuilder app, IEnumerable<string> roles)
+    public static async Task EnsureRoles(this IApplicationBuilder app, IEnumerable<string> roles)
     {
         using var scope = app.ApplicationServices.CreateScope();
 
@@ -15,7 +16,14 @@ public static class ApplicationBuilderEx
             if (!await roleManager.RoleExistsAsync(role))
                 await roleManager.CreateAsync(new IdentityRole<int>(role));
         }
+    }
 
-        return app;
+    public static async Task ClearUserConnections(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+
+        var gameplayService = scope.ServiceProvider.GetRequiredService<IGameplayService>();
+
+        await gameplayService.ClearUserConnectionsAsync();
     }
 }

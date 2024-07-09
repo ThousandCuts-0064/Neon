@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Neon.Domain.Users;
+using Microsoft.Extensions.Configuration;
+using Neon.Domain.Entities;
 
 namespace Neon.Data;
 
@@ -23,8 +24,10 @@ public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 
     private readonly string? _connectionString;
 
-    public NeonDbContext() : this(CONNECTION_STRING) { }
-    public NeonDbContext(string? connectionString) => _connectionString = connectionString;
+    public DbSet<SystemValue> SystemValues { get; set; }
+
+    public NeonDbContext() => _connectionString = CONNECTION_STRING;
+    public NeonDbContext(IConfiguration configuration) => _connectionString = configuration.GetConnectionString("Default");
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

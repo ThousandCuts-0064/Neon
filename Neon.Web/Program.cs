@@ -1,11 +1,12 @@
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Neon.Data;
-using Neon.Domain.Users;
+using Neon.Domain.Entities;
+using Neon.Domain.Enums;
 using Neon.Infrastructure;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
+using Neon.Web.Utils;
 using Neon.Web.Utils.Extensions;
 using Neon.Web.Utils.Localization;
 using WebMarkupMin.AspNetCore8;
@@ -48,10 +49,8 @@ builder.Services
     });
 
 builder.Services
-    .AddDbContext<NeonDbContext>((x, _) => x
-        .GetRequiredService<IConfiguration>()
-        .GetConnectionString("Default"))
-    .AddNeonInfrastructure()
+    .AddDbContext<NeonDbContext>()
+    .AddNeonInfrastructure(builder.Configuration)
     .AddIdentity<User, IdentityRole<int>>(x =>
     {
         x.User.AllowedUserNameCharacters = new string(Enumerable
@@ -76,6 +75,7 @@ builder.Services.ConfigureApplicationCookie(x =>
     x.Cookie.IsEssential = true;
     x.LoginPath = "/Authenticate";
     x.LogoutPath = x.LoginPath;
+    x.Events.OnValidatePrincipal = UserValidator.ValidatePrincipalAsync;
 });
 
 builder.Services
@@ -100,10 +100,11 @@ app.UseWebMarkupMin();
 app.UseAuthentication();
 app.UseAuthorization();
 
-await app.EnsureRoles(Enum.GetNames<UserRole>());
-
 app.MapHub<GameplayHub>("Gameplay/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+await app.EnsureRoles(Enum.GetNames<UserRole>());
+await app.ClearUserConnections();
+
+await app.RunAsync();
