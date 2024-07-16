@@ -1,4 +1,4 @@
-﻿using Neon.Domain.Abstracts;
+﻿using Neon.Domain.Entities.Bases;
 
 namespace Neon.Domain.Entities;
 

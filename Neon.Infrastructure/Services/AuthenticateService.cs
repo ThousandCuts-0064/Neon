@@ -3,7 +3,7 @@ using Neon.Application.Services;
 using Neon.Data;
 using Neon.Domain.Entities;
 using Neon.Domain.Enums;
-using Neon.Infrastructure.Services.Abstracts;
+using Neon.Infrastructure.Services.Bases;
 
 namespace Neon.Infrastructure.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace Neon.Domain.Abstracts;
+﻿namespace Neon.Domain.Entities.Bases;
 
 public interface IEntity<TKey> where TKey : IEquatable<TKey>
 {

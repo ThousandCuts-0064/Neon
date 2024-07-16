@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SignalR;
 using Neon.Application.Services;
 
@@ -22,10 +24,7 @@ public class GameplayHub : Hub<IGameplayHubClient>
             return;
 
         await Clients.Caller.AlreadyActive();
-        await Context.Features
-            .GetRequiredFeature<IHttpContextFeature>()
-            .HttpContext!
-            .SignOutAsync();
+
         Context.Abort();
     }
 

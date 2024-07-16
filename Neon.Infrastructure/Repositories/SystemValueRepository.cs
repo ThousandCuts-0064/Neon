@@ -2,7 +2,7 @@
 using Neon.Application.Repositories;
 using Neon.Data;
 using Neon.Domain.Entities;
-using Neon.Infrastructure.Repositories.Abstracts;
+using Neon.Infrastructure.Repositories.Bases;
 
 namespace Neon.Infrastructure.Repositories;
 

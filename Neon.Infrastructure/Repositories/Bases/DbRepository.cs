@@ -1,6 +1,6 @@
 ﻿using Neon.Data;
 
-namespace Neon.Infrastructure.Repositories.Abstracts;
+namespace Neon.Infrastructure.Repositories.Bases;
 
 internal abstract class DbRepository
 {

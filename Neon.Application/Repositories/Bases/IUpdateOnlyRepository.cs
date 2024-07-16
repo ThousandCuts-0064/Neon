@@ -1,6 +1,6 @@
-﻿using Neon.Domain.Abstracts;
+﻿using Neon.Domain.Entities.Bases;
 
-namespace Neon.Application.Repositories.Abstracts;
+namespace Neon.Application.Repositories.Bases;
 
 public interface IUpdateOnlyRepository<in TEntity, TKey>
     where TEntity : IEntity<TKey>

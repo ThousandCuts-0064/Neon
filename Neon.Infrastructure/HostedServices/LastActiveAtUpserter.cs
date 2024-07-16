@@ -1,22 +1,22 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Neon.Application.Services;
+using Neon.Infrastructure.Configurations;
 
 namespace Neon.Infrastructure.HostedServices;
 
 internal class LastActiveAtUpserter : BackgroundService
 {
-    private readonly IServiceScope _serviceScope;
-    private readonly ISystemValueService _systemValueService;
-    private readonly IConfiguration _configuration;
+    private readonly IServiceProvider _services;
+    private readonly IOptionsMonitor<LastActiveAtUpserterConfiguration> _configuration;
 
-    public LastActiveAtUpserter(IServiceProvider services)
+    public LastActiveAtUpserter(
+        IServiceProvider services,
+        IOptionsMonitor<LastActiveAtUpserterConfiguration> configuration)
     {
-        _serviceScope = services.CreateScope();
-
-        _systemValueService = _serviceScope.ServiceProvider.GetRequiredService<ISystemValueService>();
-        _configuration = _serviceScope.ServiceProvider.GetRequiredService<IConfiguration>();
+        _services = services;
+        _configuration = configuration;
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)
@@ -31,23 +31,24 @@ internal class LastActiveAtUpserter : BackgroundService
         await base.StopAsync(cancellationToken);
     }
 
-    public override void Dispose()
-    {
-        base.Dispose();
-        _serviceScope.Dispose();
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var seconds = int.TryParse(_configuration["UpdateLastActiveAtDeltaSeconds"], out var parsedSeconds)
-            ? parsedSeconds
-            : 10;
-
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(seconds));
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(_configuration.CurrentValue.DeltaSeconds));
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
+        {
             await Upsert();
+
+            timer.Period = TimeSpan.FromSeconds(_configuration.CurrentValue.DeltaSeconds);
+        }
     }
 
-    private Task Upsert() => _systemValueService.UpsertLastActiveAtAsync();
+    private async Task Upsert()
+    {
+        await using var serviceScope = _services.CreateAsyncScope();
+
+        await serviceScope.ServiceProvider
+            .GetRequiredService<ISystemValueService>()
+            .UpsertLastActiveAtAsync();
+    }
 }

@@ -1,6 +1,6 @@
 ﻿using Neon.Data;
 
-namespace Neon.Infrastructure.Services.Abstracts;
+namespace Neon.Infrastructure.Services.Bases;
 
 internal class DbContextService
 {

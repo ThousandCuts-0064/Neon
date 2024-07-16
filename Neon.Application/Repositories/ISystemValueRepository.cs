@@ -1,4 +1,4 @@
-﻿using Neon.Application.Repositories.Abstracts;
+﻿using Neon.Application.Repositories.Bases;
 using Neon.Domain.Entities;
 
 namespace Neon.Application.Repositories;

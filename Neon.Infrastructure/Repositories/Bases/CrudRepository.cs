@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Neon.Application.Repositories.Abstracts;
+using Neon.Application.Repositories.Bases;
 using Neon.Data;
-using Neon.Domain.Abstracts;
+using Neon.Domain.Entities.Bases;
 
-namespace Neon.Infrastructure.Repositories.Abstracts;
+namespace Neon.Infrastructure.Repositories.Bases;
 
 internal abstract class CrudRepository<TEntity, TKey> : DbRepository,
     ICreateOnlyRepository<TEntity, TKey>,

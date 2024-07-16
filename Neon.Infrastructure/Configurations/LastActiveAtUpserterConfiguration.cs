@@ -1,6 +1,10 @@
-﻿namespace Neon.Infrastructure.Configurations;
+﻿using Neon.Infrastructure.Configurations.Bases;
 
-public class LastActiveAtUpserterConfiguration
+namespace Neon.Infrastructure.Configurations;
+
+public class LastActiveAtUpserterConfiguration : IConfigurationBindable
 {
-    public int UpdateLastActiveAtDeltaSeconds { get; set; }
+    public static string Key => "LastActiveAtUpserter";
+
+    public int DeltaSeconds { get; set; }
 }
