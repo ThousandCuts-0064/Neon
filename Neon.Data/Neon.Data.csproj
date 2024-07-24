@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Neon.Application\Neon.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

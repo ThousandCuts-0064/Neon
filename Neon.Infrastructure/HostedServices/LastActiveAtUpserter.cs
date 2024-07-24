@@ -8,14 +8,14 @@ namespace Neon.Infrastructure.HostedServices;
 
 internal class LastActiveAtUpserter : BackgroundService
 {
-    private readonly IServiceProvider _services;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IOptionsMonitor<LastActiveAtUpserterConfiguration> _configuration;
 
     public LastActiveAtUpserter(
-        IServiceProvider services,
+        IServiceScopeFactory serviceScopeFactory,
         IOptionsMonitor<LastActiveAtUpserterConfiguration> configuration)
     {
-        _services = services;
+        _serviceScopeFactory = serviceScopeFactory;
         _configuration = configuration;
     }
 
@@ -45,7 +45,7 @@ internal class LastActiveAtUpserter : BackgroundService
 
     private async Task Upsert()
     {
-        await using var serviceScope = _services.CreateAsyncScope();
+        await using var serviceScope = _serviceScopeFactory.CreateAsyncScope();
 
         await serviceScope.ServiceProvider
             .GetRequiredService<ISystemValueService>()

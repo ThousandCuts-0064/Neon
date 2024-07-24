@@ -7,10 +7,18 @@
         Title = Resource.Layout_Title_Gameplay,
     });
 
-
-}
+<div class="neon-opponent-container">
+    @foreach (var opponent in Model.Opponents)
+    {
+        <div>
+            <button>
+                @opponent.Username
+            </button>
+        </div>
+    }
+</div>}
 
 @section Scripts
 {
-    <script src="~/js/gameplay.js"></script>
+    <script src="~/js/gameplay.js" asp-append-version="true"></script>
 }

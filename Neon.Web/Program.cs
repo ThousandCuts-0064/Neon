@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+using Neon.Application.Services;
 using Neon.Data;
+using Neon.Domain.DbNotifications;
 using Neon.Domain.Entities;
 using Neon.Domain.Enums;
 using Neon.Infrastructure;
@@ -105,6 +108,15 @@ app.MapHub<GameplayHub>("/Gameplay/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
-await app.UseNeonInfrastructure();
+await app.UseNeonInfrastructure(x =>
+{
+    var dbNotificationService = x.GetRequiredService<IDbNotificationService>();
+    var gameplayHubContex = x.GetRequiredService<IHubContext<GameplayHub, IGameplayHubClient>>();
+
+    dbNotificationService.Listen<ActiveConnectionToggle>(y =>
+        gameplayHubContex.Clients.All.ActiveConnectionToggle(y));
+
+    return ValueTask.CompletedTask;
+});
 
 await app.RunAsync();

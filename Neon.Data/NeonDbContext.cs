@@ -27,7 +27,16 @@ public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<SystemValue> SystemValues { get; set; }
 
     public NeonDbContext() => _connectionString = CONNECTION_STRING;
-    public NeonDbContext(IConfiguration configuration) => _connectionString = configuration.GetConnectionString("Default");
+
+    public NeonDbContext(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("Default");
+    }
+
+    public async Task ListenActiveConnectionToggleAsync()
+    {
+        await Database.ExecuteSqlRawAsync("LISTEN \"ActiveConnectionToggle\"");
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

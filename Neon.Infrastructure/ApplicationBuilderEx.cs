@@ -9,11 +9,13 @@ namespace Neon.Infrastructure;
 
 public static class ApplicationBuilderEx
 {
-    public static async Task UseNeonInfrastructure(this IApplicationBuilder app)
+    public static async Task UseNeonInfrastructure(
+        this IApplicationBuilder app,
+        Func<IServiceProvider, ValueTask>? onSetup)
     {
         app.UseMiddleware<ChallengeDeletedUsers>();
 
-        using var serviceScope = app.ApplicationServices.CreateScope();
+        await using var serviceScope = app.ApplicationServices.CreateAsyncScope();
 
         var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
@@ -26,5 +28,8 @@ public static class ApplicationBuilderEx
         await serviceScope.ServiceProvider
             .GetRequiredService<IGameplayService>()
             .ClearUserConnectionsAsync();
+
+        if (onSetup is not null)
+            await onSetup(serviceScope.ServiceProvider);
     }
 }

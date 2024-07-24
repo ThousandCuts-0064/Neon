@@ -19,12 +19,14 @@ public static class ServiceCollectionEx
     {
         return services
             .ConfigureBindable<LastActiveAtUpserterConfiguration>(configuration)
+            .AddHostedService<LastActiveAtUpserter>()
+            .AddHostedService<DbNotificationListener>()
+            .AddSingleton<IDbNotificationService, DbNotificationService>()
             .AddScoped<ChallengeDeletedUsers>()
             .AddScoped<ISystemValueRepository, SystemValueRepository>()
             .AddScoped<ISystemValueService, SystemValueService>()
             .AddScoped<IAuthenticateService, AuthenticateService>()
-            .AddScoped<IGameplayService, GameplayService>()
-            .AddHostedService<LastActiveAtUpserter>();
+            .AddScoped<IGameplayService, GameplayService>();
     }
 
     private static IServiceCollection ConfigureBindable<T>(

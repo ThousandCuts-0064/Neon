@@ -186,3 +186,9 @@ main {
   -webkit-transition: 0.25s;
   transition: 0.25s;
 }
+
+.neon-opponent-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
