@@ -1,5 +1,5 @@
 import * as signalR from "@microsoft/signalr";
-import * as $ from "jquery";
+import $ from "jquery";
 
 const connection = new signalR
 	.HubConnectionBuilder()
@@ -11,7 +11,17 @@ connection.on("AlreadyActive", () => {
 });
 
 connection.on("ActiveConnectionToggle", (activeConnectionToggle) => {
-	$(".neon-opponent-container").add(activeConnectionToggle.userName);
+	if (!activeConnectionToggle.isActive) {
+		$(`.neon-opponent-container .user-${activeConnectionToggle.userName}`).remove();
+		return;
+	}
+
+	$(".neon-opponent-container").append(
+		`<div class="user-${activeConnectionToggle.userName}">
+            <button>
+                ${activeConnectionToggle.userName}
+            </button>
+        </div>`);
 });
 
 connection.start();
