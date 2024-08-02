@@ -2,5 +2,6 @@
 
 public class GameplayModel
 {
-    public required List<OpponentModel> Opponents { get; init; }
+    public required UserModel User { get; init; }
+    public required IReadOnlyCollection<OpponentModel> Opponents { get; init; }
 }

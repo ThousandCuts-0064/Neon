@@ -6,17 +6,25 @@
     {
         Title = Resource.Layout_Title_Gameplay,
     });
+}
 
-<div class="neon-opponent-container">
-    @foreach (var opponent in Model.Opponents)
-    {
-        <div>
-            <button>
-                @opponent.Username
-            </button>
-        </div>
-    }
-</div>}
+<div class="neon-gameplay-container">
+    <div class="neon-opponent-container">
+        @foreach (var opponent in Model.Opponents)
+        {
+            <div class="neon-user-@opponent.Username">
+                <button class="neon-btn-special">
+                    @opponent.Username
+                </button>
+            </div>
+        }
+    </div>
+    <div class="neon-user-container">
+        <button class="neon-btn-special">
+            @Model.User.Username
+        </button>
+    </div>
+</div>
 
 @section Scripts
 {

@@ -45,10 +45,11 @@ footer {
 }
 
 main {
-  display: grid;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-items: center;
-  height: 100%;
 }
 
 .neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
@@ -96,7 +97,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 32ch;
+  width: 24ch;
 }
 .neon-form input {
   text-align: center;
@@ -187,8 +188,21 @@ main {
   transition: 0.25s;
 }
 
-.neon-opponent-container {
+.neon-gameplay-container {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  gap: 1ch;
+}
+
+.neon-opponent-container {
+  min-width: fit-content;
+  max-width: 40%;
+  overflow: hidden auto;
+  scrollbar-width: thin;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 24ch);
+}
+.neon-opponent-container * {
+  width: 100%;
 }

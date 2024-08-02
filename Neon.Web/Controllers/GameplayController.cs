@@ -16,6 +16,8 @@ public class GameplayController : Controller
 
     public IActionResult Index()
     {
+        var user = _gameplayService.GetUserByUsername(User.GetUsername());
+
         var opponents = _gameplayService.ActiveUsers
             .Where(x => x.UserName != User.GetUsername())
             .Select(x => new OpponentModel
@@ -26,6 +28,7 @@ public class GameplayController : Controller
 
         return View(new GameplayModel
         {
+            User = new UserModel { Username = user.UserName },
             Opponents = opponents
         });
     }

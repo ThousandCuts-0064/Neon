@@ -17,6 +17,8 @@ internal class GameplayService : DbContextService, IGameplayService
         _systemValueService = systemValueService;
     }
 
+    public User GetUserByUsername(string username) => DbContext.Users.First(x => x.UserName == username);
+
     public async Task ClearUserConnectionsAsync()
     {
         if (!await DbContext.Users.AnyAsync())
@@ -30,7 +32,7 @@ internal class GameplayService : DbContextService, IGameplayService
                 .SetProperty(y => y.LastActiveAt, lastActiveAt));
     }
 
-    public async Task<bool> TrySetActiveAsync(int userId, string connectionId)
+    public async Task<bool> TrySetUserActiveAsync(int userId, string connectionId)
     {
         var updatedCount = await DbContext.Users
             .Where(x => x.Id == userId && x.ActiveConnectionId == null)
@@ -40,7 +42,7 @@ internal class GameplayService : DbContextService, IGameplayService
         return updatedCount != 0;
     }
 
-    public async Task<bool> TrySetInactiveAsync(int userId, string connectionId)
+    public async Task<bool> TrySetUserInactiveAsync(int userId, string connectionId)
     {
         var updatedCount = await DbContext.Users
             .Where(x => x.Id == userId && x.ActiveConnectionId == connectionId)

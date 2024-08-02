@@ -1,5 +1,24 @@
-﻿.neon-opponent-container{
+﻿@import "constants.scss";
+
+.neon-gameplay-container {
+	width: 100%;
+	height: 100%;
 	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
+	gap: 1ch;
+}
+
+.neon-opponent-container {
+	min-width: fit-content;
+	max-width: calc(100% / 5 * 2);
+	overflow: hidden auto;
+	scrollbar-width: thin;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, $username-width);
+
+	* {
+		width: 100%;
+	}
+}
+
+.neon-user-container {
 }

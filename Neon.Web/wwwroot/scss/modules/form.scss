@@ -1,8 +1,10 @@
-﻿.neon-form {
+﻿@import "constants.scss";
+
+.neon-form {
 	display: flex;
 	flex-direction: column;
 	gap: 0.25rem;
-	width: 32ch;
+	width: $username-width;
 
 	input {
 		text-align: center

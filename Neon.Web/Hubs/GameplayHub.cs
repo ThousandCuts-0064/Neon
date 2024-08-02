@@ -15,7 +15,7 @@ public class GameplayHub : Hub<IGameplayHubClient>
 
     public override async Task OnConnectedAsync()
     {
-        if (await _gameplayService.TrySetActiveAsync(UserId, Context.ConnectionId))
+        if (await _gameplayService.TrySetUserActiveAsync(UserId, Context.ConnectionId))
             return;
 
         await Clients.Caller.AlreadyActive();
@@ -25,6 +25,6 @@ public class GameplayHub : Hub<IGameplayHubClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _gameplayService.TrySetInactiveAsync(UserId, Context.ConnectionId);
+        await _gameplayService.TrySetUserInactiveAsync(UserId, Context.ConnectionId);
     }
 }

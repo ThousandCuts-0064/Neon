@@ -12,11 +12,13 @@ connection.on("ActiveConnectionToggle", (activeConnectionToggle) => {
         $(`.neon-opponent-container .user-${activeConnectionToggle.userName}`).remove();
         return;
     }
-    $(".neon-opponent-container").append(`<div class="user-${activeConnectionToggle.userName}">
-            <button>
+    for (var i = 0; i < 503; i++) {
+        $(".neon-opponent-container").append(`<div class="neon-user-${activeConnectionToggle.userName}">
+            <button class="neon-btn-special">
                 ${activeConnectionToggle.userName}
             </button>
         </div>`);
+    }
 });
 connection.start();
 //# sourceMappingURL=gameplay.js.map
