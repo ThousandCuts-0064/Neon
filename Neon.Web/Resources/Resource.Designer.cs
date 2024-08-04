@@ -106,6 +106,24 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unexpected error occurred..
+        /// </summary>
+        public static string Error_Validation_UnexpectedError {
+            get {
+                return ResourceManager.GetString("Error_Validation_UnexpectedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username can only contain letters, digits, dashes and underscores..
+        /// </summary>
+        public static string Error_Validation_UsernameInvalidCharacters {
+            get {
+                return ResourceManager.GetString("Error_Validation_UsernameInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username not found..
         /// </summary>
         public static string Error_Validation_UsernameNotFound {

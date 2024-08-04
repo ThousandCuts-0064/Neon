@@ -14,9 +14,13 @@ $item-slot-gap: 16px;
 .neon-user-opponents-container,
 .neon-user-equipment-container,
 .neon-user-inventory-container {
-	flex: 1;
 	max-height: 100%;
 	display: flex;
+}
+
+.neon-user-opponents-container,
+.neon-user-inventory-container {
+	flex: 1;
 }
 
 .neon-user-equipment-container {
@@ -42,11 +46,10 @@ $item-slot-gap: 16px;
 }
 
 .neon-user-equipment,
-.neon-user-inventory{
+.neon-user-inventory {
 	min-width: fit-content;
 	padding: $item-slot-gap;
 	display: grid;
-
 	grid-auto-rows: $item-slot-size;
 	gap: $item-slot-gap;
 }

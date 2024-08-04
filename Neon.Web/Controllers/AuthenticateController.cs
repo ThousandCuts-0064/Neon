@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Neon.Application.Services;
 using Neon.Domain.Enums;
@@ -35,7 +36,15 @@ public class AuthenticateController : Controller
         if (result == RegisterResult.Success)
             return RedirectToAction("Index", "Gameplay");
 
-        ModelState.AddModelError(nameof(model.Username), Resource.Error_Validation_UsernameTaken);
+        var usernameError = result switch
+        {
+            RegisterResult.UsernameTaken => Resource.Error_Validation_UsernameTaken,
+            RegisterResult.UsernameInvalidCharacters => Resource.Error_Validation_UsernameInvalidCharacters,
+            RegisterResult.Error => Resource.Error_Validation_UnexpectedError,
+            _ => throw new UnreachableException()
+        };
+
+        ModelState.AddModelError(nameof(model.Username), usernameError);
 
         return View(model);
     }

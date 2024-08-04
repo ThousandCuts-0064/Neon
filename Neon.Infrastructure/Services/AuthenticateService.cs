@@ -23,13 +23,20 @@ internal class AuthenticateService : DbContextService, IAuthenticateService
 
         var user = NewUser(username);
 
-        if (await UserManager.FindByNameAsync(username) is not null)
-            return RegisterResult.UsernameTaken;
-
         var result = await UserManager.CreateAsync(user);
 
         if (!result.Succeeded)
-            return RegisterResult.UsernameTaken;
+        {
+            if (result.Errors.Count() > 1)
+                return RegisterResult.Error;
+
+            return result.Errors.First().Code switch
+            {
+                nameof(IdentityErrorDescriber.InvalidUserName) => RegisterResult.UsernameInvalidCharacters,
+                nameof(IdentityErrorDescriber.DuplicateUserName) => RegisterResult.UsernameTaken,
+                _ => RegisterResult.Error
+            };
+        }
 
         result = await UserManager.AddToRoleAsync(user, nameof(UserRole.Guest));
 

@@ -59,7 +59,7 @@ builder.Services
             .Concat(Enumerable.Range('A', 'Z' - 'A'))
             .Concat(Enumerable.Range('0', '9' - '0'))
             .Select(y => (char)y)
-            .Concat([' ', '_', '-', '.', '@', '+'])
+            .Concat(['_', '-'])
             .ToArray());
 
         x.Password.RequiredLength = User.PASSWORD_MIN_LENGTH;

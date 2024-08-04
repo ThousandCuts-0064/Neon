@@ -100,7 +100,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 24ch;
+  width: 30ch;
 }
 .neon-form input {
   text-align: center;
@@ -202,9 +202,13 @@ main {
 .neon-user-opponents-container,
 .neon-user-equipment-container,
 .neon-user-inventory-container {
-  flex: 1;
   max-height: 100%;
   display: flex;
+}
+
+.neon-user-opponents-container,
+.neon-user-inventory-container {
+  flex: 1;
 }
 
 .neon-user-equipment-container {
@@ -222,7 +226,7 @@ main {
   overflow: hidden auto;
   scrollbar-width: thin;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 24ch);
+  grid-template-columns: repeat(auto-fit, 30ch);
 }
 .neon-user-opponents * {
   width: 100%;

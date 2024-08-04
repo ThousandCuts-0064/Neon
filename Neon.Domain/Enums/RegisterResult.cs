@@ -4,5 +4,6 @@ public enum RegisterResult
 {
     Error,
     UsernameTaken,
+    UsernameInvalidCharacters,
     Success
 }
