@@ -25,7 +25,7 @@ public class FieldTagHelper : TagHelper
         output.TagName = null;
         output.TagMode = TagMode.StartTagAndEndTag;
 
-        var viewData = new ViewDataDictionary<ModelExpression>(ViewContext.ViewData) { Model = For };
+        var viewData = new ViewDataDictionary<ModelExpression>(ViewContext.ViewData, For);
         var viewContext = new ViewContext(ViewContext, ViewContext.View, viewData, new StringWriter());
 
         await GetView("_Field").RenderAsync(viewContext);

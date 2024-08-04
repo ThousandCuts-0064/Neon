@@ -91,7 +91,19 @@ internal class AuthenticateService : DbContextService, IAuthenticateService
         return RegisterResult.Success;
     }
 
-    public async Task LogoutAsync() => await _signInManager.SignOutAsync();
+    public async Task LogoutAsync()
+    {
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
+
+        await _signInManager.SignOutAsync();
+
+        var user = await UserManager.FindByNameAsync(_signInManager.Context.User.Identity!.Name!);
+
+        if (await UserManager.IsInRoleAsync(user!, nameof(UserRole.Guest)))
+            await UserManager.DeleteAsync(user!);
+
+        await transaction.CommitAsync();
+    }
 
     private static User NewUser(string username) => new()
     {

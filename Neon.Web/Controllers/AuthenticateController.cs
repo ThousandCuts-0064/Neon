@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Neon.Application.Services;
 using Neon.Domain.Enums;
 using Neon.Web.Models;
+using Neon.Web.Resources;
 
 namespace Neon.Web.Controllers;
 
@@ -33,6 +34,8 @@ public class AuthenticateController : Controller
 
         if (result == RegisterResult.Success)
             return RedirectToAction("Index", "Gameplay");
+
+        ModelState.AddModelError(nameof(model.Username), Resource.Error_Validation_UsernameTaken);
 
         return View(model);
     }
