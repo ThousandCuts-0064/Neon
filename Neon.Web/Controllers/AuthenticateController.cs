@@ -68,4 +68,11 @@ public class AuthenticateController : Controller
 
         return View(model);
     }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _authenticateService.LogoutAsync();
+
+        return RedirectToAction("Index");
+    }
 }

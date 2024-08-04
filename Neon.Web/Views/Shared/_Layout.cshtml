@@ -24,7 +24,15 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (!User.IsAuthenticated())
+                        @if (User.IsAuthenticated())
+                        {
+                            <li style="margin-left: auto">
+                                <a asp-controller="Authenticate" asp-action="Logout" class="neon-link-common neon-nav-btn">
+                                    @Resource.Layout_Nav_Logout
+                                </a>
+                            </li>
+                        }
+                        else
                         {
                             <li>
                                 <a asp-controller="Authenticate" asp-action="Register" class="neon-link-common neon-nav-btn">

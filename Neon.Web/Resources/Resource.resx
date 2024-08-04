@@ -183,4 +183,7 @@
   <data name="Layout_Title_AlreadyActive" xml:space="preserve">
     <value>Already active</value>
   </data>
+  <data name="Layout_Nav_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
 </root>

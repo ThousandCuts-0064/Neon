@@ -20,9 +20,12 @@ footer {
 }
 
 main {
+	height: 100%;
 	overflow: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	align-content: center;
 	justify-items: center;
+	justify-content: center;
 }

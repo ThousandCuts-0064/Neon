@@ -9,20 +9,39 @@
 }
 
 <div class="neon-gameplay-container">
-    <div class="neon-opponent-container">
-        @foreach (var opponent in Model.Opponents)
-        {
-            <div class="neon-user-@opponent.Username">
-                <button class="neon-btn-special">
-                    @opponent.Username
-                </button>
-            </div>
-        }
+    <div class="neon-user-opponents-container">
+        <div class="neon-user-opponents">
+            @foreach (var opponent in Model.Opponents)
+            {
+                <div class="neon-user-@opponent.Username">
+                    <button class="neon-btn-special">
+                        @opponent.Username
+                    </button>
+                </div>
+            }
+        </div>
     </div>
-    <div class="neon-user-container">
-        <button class="neon-btn-special">
-            @Model.User.Username
-        </button>
+    <div class="neon-user-equipment-container">
+        <div class="neon-user-equipment">
+            @for (var i = 0; i < 25; i++)
+            {
+                <div>
+                    <button id="neon-user-equipment-slot-@i" class="neon-item-slot">
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="neon-user-inventory-container">
+        <div class="neon-user-inventory">
+            @for (var i = 0; i < 100; i++)
+            {
+                <div>
+                    <button id="neon-user-inventory-slot-@i" class="neon-item-slot">
+                    </button>
+                </div>
+            }
+        </div>
     </div>
 </div>
 

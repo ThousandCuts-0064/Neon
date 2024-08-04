@@ -9,11 +9,11 @@ connection.on("AlreadyActive", () => {
 });
 connection.on("ActiveConnectionToggle", (activeConnectionToggle) => {
     if (!activeConnectionToggle.isActive) {
-        $(`.neon-opponent-container .user-${activeConnectionToggle.userName}`).remove();
+        $(`.neon-user-opponents .user-${activeConnectionToggle.userName}`).remove();
         return;
     }
     for (var i = 0; i < 503; i++) {
-        $(".neon-opponent-container").append(`<div class="neon-user-${activeConnectionToggle.userName}">
+        $(".neon-user-opponents").append(`<div class="neon-user-${activeConnectionToggle.userName}">
             <button class="neon-btn-special">
                 ${activeConnectionToggle.userName}
             </button>
