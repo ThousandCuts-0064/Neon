@@ -55,9 +55,9 @@ builder.Services
     .AddIdentity<User, IdentityRole<int>>(x =>
     {
         x.User.AllowedUserNameCharacters = new string(Enumerable
-            .Range('a', 'z' - 'a')
-            .Concat(Enumerable.Range('A', 'Z' - 'A'))
-            .Concat(Enumerable.Range('0', '9' - '0'))
+            .Range('a', 'z' - 'a' + 1)
+            .Concat(Enumerable.Range('A', 'Z' - 'A' + 1))
+            .Concat(Enumerable.Range('0', '9' - '0' + 1))
             .Select(y => (char)y)
             .Concat(['_', '-'])
             .ToArray());
@@ -75,6 +75,7 @@ builder.Services.ConfigureApplicationCookie(x =>
 {
     x.Cookie.HttpOnly = true;
     x.Cookie.SameSite = SameSiteMode.Strict;
+    x.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     x.Cookie.IsEssential = true;
     x.LoginPath = "/Authenticate";
     x.LogoutPath = x.LoginPath;

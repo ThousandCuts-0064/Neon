@@ -212,7 +212,8 @@ main {
 }
 
 .neon-user-equipment-container {
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .neon-user-inventory-container {
@@ -245,6 +246,14 @@ main {
   grid-template-columns: repeat(5, 64px);
 }
 
+.neon-user-input {
+  width: 100%;
+  padding: 1rem 1ch;
+}
+.neon-user-input * {
+  width: 100%;
+}
+
 .neon-user-inventory {
   max-height: 100%;
   overflow: hidden auto;
@@ -252,8 +261,66 @@ main {
   grid-template-columns: repeat(5, 64px);
 }
 
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --opacity {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: false;
+}
 .neon-item-slot {
-  background-color: black;
+  --border-color: slategray;
+  --animation-spin-duration: 0s;
+  --animation-spin-direction: normal;
+  --animation-pulse-duration: 0s;
+  --glow-z-index: -1;
+  position: relative;
   width: 100%;
   height: 100%;
+  padding: 0;
+  border: 0;
+  background-color: black;
+}
+.neon-item-slot:hover {
+  --glow-z-index: 1;
+}
+.neon-item-slot::before, .neon-item-slot::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  left: -6px;
+  top: -6px;
+  background: repeating-conic-gradient(from var(--angle), var(--border-color) 0deg, transparent 45deg, var(--border-color) 90deg);
+  opacity: var(--opacity);
+  z-index: -1;
+  animation: var(--animation-spin-duration) spin linear infinite var(--animation-spin-direction), var(--animation-pulse-duration) pulse linear infinite;
+}
+.neon-item-slot::before {
+  filter: blur(4px);
+  opacity: var(--opacity);
+  z-index: var(--glow-z-index);
+}
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+@keyframes pulse {
+  0% {
+    --opacity: 1;
+  }
+  50% {
+    --opacity: 0.2;
+  }
+  100% {
+    --opacity: 1;
+  }
 }

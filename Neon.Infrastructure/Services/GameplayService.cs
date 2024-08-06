@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services;
 using Neon.Data;
 using Neon.Domain.Entities;
@@ -51,5 +52,11 @@ internal class GameplayService : DbContextService, IGameplayService
                 .SetProperty(y => y.LastActiveAt, DateTime.UtcNow));
 
         return updatedCount != 0;
+    }
+
+    public async Task UserGetItem(int userId, Guid itemKey)
+    {
+        // TODO
+        Debugger.Break();
     }
 }
