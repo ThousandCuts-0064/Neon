@@ -43,4 +43,9 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\ts\gameplay.js" />
+    <None Include="wwwroot\ts\gameplay.js.map" />
+  </ItemGroup>
+
 </Project>

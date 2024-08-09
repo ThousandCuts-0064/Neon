@@ -18,6 +18,7 @@ internal class GameplayService : DbContextService, IGameplayService
         _systemValueService = systemValueService;
     }
 
+    public User GetUserById(int id) => DbContext.Users.First(x => x.Id == id);
     public User GetUserByUsername(string username) => DbContext.Users.First(x => x.UserName == username);
 
     public async Task ClearUserConnectionsAsync()

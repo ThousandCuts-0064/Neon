@@ -59,7 +59,29 @@ $item-slot-gap: 16px;
 	grid-template-columns: repeat(5, $item-slot-size);
 }
 
-.neon-user-input {
+.neon-user-chat {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden auto;
+}
+
+.neon-user-messages {
+	margin: 0;
+	padding: 1rem 1ch;
+	overflow: hidden auto;
+	scrollbar-width: none;
+
+	li {
+		list-style: none;
+	}
+
+	.neon-user-message {
+		--text-color: red;
+		color: var(--text-color);
+	}
+}
+
+.neon-user-form {
 	width: 100%;
 	padding: 1rem 1ch;
 

@@ -24,6 +24,7 @@
     "@microsoft/signalr": "^8.0.0",
     "@types/jquery": "^3.5.30",
     "@types/node": "^20.14.6",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "raw-loader": "^4.0.2"
   }
 }

@@ -1,5 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import $ from "jquery";
+import userMessage from "../html/user-message.html";
 
 const connection = new signalR
 	.HubConnectionBuilder()
@@ -10,8 +11,15 @@ connection.on("AlreadyActive", () => {
 	console.log("Already active!");
 });
 
-connection.on("SendMessage", (message) => {
-	console.log(message);
+const neonUserMessages = $(".neon-user-messages");
+
+connection.on("SendMessage", (username, message) => {
+	neonUserMessages.append(userMessage.replace("{{ message }}", `${username}: ${message}`))
+			.addClass("newon-user-message")
+
+	neonUserMessages.animate({
+		scrollTop: neonUserMessages[0].scrollHeight - neonUserMessages.height()
+	}, 250);
 });
 
 connection.on("ExecutedCommand", (message) => {
@@ -41,20 +49,20 @@ connection.on("ActiveConnectionToggle", (activeConnectionToggle) => {
 connection.start();
 
 
-const neonUserInput = $(".neon-user-input");
-const neonUserMessage = $("#neon-user-message");
+const neonUserForm = $(".neon-user-form");
+const neonUserInput = $("#neon-user-input");
 
-neonUserInput.on("submit", () => {
-	connection.send("HandleInput", neonUserMessage.val());
+neonUserForm.on("submit", () => {
+	connection.send("HandleInput", neonUserInput.val());
 
-	neonUserInput.trigger("reset");
+	neonUserForm.trigger("reset");
 
 	return false;
-})
+});
 
-neonUserMessage.on("input", () => {
-	if (neonUserMessage.val().toString()[0] === '/')
-		neonUserMessage.css("color", "green");
+neonUserInput.on("input", () => {
+	if (neonUserInput.val().toString()[0] === '/')
+		neonUserInput.css("color", "green");
 	else
-		neonUserMessage.css("color", "black");
-})
+		neonUserInput.css("color", "black");
+});

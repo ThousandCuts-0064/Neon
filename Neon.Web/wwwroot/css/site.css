@@ -246,11 +246,31 @@ main {
   grid-template-columns: repeat(5, 64px);
 }
 
-.neon-user-input {
+.neon-user-chat {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+}
+
+.neon-user-messages {
+  margin: 0;
+  padding: 1rem 1ch;
+  overflow: hidden auto;
+  scrollbar-width: none;
+}
+.neon-user-messages li {
+  list-style: none;
+}
+.neon-user-messages .neon-user-message {
+  --text-color: red;
+  color: var(--text-color);
+}
+
+.neon-user-form {
   width: 100%;
   padding: 1rem 1ch;
 }
-.neon-user-input * {
+.neon-user-form * {
   width: 100%;
 }
 

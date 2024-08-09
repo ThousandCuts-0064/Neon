@@ -36,7 +36,7 @@ public class GameplayHub : Hub<IGameplayHubClient>
 
         var handlingTask = HandleInput(text, out var message) switch
         {
-            InputResult.PlainText => Clients.All.SendMessage(message),
+            InputResult.PlainText => Clients.All.SendMessage(_gameplayService.GetUserById(UserId).UserName, message),
             InputResult.ExecutedCommand => Clients.All.ExecutedCommand(message),
             InputResult.InvalidCommand => Clients.All.InvalidCommand(message),
             _ => throw new UnreachableException()
