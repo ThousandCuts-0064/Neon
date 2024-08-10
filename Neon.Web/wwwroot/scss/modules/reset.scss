@@ -1,9 +1,16 @@
 ﻿* {
+	box-sizing: border-box;
+	border: 0;
 	margin: 0;
+	border-color: transparent;
 
 	&::before, &::after {
 		box-sizing: border-box;
 	}
+}
+
+#root, #__next {
+	isolation: isolate;
 }
 
 body {

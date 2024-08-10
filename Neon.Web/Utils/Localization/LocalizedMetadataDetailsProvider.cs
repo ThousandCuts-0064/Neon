@@ -33,6 +33,8 @@ public class LocalizedMetadataDetailsProvider : IValidationMetadataProvider
                 StringLengthAttribute a when a.MinimumLength != 0 => Resource.Error_Validation_StringLengthWithMin,
                 StringLengthAttribute => Resource.Error_Validation_StringLength,
                 CompareAttribute => Resource.Error_Validation_Compare,
+                MinLengthAttribute => Resource.Error_Validation_MinLength,
+                MaxLengthAttribute => Resource.Error_Validation_MaxLength,
 
                 CreditCardAttribute => throw new NotImplementedException(),
                 EmailAddressAttribute => throw new NotImplementedException(),
@@ -51,8 +53,6 @@ public class LocalizedMetadataDetailsProvider : IValidationMetadataProvider
                 CustomValidationAttribute => throw new NotImplementedException(),
                 DeniedValuesAttribute => throw new NotImplementedException(),
                 LengthAttribute => throw new NotImplementedException(),
-                MaxLengthAttribute => throw new NotImplementedException(),
-                MinLengthAttribute => throw new NotImplementedException(),
                 RangeAttribute => throw new NotImplementedException(),
                 RegularExpressionAttribute => throw new NotImplementedException(),
                 _ => throw new NotImplementedException()

@@ -169,10 +169,10 @@
     <value>Password</value>
   </data>
   <data name="Error_Validation_Compare" xml:space="preserve">
-    <value>"{0} and {1} do not match."</value>
+    <value>{0} and {1} do not match.</value>
   </data>
   <data name="Error_Validation_StringLength" xml:space="preserve">
-    <value>{0} must have a length up to {1}</value>
+    <value>{0} must have a length up to {1}.</value>
   </data>
   <data name="Layout_Nav_Neon" xml:space="preserve">
     <value>Neon</value>
@@ -191,5 +191,11 @@
   </data>
   <data name="Error_Validation_UnexpectedError" xml:space="preserve">
     <value>Unexpected error occurred.</value>
+  </data>
+  <data name="Error_Validation_MaxLength" xml:space="preserve">
+    <value>{0} must have a maximum length of {1}.</value>
+  </data>
+  <data name="Error_Validation_MinLength" xml:space="preserve">
+    <value>{0} must have a minimum length of {1}.</value>
   </data>
 </root>

@@ -63,6 +63,7 @@ $item-slot-gap: 16px;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden auto;
+	clip-path: inset(1rem 0 0 0);
 }
 
 .neon-user-messages {

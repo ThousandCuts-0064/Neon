@@ -61,7 +61,7 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0} and {1} do not match.&quot;.
+        ///   Looks up a localized string similar to {0} and {1} do not match..
         /// </summary>
         public static string Error_Validation_Compare {
             get {
@@ -79,6 +79,24 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must have a maximum length of {1}..
+        /// </summary>
+        public static string Error_Validation_MaxLength {
+            get {
+                return ResourceManager.GetString("Error_Validation_MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must have a minimum length of {1}..
+        /// </summary>
+        public static string Error_Validation_MinLength {
+            get {
+                return ResourceManager.GetString("Error_Validation_MinLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is required..
         /// </summary>
         public static string Error_Validation_Required {
@@ -88,7 +106,7 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must have a length up to {1}.
+        ///   Looks up a localized string similar to {0} must have a length up to {1}..
         /// </summary>
         public static string Error_Validation_StringLength {
             get {

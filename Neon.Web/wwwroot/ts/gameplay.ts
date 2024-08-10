@@ -64,5 +64,5 @@ neonUserInput.on("input", () => {
 	if (neonUserInput.val().toString()[0] === '/')
 		neonUserInput.css("color", "green");
 	else
-		neonUserInput.css("color", "black");
+		neonUserInput.css("color", "#AAAAAA");
 });

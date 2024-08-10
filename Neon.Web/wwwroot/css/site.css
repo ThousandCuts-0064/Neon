@@ -1,8 +1,15 @@
 ﻿* {
+  box-sizing: border-box;
+  border: 0;
   margin: 0;
+  border-color: transparent;
 }
 *::before, *::after {
   box-sizing: border-box;
+}
+
+#root, #__next {
+  isolation: isolate;
 }
 
 body {
@@ -21,6 +28,10 @@ input, button, textarea, select {
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+}
+
+:root {
+  color-scheme: dark light;
 }
 
 body {
@@ -53,6 +64,13 @@ main {
   align-content: center;
   justify-items: center;
   justify-content: center;
+}
+
+input {
+  border: 0;
+  background-color: black;
+  color: #AAAAAA;
+  outline: none;
 }
 
 .neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
@@ -250,6 +268,7 @@ main {
   display: flex;
   flex-direction: column;
   overflow: hidden auto;
+  clip-path: inset(1rem 0 0 0);
 }
 
 .neon-user-messages {

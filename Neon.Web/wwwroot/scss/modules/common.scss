@@ -1,4 +1,8 @@
-﻿body {
+﻿:root {
+	color-scheme: dark light;
+}
+
+body {
 	height: 100svh;
 	display: flex;
 	flex-direction: column;
@@ -28,4 +32,11 @@ main {
 	align-content: center;
 	justify-items: center;
 	justify-content: center;
+}
+
+input {
+	border: 0;
+	background-color: black;
+	color: #AAAAAA;
+	outline: none;
 }
