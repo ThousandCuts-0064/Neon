@@ -232,6 +232,7 @@ input {
 .neon-user-equipment-container {
   flex-direction: column;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .neon-user-inventory-container {
@@ -246,6 +247,7 @@ input {
   scrollbar-width: thin;
   display: grid;
   grid-template-columns: repeat(auto-fit, 30ch);
+  gap: 4px;
 }
 .neon-user-opponents * {
   width: 100%;
@@ -254,31 +256,32 @@ input {
 .neon-user-equipment,
 .neon-user-inventory {
   min-width: fit-content;
-  padding: 16px;
   display: grid;
-  grid-auto-rows: 64px;
-  gap: 16px;
+  grid-auto-rows: 76px;
+  gap: 4px;
 }
 
 .neon-user-equipment {
-  grid-template-columns: repeat(5, 64px);
+  grid-template-columns: repeat(5, 76px);
 }
 
 .neon-user-chat {
   display: flex;
   flex-direction: column;
   overflow: hidden auto;
-  clip-path: inset(1rem 0 0 0);
+  gap: 1px;
 }
 
 .neon-user-messages {
+  padding: 0;
   margin: 0;
-  padding: 1rem 1ch;
   overflow: hidden auto;
-  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 .neon-user-messages li {
   list-style: none;
+  scroll-snap-align: start;
 }
 .neon-user-messages .neon-user-message {
   --text-color: red;
@@ -287,7 +290,6 @@ input {
 
 .neon-user-form {
   width: 100%;
-  padding: 1rem 1ch;
 }
 .neon-user-form * {
   width: 100%;
@@ -295,9 +297,10 @@ input {
 
 .neon-user-inventory {
   max-height: 100%;
+  padding-left: 8px;
   overflow: hidden auto;
   scrollbar-width: thin;
-  grid-template-columns: repeat(5, 64px);
+  grid-template-columns: repeat(5, 76px);
 }
 
 @property --angle {
@@ -316,12 +319,12 @@ input {
   --animation-spin-direction: normal;
   --animation-pulse-duration: 0s;
   --glow-z-index: -1;
+  display: block;
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 76px;
+  height: 76px;
   padding: 0;
-  border: 0;
-  background-color: black;
+  background-color: transparent;
 }
 .neon-item-slot:hover {
   --glow-z-index: 1;
@@ -330,10 +333,10 @@ input {
   content: "";
   display: inline-block;
   position: absolute;
-  width: calc(100% + 12px);
-  height: calc(100% + 12px);
-  left: -6px;
-  top: -6px;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
   background: repeating-conic-gradient(from var(--angle), var(--border-color) 0deg, transparent 45deg, var(--border-color) 90deg);
   opacity: var(--opacity);
   z-index: -1;
@@ -343,6 +346,16 @@ input {
   filter: blur(4px);
   opacity: var(--opacity);
   z-index: var(--glow-z-index);
+}
+.neon-item-slot > img {
+  display: block;
+  line-height: 1;
+  width: 64px;
+  height: 64px;
+  background-color: black;
+  margin: auto;
+  justify-content: center;
+  align-content: center;
 }
 @keyframes spin {
   from {

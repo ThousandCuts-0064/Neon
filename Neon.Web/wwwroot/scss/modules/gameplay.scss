@@ -1,7 +1,9 @@
 ﻿@import "constants.scss";
 
-$item-slot-size: 64px;
-$item-slot-gap: 16px;
+$item-img-size: 64px;
+$item-border-size: 12px;
+$item-slot-size: $item-img-size + $item-border-size;
+$item-slot-gap: 4px;
 
 .neon-gameplay-container {
 	width: 100%;
@@ -26,6 +28,7 @@ $item-slot-gap: 16px;
 .neon-user-equipment-container {
 	flex-direction: column;
 	justify-content: space-between;
+	gap: 1rem;
 }
 
 .neon-user-inventory-container {
@@ -40,6 +43,7 @@ $item-slot-gap: 16px;
 	scrollbar-width: thin;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, $username-width);
+	gap: $item-slot-gap;
 
 	* {
 		width: 100%;
@@ -49,7 +53,6 @@ $item-slot-gap: 16px;
 .neon-user-equipment,
 .neon-user-inventory {
 	min-width: fit-content;
-	padding: $item-slot-gap;
 	display: grid;
 	grid-auto-rows: $item-slot-size;
 	gap: $item-slot-gap;
@@ -63,17 +66,19 @@ $item-slot-gap: 16px;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden auto;
-	clip-path: inset(1rem 0 0 0);
+	gap: 1px;
 }
 
 .neon-user-messages {
+	padding: 0;
 	margin: 0;
-	padding: 1rem 1ch;
 	overflow: hidden auto;
-	scrollbar-width: none;
+	scroll-behavior: smooth;
+	scroll-snap-type: y mandatory;
 
 	li {
 		list-style: none;
+		scroll-snap-align: start;
 	}
 
 	.neon-user-message {
@@ -84,7 +89,6 @@ $item-slot-gap: 16px;
 
 .neon-user-form {
 	width: 100%;
-	padding: 1rem 1ch;
 
 	* {
 		width: 100%;
@@ -93,6 +97,7 @@ $item-slot-gap: 16px;
 
 .neon-user-inventory {
 	max-height: 100%;
+	padding-left: $item-slot-gap * 2;
 	overflow: hidden auto;
 	scrollbar-width: thin;
 	grid-template-columns: repeat(5, $item-slot-size);
@@ -116,12 +121,12 @@ $item-slot-gap: 16px;
 	--animation-spin-direction: normal;
 	--animation-pulse-duration: 0s;
 	--glow-z-index: -1;
+	display: block;
 	position: relative;
-	width: 100%;
-	height: 100%;
+	width: $item-slot-size;
+	height: $item-slot-size;
 	padding: 0;
-	border: 0;
-	background-color: black;
+	background-color: transparent;
 
 	&:hover {
 		--glow-z-index: 1;
@@ -131,10 +136,10 @@ $item-slot-gap: 16px;
 		content: "";
 		display: inline-block;
 		position: absolute;
-		width: calc(100% + $item-slot-gap * 0.75);
-		height: calc(100% + $item-slot-gap * 0.75);
-		left: calc($item-slot-gap * -0.375);
-		top: calc($item-slot-gap * -0.375);
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
 		background: repeating-conic-gradient(from var(--angle), var(--border-color) 0deg, transparent 45deg, var(--border-color) 90deg);
 		opacity: var(--opacity);
 		z-index: -1;
@@ -142,9 +147,20 @@ $item-slot-gap: 16px;
 	}
 
 	&::before {
-		filter: blur(4px);
+		filter: blur($item-slot-gap);
 		opacity: var(--opacity);
 		z-index: var(--glow-z-index);
+	}
+
+	> img {
+		display: block;
+		line-height: 1;
+		width: $item-img-size;
+		height: $item-img-size;
+		background-color: black;
+		margin: auto;
+		justify-content: center;
+		align-content: center;
 	}
 
 	@keyframes spin {
