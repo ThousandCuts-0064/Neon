@@ -1,5 +1,9 @@
-﻿@model OpponentModel
+﻿@model UserModel
 
 @{
     Layout = "_Layout";
+    ViewData.Set(new LayoutData
+    {
+        Title = Model.Username,
+    });
 }

@@ -174,7 +174,7 @@
   <data name="Error_Validation_StringLength" xml:space="preserve">
     <value>{0} must have a length up to {1}.</value>
   </data>
-  <data name="Layout_Nav_Neon" xml:space="preserve">
+  <data name="Layout_Nav_Home" xml:space="preserve">
     <value>Neon</value>
   </data>
   <data name="User_Property_RepeatPassword" xml:space="preserve">
@@ -197,5 +197,11 @@
   </data>
   <data name="Error_Validation_MinLength" xml:space="preserve">
     <value>{0} must have a minimum length of {1}.</value>
+  </data>
+  <data name="Project_LanguageShort" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="Project_Name" xml:space="preserve">
+    <value>Neon</value>
   </data>
 </root>

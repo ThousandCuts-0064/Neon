@@ -1,10 +1,10 @@
 ﻿* {
-  box-sizing: border-box;
+  padding: 0;
   border: 0;
   margin: 0;
   border-color: transparent;
 }
-*::before, *::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -30,8 +30,115 @@ p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
-:root {
+.neon-theme {
+  --theme-base-0: #020303;
+  --theme-base-1: #040606;
+  --theme-base-2: #070909;
+  --theme-base-3: #090C0C;
+  --theme-base-4: #0B0E0F;
+  --theme-base-5: #0D1112;
+  --theme-base-6: #0F1415;
+  --theme-base-7: #111717;
+  --theme-base-8: #141A1A;
+  --theme-base-9: #161D1D;
+  --theme-common: #AAAAAA;
+  --theme-contrast: #FFFFFF;
+  --theme-accent: #00ADB5;
+  --theme-danger: #DC3545;
+  --theme-warning: #FFC107;
+  --theme-success: #28A745;
   color-scheme: dark light;
+  font-family: "Roboto Condensed";
+}
+.neon-theme input {
+  color: var(--theme-common);
+}
+.neon-theme .neon-theme-back-base-0 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-0), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-0);
+}
+.neon-theme .neon-theme-back-base-1 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-1), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-1);
+}
+.neon-theme .neon-theme-back-base-2 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-2), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-2);
+}
+.neon-theme .neon-theme-back-base-3 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-3), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-3);
+}
+.neon-theme .neon-theme-back-base-4 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-4), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-4);
+}
+.neon-theme .neon-theme-back-base-5 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-5), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-5);
+}
+.neon-theme .neon-theme-back-base-6 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-6), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-6);
+}
+.neon-theme .neon-theme-back-base-7 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-7), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-7);
+}
+.neon-theme .neon-theme-back-base-8 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-8), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-8);
+}
+.neon-theme .neon-theme-back-base-9 {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-base-9), var(--theme-contrast) 5%);
+  background-color: var(--theme-base-9);
+}
+.neon-theme .neon-theme-back-accent, .neon-theme .neon-button-accented {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-accent), var(--theme-contrast) 25%);
+  background-color: var(--theme-accent);
+}
+.neon-theme .neon-theme-front-common {
+  color: var(--theme-common);
+}
+.neon-theme .neon-theme-front-contrast, .neon-theme .neon-button-accented {
+  color: var(--theme-contrast);
+}
+.neon-theme .neon-theme-front-accent {
+  color: var(--theme-accent);
+}
+.neon-theme .neon-theme-back-danger {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-danger), var(--theme-contrast) 25%);
+  background-color: var(--theme-danger);
+}
+.neon-theme .neon-theme-front-danger {
+  color: var(--theme-danger);
+}
+.neon-theme .neon-theme-back-warning {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-warning), var(--theme-contrast) 25%);
+  background-color: var(--theme-warning);
+}
+.neon-theme .neon-theme-front-warning {
+  color: var(--theme-warning);
+}
+.neon-theme .neon-theme-back-success {
+  --theme-base-highlighted: color-mix(in srgb, var(--theme-success), var(--theme-contrast) 25%);
+  background-color: var(--theme-success);
+}
+.neon-theme .neon-theme-front-success {
+  color: var(--theme-success);
+}
+.neon-theme .neon-interactable, .neon-theme .neon-nav-button, .neon-theme .neon-button-accented {
+  cursor: pointer;
+}
+.neon-theme .neon-interactable:hover, .neon-theme .neon-nav-button:hover, .neon-theme .neon-button-accented:hover {
+  background-color: var(--theme-base-highlighted);
+  transition: background-color 0.15s linear;
+}
+.neon-theme .neon-interactable:not(:hover), .neon-theme .neon-nav-button:not(:hover), .neon-theme .neon-button-accented:not(:hover) {
+  transition: background-color 0.15s linear;
+}
+* {
+  scrollbar-width: thin;
 }
 
 body {
@@ -43,7 +150,6 @@ body {
 header, footer {
   position: sticky;
   width: 100%;
-  white-space: nowrap;
   padding: 0.5rem;
 }
 
@@ -61,57 +167,84 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-content: center;
-  justify-items: center;
   justify-content: center;
 }
 
-input {
-  border: 0;
-  background-color: black;
-  color: #AAAAAA;
+input:not([type]) {
   outline: none;
 }
 
-.neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
-  background: #040606;
+.neon-nav,
+.neon-nav-center {
+  display: flex;
+  gap: 3ch;
 }
-.neon-palette-theme-dark.neon-palette-base-mignight .neon-header-bg,
-.neon-palette-theme-dark.neon-palette-base-mignight .neon-footer-bg {
-  background: #020303;
+
+.neon-nav-center {
+  justify-content: center;
 }
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-common {
-  color: #AAAAAA;
+
+.neon-menu {
+  display: flex;
+  width: 100%;
+  gap: 1ch;
+  list-style-type: none;
 }
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-special {
-  color: #00ADB5;
+.neon-menu li {
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common {
-  color: #AAAAAA;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common:hover {
-  color: #AAAAAA;
-  background: #161D1D;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special {
-  color: #00ADB5;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special:hover {
-  color: #00ADB5;
-  background: #161D1D;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-btn-special {
-  color: #FFFFFF;
-  background: #00ADB5;
+
+.neon-nav-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
   font-weight: bold;
 }
 
-.neon-nav-btn {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
+.neon-switch {
+  display: inline-block;
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1.5rem;
+}
+.neon-switch:focus-within {
+  outline: solid;
+}
+.neon-switch input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.neon-switch input:checked + .neon-slider {
+  background-color: var(--theme-accent);
+}
+.neon-switch input:checked + .neon-slider::before {
+  transform: translateX(1.5rem);
+}
+.neon-switch .neon-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  background-color: var(--theme-common);
+  transition: 0.25s;
+}
+.neon-switch .neon-slider::before {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  left: 0.25rem;
+  bottom: 0.25rem;
+  border-radius: 50%;
+  background-color: var(--theme-contrast);
+  transition: 0.25s;
 }
 
 .neon-form {
@@ -130,83 +263,6 @@ input {
 .neon-form .neon-form-row {
   display: flex;
   justify-content: space-between;
-}
-
-.neon-palette-theme-dark.neon-palette-base-mignight.neon-body-bg {
-  background: #040606;
-}
-.neon-palette-theme-dark.neon-palette-base-mignight .neon-header-bg,
-.neon-palette-theme-dark.neon-palette-base-mignight .neon-footer-bg {
-  background: #020303;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-common {
-  color: #AAAAAA;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-text-special {
-  color: #00ADB5;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common {
-  color: #AAAAAA;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-common:hover {
-  color: #AAAAAA;
-  background: #161D1D;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special {
-  color: #00ADB5;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-link-special:hover {
-  color: #00ADB5;
-  background: #161D1D;
-}
-.neon-palette-theme-dark.neon-palette-accent-sea .neon-btn-special {
-  color: #FFFFFF;
-  background: #00ADB5;
-  font-weight: bold;
-}
-
-.neon-switch {
-  position: relative;
-  display: inline-block;
-  width: 3rem;
-  height: 1.5rem;
-}
-.neon-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.neon-switch input:checked + .neon-slider {
-  background-color: #00ADB5;
-}
-.neon-switch input:checked + .neon-slider:before {
-  -webkit-transform: translateX(1.5rem);
-  -ms-transform: translateX(1.5rem);
-  transform: translateX(1.5rem);
-}
-.neon-switch .neon-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #AAAAAA;
-  border-radius: 1.5rem;
-  -webkit-transition: 0.25s;
-  transition: 0.25s;
-}
-.neon-switch .neon-slider:before {
-  position: absolute;
-  content: "";
-  width: 1rem;
-  height: 1rem;
-  left: 0.25rem;
-  bottom: 0.25rem;
-  background-color: #FFFFFF;
-  border-radius: 50%;
-  -webkit-transition: 0.25s;
-  transition: 0.25s;
 }
 
 .neon-gameplay-container {
@@ -239,15 +295,20 @@ input {
   justify-content: end;
 }
 
-.neon-user-opponents {
+.neon-user-opponents,
+.neon-user-equipment,
+.neon-user-inventory {
   min-width: fit-content;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.neon-user-opponents {
   max-width: 100%;
   max-height: 100%;
   overflow: hidden auto;
-  scrollbar-width: thin;
-  display: grid;
   grid-template-columns: repeat(auto-fit, 30ch);
-  gap: 4px;
 }
 .neon-user-opponents * {
   width: 100%;
@@ -255,10 +316,7 @@ input {
 
 .neon-user-equipment,
 .neon-user-inventory {
-  min-width: fit-content;
-  display: grid;
   grid-auto-rows: 76px;
-  gap: 4px;
 }
 
 .neon-user-equipment {
@@ -273,19 +331,20 @@ input {
 }
 
 .neon-user-messages {
+  width: 0;
+  min-width: 100%;
   padding: 0;
   margin: 0;
+  list-style-type: none;
   overflow: hidden auto;
-  scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
 .neon-user-messages li {
-  list-style: none;
   scroll-snap-align: start;
 }
 .neon-user-messages .neon-user-message {
-  --text-color: red;
-  color: var(--text-color);
+  word-wrap: break-word;
 }
 
 .neon-user-form {
@@ -296,11 +355,11 @@ input {
 }
 
 .neon-user-inventory {
+  max-width: 100%;
   max-height: 100%;
   padding-left: 8px;
   overflow: hidden auto;
-  scrollbar-width: thin;
-  grid-template-columns: repeat(5, 76px);
+  grid-template-columns: 76px 76px repeat(auto-fit, 76px);
 }
 
 @property --angle {
@@ -325,6 +384,7 @@ input {
   height: 76px;
   padding: 0;
   background-color: transparent;
+  cursor: pointer;
 }
 .neon-item-slot:hover {
   --glow-z-index: 1;

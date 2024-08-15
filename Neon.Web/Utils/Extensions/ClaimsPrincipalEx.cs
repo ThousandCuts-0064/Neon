@@ -9,6 +9,12 @@ public static class ClaimsPrincipalEx
         return claimsPrincipal.Identity?.IsAuthenticated ?? false;
     }
 
+    public static int GetId(this ClaimsPrincipal claimsPrincipal)
+    {
+        return int.Parse(claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier) ??
+            throw new InvalidOperationException());
+    }
+
     public static string GetUsername(this ClaimsPrincipal claimsPrincipal)
     {
         return claimsPrincipal.Identity?.Name ?? throw new InvalidOperationException();

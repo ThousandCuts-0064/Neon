@@ -1,0 +1,87 @@
+﻿$palette-dark-base-1: #020303;
+$palette-dark-base-2: #040606;
+$palette-dark-base-3: #070909;
+$palette-dark-base-4: #090C0C;
+$palette-dark-base-5: #0B0E0F;
+$palette-dark-base-6: #0D1112;
+$palette-dark-base-7: #0F1415;
+$palette-dark-base-8: #111717;
+$palette-dark-base-9: #141A1A;
+$palette-dark-base-10: #161D1D;
+
+$palette-accent-common: #AAAAAA;
+$palette-accent-contrast: #FFFFFF;
+$palette-accent-special: #00ADB5;
+
+.neon-theme {
+	--theme-base-0: #020303;
+	--theme-base-1: #040606;
+	--theme-base-2: #070909;
+	--theme-base-3: #090C0C;
+	--theme-base-4: #0B0E0F;
+	--theme-base-5: #0D1112;
+	--theme-base-6: #0F1415;
+	--theme-base-7: #111717;
+	--theme-base-8: #141A1A;
+	--theme-base-9: #161D1D;
+	--theme-common: #AAAAAA;
+	--theme-contrast: #FFFFFF;
+	--theme-accent: #00ADB5;
+	--theme-danger: #DC3545;
+	--theme-warning: #FFC107;
+	--theme-success: #28A745;
+	color-scheme: dark light;
+	font-family: "Roboto Condensed"; //, "Zilla Slab", "Roboto Slab", "Bitter", "Merriweather", "Slabo 27px", "Nunito", "Arvo", "Poppins", "Montserrat", "Aleo", "Oswald"
+
+	input {
+		color: var(--theme-common);
+	}
+
+	@for $i from 0 through 9 {
+		.neon-theme-back-base-#{$i} {
+			--theme-base-highlighted: color-mix(in srgb, var(--theme-base-#{$i}), var(--theme-contrast) 5%);
+			background-color: var(--theme-base-#{$i});
+		}
+	}
+
+	.neon-theme-back-accent {
+		--theme-base-highlighted: color-mix(in srgb, var(--theme-accent), var(--theme-contrast) 25%);
+		background-color: var(--theme-accent);
+	}
+
+	@each $value in (common, contrast, accent) {
+		.neon-theme-front-#{$value} {
+			color: var(--theme-#{$value});
+		}
+	}
+
+	@each $value in (danger, warning, success) {
+		.neon-theme-back-#{$value} {
+			--theme-base-highlighted: color-mix(in srgb, var(--theme-#{$value}), var(--theme-contrast) 25%);
+			background-color: var(--theme-#{$value});
+		}
+
+		.neon-theme-front-#{$value} {
+			color: var(--theme-#{$value});
+		}
+	}
+
+	.neon-interactable {
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--theme-base-highlighted);
+			transition: background-color 0.15s linear;
+		}
+
+		&:not(:hover) {
+			transition: background-color 0.15s linear;
+		}
+	}
+
+	.neon-button-accented {
+		@extend .neon-interactable;
+		@extend .neon-theme-back-accent;
+		@extend .neon-theme-front-contrast;
+	}
+}

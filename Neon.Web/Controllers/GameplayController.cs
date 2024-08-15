@@ -16,7 +16,7 @@ public class GameplayController : Controller
 
     public IActionResult Index()
     {
-        var user = _gameplayService.GetUserByUsername(User.GetUsername());
+        var user = _gameplayService.FindUserByUsername(User.GetUsername());
 
         var opponents = _gameplayService.ActiveUsers
             .Where(x => x.UserName != User.GetUsername())

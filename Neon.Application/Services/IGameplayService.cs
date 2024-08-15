@@ -6,8 +6,8 @@ public interface IGameplayService
 {
     public IQueryable<User> ActiveUsers { get; }
 
-    public User GetUserById(int id);
-    public User GetUserByUsername(string username);
+    public User FindUserById(int id);
+    public User FindUserByUsername(string username);
 
     public Task ClearUserConnectionsAsync();
     public Task<bool> TrySetUserActiveAsync(int userId, string connectionId);

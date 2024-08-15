@@ -13,7 +13,7 @@
         <div class="neon-user-opponents">
             @foreach (var opponent in Model.Opponents)
             {
-                <button class="neon-user-@opponent.Username neon-btn-special">
+                <button type="button" class="neon-user-@opponent.Username neon-button-accented">
                     @opponent.Username
                 </button>
             }
@@ -23,16 +23,15 @@
         <div class="neon-user-equipment">
             @for (var i = 0; i < 25; i++)
             {
-                <button id="neon-user-equipment-slot-@i" class="neon-item-slot">
-                    <img src="img/item/empty.png" alt="Empty" asp-append-version="true"/>
+                <button id="neon-user-equipment-slot-@i" type="button" class="neon-item-slot">
+                    <img src="~/img/item/empty.png" alt="Empty" asp-append-version="true"/>
                 </button>
             }
         </div>
         <div class="neon-user-chat">
-            <ol class="neon-user-messages">
-            </ol>
+            <ol class="neon-user-messages"></ol>
             <form class="neon-user-form">
-                <input id="neon-user-input"/>
+                <input id="neon-user-input" class="neon-theme-back-base-3" autocomplete="off" maxlength="64"/>
             </form>
         </div>
     </div>
@@ -40,8 +39,8 @@
         <div class="neon-user-inventory">
             @for (var i = 0; i < 100; i++)
             {
-                <button id="neon-user-inventory-slot-@i" class="neon-item-slot">
-                    <img src="img/item/empty.png" alt="Empty" asp-append-version="true" />
+                <button id="neon-user-inventory-slot-@i" type="button" class="neon-item-slot">
+                    <img src="~/img/item/empty.png" alt="Empty" asp-append-version="true"/>
                 </button>
             }
         </div>

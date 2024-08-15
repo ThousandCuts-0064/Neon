@@ -27,7 +27,11 @@ builder.Services
         x.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(Resource));
     });
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(x =>
+{
+    if (builder.Environment.IsDevelopment())
+        x.EnableDetailedErrors = true;
+});
 
 builder.Services
     .AddWebMarkupMin(x =>
@@ -45,7 +49,7 @@ builder.Services
         x.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
         x.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
         x.MinificationSettings.RemoveEmptyAttributes = true;
-        x.MinificationSettings.RemoveTagsWithoutContent = true;
+        //x.MinificationSettings.RemoveTagsWithoutContent = true;
         x.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Aggressive;
     });
 
@@ -107,7 +111,7 @@ app.UseWebSockets();
 
 app.MapHub<GameplayHub>("/Gameplay/Hub");
 
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{key?}");
 
 await app.UseNeonInfrastructure(x =>
 {

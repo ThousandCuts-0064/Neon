@@ -3,70 +3,74 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@Resource.Project_LanguageShort" class="neon-theme">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@data.Title</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <title>@data.Title | @Resource.Project_Name</title>
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aleo:wght@400%3B700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400%3B700&display=swap">
 </head>
-<body class="neon-palette-theme-dark neon-palette-base-mignight neon-palette-accent-sea neon-body-bg">
-    <header class="neon-header-bg">
-        <nav class="navbar navbar-expand-sm navbar-dark">
-            <div class="container-fluid">
-                <a asp-controller="Home" asp-action="Index" class="neon-link-special neon-nav-btn">
-                    @Resource.Layout_Nav_Neon
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <menu class="navbar-nav flex-grow-1">
-                        @if (User.IsAuthenticated())
-                        {
-                            <li style="margin-left: auto">
-                                <a asp-controller="Authenticate" asp-action="Logout" class="neon-link-common neon-nav-btn">
-                                    @Resource.Layout_Nav_Logout
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a asp-controller="Authenticate" asp-action="Register" class="neon-link-common neon-nav-btn">
-                                    @Resource.Layout_Nav_Register
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Authenticate" asp-action="Login" class="neon-link-common neon-nav-btn">
-                                    @Resource.Layout_Nav_Login
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Authenticate" asp-action="Guest" class="neon-link-common neon-nav-btn">
-                                    @Resource.Layout_Nav_Guest
-                                </a>
-                            </li>
-                        }
-                    </menu>
-                </div>
-            </div>
+<body class="neon-theme-back-base-1">
+    <header class="neon-theme-back-base-0">
+        <nav class="neon-nav">
+            <a asp-controller="Home" asp-action="Index" class="neon-theme-back-base-2 neon-theme-front-accent neon-nav-button">
+                @Resource.Layout_Nav_Home
+            </a>
+            <menu class="neon-menu">
+                @if (User.IsAuthenticated())
+                {
+                    <li style="margin-left: auto">
+                        <a asp-controller="Authenticate" asp-action="Logout" class="neon-theme-back-base-2 neon-theme-front-common neon-nav-button">
+                            @Resource.Layout_Nav_Logout
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a asp-controller="Authenticate" asp-action="Register" class="neon-theme-back-base-2 neon-theme-front-common neon-nav-button">
+                            @Resource.Layout_Nav_Register
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Authenticate" asp-action="Login" class="neon-theme-back-base-2 neon-theme-front-common neon-nav-button">
+                            @Resource.Layout_Nav_Login
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Authenticate" asp-action="Guest" class="neon-theme-back-base-2 neon-theme-front-common neon-nav-button">
+                            @Resource.Layout_Nav_Guest
+                        </a>
+                    </li>
+                }
+            </menu>
         </nav>
     </header>
-    <main class="container-fluid">
+    <main>
         @RenderBody()
     </main>
-    <footer class="neon-footer-bg">
-        <div class="container-fluid d-flex justify-content-center">
-            <a asp-controller="User" asp-action="Index" class="neon-link-special neon-nav-btn">
-                @User.Identity?.Name
-            </a>
-        </div>
+    <footer class="neon-theme-back-base-0">
+        <nav class="neon-nav-center">
+            @if (User.IsAuthenticated())
+            {
+                <a asp-controller="User" asp-action="Index" class="neon-theme-back-base-2 neon-theme-front-accent neon-nav-button">
+                    @User.GetUsername()
+                </a>
+            }
+        </nav>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

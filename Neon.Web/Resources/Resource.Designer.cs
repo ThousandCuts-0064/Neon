@@ -178,6 +178,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neon.
+        /// </summary>
+        public static string Layout_Nav_Home {
+            get {
+                return ResourceManager.GetString("Layout_Nav_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string Layout_Nav_Login {
@@ -192,15 +201,6 @@ namespace Neon.Web.Resources {
         public static string Layout_Nav_Logout {
             get {
                 return ResourceManager.GetString("Layout_Nav_Logout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Neon.
-        /// </summary>
-        public static string Layout_Nav_Neon {
-            get {
-                return ResourceManager.GetString("Layout_Nav_Neon", resourceCulture);
             }
         }
         
@@ -255,6 +255,24 @@ namespace Neon.Web.Resources {
         public static string Layout_Title_Register {
             get {
                 return ResourceManager.GetString("Layout_Title_Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to en.
+        /// </summary>
+        public static string Project_LanguageShort {
+            get {
+                return ResourceManager.GetString("Project_LanguageShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neon.
+        /// </summary>
+        public static string Project_Name {
+            get {
+                return ResourceManager.GetString("Project_Name", resourceCulture);
             }
         }
         

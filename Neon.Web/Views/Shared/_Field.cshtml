@@ -3,7 +3,7 @@
 @if (Model.Metadata.ModelType == typeof(bool))
 {
     <div class="neon-form-row">
-        <label asp-for-model class="neon-text-common"></label>
+        <label asp-for-model class="neon-theme-front-common"></label>
         <label class="neon-switch">
             <input asp-for-model type="checkbox"/>
             <span class="neon-slider"></span>
@@ -14,6 +14,6 @@ else
 {
     <div class="neon-form-col">
         <input asp-for-model/>
-        <span asp-validation-for-model class="text-danger"></span>
+        <span asp-validation-for-model class="neon-theme-front-danger"></span>
     </div>
 }

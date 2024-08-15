@@ -1,17 +1,22 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Neon.Application.Services;
+using Neon.Domain.Entities;
+using Neon.Domain.Enums;
 
 namespace Neon.Web.Hubs;
 
 public class GameplayHub : Hub<IGameplayHubClient>
 {
     private readonly IGameplayService _gameplayService;
+    private readonly UserManager<User> _userManager;
     private int UserId => int.Parse(Context.UserIdentifier!);
 
-    public GameplayHub(IGameplayService gameplayService)
+    public GameplayHub(IGameplayService gameplayService, UserManager<User> userManager)
     {
         _gameplayService = gameplayService;
+        _userManager = userManager;
     }
 
     public override async Task OnConnectedAsync()
@@ -34,15 +39,50 @@ public class GameplayHub : Hub<IGameplayHubClient>
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        var handlingTask = HandleInput(text, out var message) switch
+        switch (HandleInput(text, out var message))
         {
-            InputResult.PlainText => Clients.All.SendMessage(_gameplayService.GetUserById(UserId).UserName, message),
-            InputResult.ExecutedCommand => Clients.All.ExecutedCommand(message),
-            InputResult.InvalidCommand => Clients.All.InvalidCommand(message),
-            _ => throw new UnreachableException()
-        };
+            case InputResult.PlainText:
+                var user = _gameplayService.FindUserById(UserId);
+                var roles = await _userManager.GetRolesAsync(user);
 
-        await handlingTask;
+                var (usernamePrefix, usernameSuffix) = roles[0] switch
+                {
+                    nameof(UserRole.Guest) => ("(", ")"),
+                    nameof(UserRole.Standard) => ("<", ">"),
+                    nameof(UserRole.Admin) => ("{", "}"),
+                    _ => throw new UnreachableException()
+                };
+
+                var isImportant = message[0] == '!';
+
+                if (isImportant)
+                    message = message[1..].TrimStart();
+
+                if (message.Length > 0)
+                {
+                    await Clients.All.SendMessage(
+                        Enum.Parse<UserRole>(roles[0]),
+                        usernamePrefix,
+                        user.UserName,
+                        usernameSuffix,
+                        message,
+                        isImportant);
+                }
+
+                break;
+
+            case InputResult.ExecutedCommand:
+                await Clients.All.ExecutedCommand("[", "System", "]", message);
+
+                break;
+
+            case InputResult.InvalidCommand:
+                await Clients.All.InvalidCommand("[", "System", "]", message);
+
+                break;
+
+            default: throw new UnreachableException();
+        }
     }
 
     private InputResult HandleInput(string command, out string result)
