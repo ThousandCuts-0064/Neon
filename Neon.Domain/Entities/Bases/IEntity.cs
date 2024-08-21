@@ -1,8 +1,8 @@
 ﻿namespace Neon.Domain.Entities.Bases;
 
-public interface IEntity<TKey> where TKey : IEquatable<TKey>
-{
-    public TKey Id { get; set; }
-}
+public interface IEntity;
 
-public interface IEntity : IEntity<int>;
+public interface IEntity<TId> : IEntity where TId : IEquatable<TId>
+{
+    public TId Id { get; set; }
+}

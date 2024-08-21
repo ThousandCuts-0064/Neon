@@ -13,6 +13,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.NormalizedUserName).IsRequired().HasMaxLength(User.USERNAME_MAX_LENGTH);
         builder.Property(x => x.RegisteredAt).IsRequired();
         builder.Property(x => x.LastActiveAt).IsRequired();
+        builder.Property(x => x.ActiveConnectionId).HasMaxLength(User.ACTIVE_CONNECTION_ID_MAX_LENGTH);
 
         builder.HasIndex(x => x.UserName).IsUnique();
     }

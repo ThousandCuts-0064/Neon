@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using Neon.Application;
 using Neon.Domain.Entities;
 
 namespace Neon.Data;
 
-public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>, INeonDbContext
 {
     private const string CONNECTION_STRING =
         $"""

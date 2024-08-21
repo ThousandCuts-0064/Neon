@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Neon.Application.Services;
+using Neon.Application.Services.Gameplays;
+using Neon.Application.Services.Users;
 using Neon.Web.Models;
 using Neon.Web.Utils.Extensions;
 
@@ -8,33 +9,24 @@ namespace Neon.Web.Controllers;
 public class GameplayController : Controller
 {
     private readonly IGameplayService _gameplayService;
+    private readonly IUserService _userService;
 
-    public GameplayController(IGameplayService gameplayService)
+    public GameplayController(IGameplayService gameplayService, IUserService userService)
     {
         _gameplayService = gameplayService;
+        _userService = userService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var user = _gameplayService.FindUserByUsername(User.GetUsername());
-
-        var opponents = _gameplayService.ActiveUsers
-            .Where(x => x.UserName != User.GetUsername())
-            .Select(x => new OpponentModel
-            {
-                Username = x.UserName
-            })
-            .ToList();
+        var userId = User.GetId();
+        var user = await _userService.FindAsync<UserModel>(userId);
+        var opponvents = await _gameplayService.FindOpponentsAsync<OpponentModel>(userId);
 
         return View(new GameplayModel
         {
-            User = new UserModel { Username = user.UserName },
-            Opponents = opponents
+            User = user,
+            Opponents = opponvents
         });
-    }
-
-    public IActionResult AlreadyActive()
-    {
-        return View();
     }
 }

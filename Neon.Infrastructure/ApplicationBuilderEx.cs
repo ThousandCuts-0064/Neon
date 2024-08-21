@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Neon.Application.Services;
+using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Infrastructure.MIddlewares;
 
@@ -26,8 +26,8 @@ public static class ApplicationBuilderEx
         }
 
         await serviceScope.ServiceProvider
-            .GetRequiredService<IGameplayService>()
-            .ClearUserConnectionsAsync();
+            .GetRequiredService<IUserService>()
+            .SetAllInactiveAsync();
 
         if (onSetup is not null)
             await onSetup(serviceScope.ServiceProvider);

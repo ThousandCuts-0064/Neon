@@ -3,9 +3,9 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Neon.Application.Services;
+using Neon.Application.Services.Notifications;
 using Neon.Data;
-using Neon.Domain.DbNotifications.Bases;
+using Neon.Domain.Notifications.Bases;
 using Npgsql;
 
 namespace Neon.Infrastructure.HostedServices;
@@ -17,9 +17,9 @@ internal class DbNotificationListener : BackgroundService
 
     static DbNotificationListener()
     {
-        _dbNotificationTypes = typeof(DbNotification).Assembly
+        _dbNotificationTypes = typeof(Notification).Assembly
             .GetTypes()
-            .Where(x => !x.IsAbstract && x.IsAssignableTo(typeof(DbNotification)))
+            .Where(x => !x.IsAbstract && x.IsAssignableTo(typeof(Notification)))
             .ToFrozenDictionary(x => x.Name);
     }
 
@@ -36,7 +36,7 @@ internal class DbNotificationListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var dbNotificationServcie = _asyncServiceScope.ServiceProvider.GetRequiredService<IDbNotificationService>();
+        var dbNotificationServcie = _asyncServiceScope.ServiceProvider.GetRequiredService<INotificationService>();
         var dbContext = _asyncServiceScope.ServiceProvider.GetRequiredService<NeonDbContext>();
         var dbConnection = (NpgsqlConnection)dbContext.Database.GetDbConnection();
 
@@ -46,7 +46,7 @@ internal class DbNotificationListener : BackgroundService
                 return;
 
             dbNotificationServcie.Notify(
-                (DbNotification)JsonSerializer.Deserialize(e.Payload, dbNotificationType)!);
+                (Notification)JsonSerializer.Deserialize(e.Payload, dbNotificationType)!);
         };
 
         await dbConnection.OpenAsync(stoppingToken);

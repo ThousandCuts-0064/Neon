@@ -17,16 +17,16 @@ internal class ChallengeDeletedUsers : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        if (int.TryParse(context.User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) &&
-            await _dbContext.Users.AllAsync(x => x.Id != userId))
+        if (!int.TryParse(context.User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId) ||
+            await _dbContext.Users.AnyAsync(x => x.Id == userId))
         {
-            context.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-
-            await context.ChallengeAsync();
+            await next(context);
 
             return;
         }
 
-        await next(context);
+        context.Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
+        await context.ChallengeAsync();
     }
 }

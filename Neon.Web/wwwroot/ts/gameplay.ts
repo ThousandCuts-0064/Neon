@@ -2,6 +2,7 @@ import * as signalR from "@microsoft/signalr";
 import $ from "jquery";
 import userMessage from "../html/user-message.html";
 import userOpponent from "../html/user-opponent.html";
+import { ActiveConnectionToggleArgs, UserRole, UserMessageArgs, CommandMessageArgs } from "./modules/gameplay-args";
 
 const connection = new signalR
 	.HubConnectionBuilder()
@@ -9,42 +10,65 @@ const connection = new signalR
 	.build();
 
 const neonUserMessages = $(".neon-user-messages");
+let suppressOnClose = false;
 
-connection.on("AlreadyActive", () => {
+connection.onclose(() => {
+	if (suppressOnClose) {
+		suppressOnClose = false;
+
+		return;
+	}
+
 	neonUserMessages.append(formatHtml(userMessage, {
 		"username-class": "",
 		"username-prefix": "",
 		"username": "",
 		"username-suffix": "",
-		"message-class": "neon-theme-front-danger",
-		"message": "Already logged in from another tab. This one will be closed in:"
+		"message-class": "neon-theme-front-warning",
+		"message": "Connection lost. Refresh the page to reconnect."
 	}));
-
-	let seconds = 5;
-
-	setInterval(() => {
-		neonUserMessages.append(formatHtml(userMessage, {
-			"username-class": "",
-			"username-prefix": "",
-			"username": "",
-			"username-suffix": "",
-			"message-class": "neon-theme-front-danger",
-			"message": seconds.toString()
-		}));
-
-		if (seconds-- <= 0)
-			window.close();
-	}, 1000);
 });
 
-connection.on("SendMessage", (userRole, usernamePrefix, username, usernameSuffix, message, isImportant) => {
+connection.on("ConnectedFromAnotherSource", () => {
+	suppressOnClose = true;
+
 	neonUserMessages.append(formatHtml(userMessage, {
-		"username-class": "neon-theme-front-common",
-		"username-prefix": escapeHtml(usernamePrefix),
-		"username": username,
-		"username-suffix": escapeHtml(usernameSuffix),
-		"message-class": isImportant ? "neon-theme-front-accent" : "neon-theme-front-common",
-		"message": escapeHtml(message)
+		"username-class": "",
+		"username-prefix": "",
+		"username": "",
+		"username-suffix": "",
+		"message-class": "neon-theme-front-warning",
+		"message": "Logged in from another source. Refresh the page to reconnect."
+	}));
+});
+
+connection.on("SendMessage", (args: UserMessageArgs) => {
+	let usernameClass: string;
+
+	switch (args.userRole) {
+		case UserRole.Guest:
+			usernameClass = "neon-theme-front-common";
+
+			break;
+
+		case UserRole.Standard:
+			usernameClass = "neon-theme-front-contrast";
+
+			break;
+
+		case UserRole.Admin:
+			usernameClass = "neon-theme-front-accent";
+
+			break;
+	}
+
+	neonUserMessages.append(formatHtml(userMessage, {
+		"username-class": usernameClass,
+		"username-prefix": escapeHtml(args.usernamePrefix),
+		"username": args.username,
+		"username-suffix": escapeHtml(args.usernameSuffix),
+		"message-class": args.isImportant ? "neon-theme-front-accent" : "neon-theme-front-common",
+		"message": escapeHtml(args.message)
 	}));
 
 	neonUserMessages.animate({
@@ -52,14 +76,14 @@ connection.on("SendMessage", (userRole, usernamePrefix, username, usernameSuffix
 	}, 250);
 });
 
-connection.on("ExecutedCommand", (usernamePrefix, username, usernameSuffix, message) => {
+connection.on("ExecutedCommand", (args: CommandMessageArgs) => {
 	neonUserMessages.append(formatHtml(userMessage, {
 		"username-class": "neon-theme-front-contrast",
-		"username-prefix": escapeHtml(usernamePrefix),
-		"username": username,
-		"username-suffix": escapeHtml(usernameSuffix),
+		"username-prefix": escapeHtml(args.usernamePrefix),
+		"username": args.username,
+		"username-suffix": escapeHtml(args.usernameSuffix),
 		"message-class": "neon-theme-front-success",
-		"message": escapeHtml(message)
+		"message": escapeHtml(args.message)
 	}));
 
 	neonUserMessages.animate({
@@ -67,14 +91,14 @@ connection.on("ExecutedCommand", (usernamePrefix, username, usernameSuffix, mess
 	}, 250);
 });
 
-connection.on("InvalidCommand", (usernamePrefix, username, usernameSuffix, message) => {
+connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 	neonUserMessages.append(formatHtml(userMessage, {
 		"username-class": "neon-theme-front-contrast",
-		"username-prefix": escapeHtml(usernamePrefix),
-		"username": username,
-		"username-suffix": escapeHtml(usernameSuffix),
+		"username-prefix": escapeHtml(args.usernamePrefix),
+		"username": args.username,
+		"username-suffix": escapeHtml(args.usernameSuffix),
 		"message-class": "neon-theme-front-danger",
-		"message": escapeHtml(message)
+		"message": escapeHtml(args.message)
 	}));
 
 	neonUserMessages.animate({
@@ -82,15 +106,15 @@ connection.on("InvalidCommand", (usernamePrefix, username, usernameSuffix, messa
 	}, 250);
 });
 
-connection.on("ActiveConnectionToggle", (activeConnectionToggle) => {
-	if (!activeConnectionToggle.isActive) {
-		$(`.neon-user-opponents .user-${activeConnectionToggle.userName}`).remove();
+connection.on("ActiveConnectionToggle", (args: ActiveConnectionToggleArgs) => {
+	if (!args.isActive) {
+		$(`.neon-user-opponents .user-${args.username}`).remove();
 
 		return;
 	}
 
 	for (var i = 0; i < 503; i++) {
-		$(".neon-user-opponents").append(userOpponent.replace(/{{username}}/g, activeConnectionToggle.userName));
+		$(".neon-user-opponents").append(userOpponent.replace(/{{username}}/g, args.username));
 	}
 });
 

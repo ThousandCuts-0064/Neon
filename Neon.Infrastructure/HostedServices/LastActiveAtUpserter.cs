@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Neon.Application.Services;
+using Neon.Application.Services.Systems;
 using Neon.Infrastructure.Configurations;
 
 namespace Neon.Infrastructure.HostedServices;
@@ -48,7 +48,7 @@ internal class LastActiveAtUpserter : BackgroundService
         await using var serviceScope = _serviceScopeFactory.CreateAsyncScope();
 
         await serviceScope.ServiceProvider
-            .GetRequiredService<ISystemValueService>()
+            .GetRequiredService<ISystemService>()
             .UpsertLastActiveAtAsync();
     }
 }

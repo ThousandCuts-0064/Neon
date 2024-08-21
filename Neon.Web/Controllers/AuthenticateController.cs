@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Neon.Application.Services;
+using Neon.Application.Services.Authenticates;
 using Neon.Domain.Enums;
 using Neon.Web.Models;
 using Neon.Web.Resources;

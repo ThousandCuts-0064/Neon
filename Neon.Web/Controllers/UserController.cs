@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Neon.Application.Services;
+using Neon.Application.Services.Users;
 using Neon.Web.Models;
 using Neon.Web.Utils.Extensions;
 
@@ -7,20 +7,17 @@ namespace Neon.Web.Controllers;
 
 public class UserController : Controller
 {
-    private readonly IGameplayService _gameplayService;
+    private readonly IUserService _userService;
 
-    public UserController(IGameplayService gameplayService)
+    public UserController(IUserService userService)
     {
-        _gameplayService = gameplayService;
+        _userService = userService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var user = _gameplayService.FindUserById(User.GetId());
+        var user = await _userService.FindAsync<UserModel>(User.GetId());
 
-        return View(new UserModel
-        {
-            Username = user.UserName
-        });
+        return View(user);
     }
 }

@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using Neon.Application.Services;
+using Neon.Application;
+using Neon.Application.Services.Notifications;
 using Neon.Data;
-using Neon.Domain.DbNotifications;
 using Neon.Domain.Entities;
 using Neon.Domain.Enums;
+using Neon.Domain.Notifications;
 using Neon.Infrastructure;
+using Neon.Web.Args;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -54,8 +56,9 @@ builder.Services
     });
 
 builder.Services
-    .AddDbContext<NeonDbContext>()
+    .AddDbContext<INeonDbContext, NeonDbContext>()
     .AddNeonInfrastructure(builder.Configuration)
+    .AddNeonApplication()
     .AddIdentity<User, IdentityRole<int>>(x =>
     {
         x.User.AllowedUserNameCharacters = new string(Enumerable
@@ -115,11 +118,17 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 
 await app.UseNeonInfrastructure(x =>
 {
-    var dbNotificationService = x.GetRequiredService<IDbNotificationService>();
+    var dbNotificationService = x.GetRequiredService<INotificationService>();
     var gameplayHubContex = x.GetRequiredService<IHubContext<GameplayHub, IGameplayHubClient>>();
 
     dbNotificationService.Listen<ActiveConnectionToggle>(y =>
-        gameplayHubContex.Clients.All.ActiveConnectionToggle(y));
+    {
+        gameplayHubContex.Clients.All.ActiveConnectionToggle(new ActiveConnectionToggleArgs
+        {
+            Username = y.UserName,
+            IsActive = y.IsActive
+        });
+    });
 
     return ValueTask.CompletedTask;
 });

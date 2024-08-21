@@ -3,9 +3,10 @@ const glob = require("glob");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-	entry: glob.sync('./wwwroot/ts/**.js').reduce((obj, el) => {
+	entry: glob.sync('./wwwroot/ts/*.js').reduce((obj, el) => {
 		obj[path.parse(el).name] = el;
-		return obj
+
+		return obj;
 	}, {}),
 	module: {
 		rules: [

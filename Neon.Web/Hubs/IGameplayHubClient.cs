@@ -1,17 +1,12 @@
-﻿using Neon.Domain.DbNotifications;
-using Neon.Domain.Enums;
+﻿using Neon.Web.Args;
 
 namespace Neon.Web.Hubs;
 
 public interface IGameplayHubClient
 {
-    Task AlreadyActive();
-    Task ActiveConnectionToggle(ActiveConnectionToggle activeConnectionToggle);
-
-    Task SendMessage(
-        UserRole userRole, string usernamePrefix, string username, string usernameSuffix,
-        string message, bool isImportant);
-
-    Task ExecutedCommand(string usernamePrefix, string username, string usernameSuffix, string message);
-    Task InvalidCommand(string usernamePrefix, string username, string usernameSuffix, string message);
+    Task ConnectedFromAnotherSource();
+    Task ActiveConnectionToggle(ActiveConnectionToggleArgs activeConnectionToggle);
+    Task SendMessage(UserMessageArgs args);
+    Task ExecutedCommand(CommandMessageArgs args);
+    Task InvalidCommand(CommandMessageArgs args);
 }
