@@ -31,7 +31,8 @@ public class GameplayHub : Hub<IGameplayHubClient>
         {
             await Clients.Client(oldConnectionId).ConnectedFromAnotherSource();
 
-            _activeContexts[oldConnectionId].Abort();
+            if (_activeContexts.TryRemove(oldConnectionId, out var hubCallerContext))
+                hubCallerContext.Abort();
         }
 
         _activeContexts.TryAdd(Context.ConnectionId, Context);
@@ -40,8 +41,6 @@ public class GameplayHub : Hub<IGameplayHubClient>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await _userService.SetInactiveAsync(UserId, Context.ConnectionId);
-
-        _activeContexts.TryRemove(Context.ConnectionId, out _);
     }
 
     public async Task HandleInput(string text)
