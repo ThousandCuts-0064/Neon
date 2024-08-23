@@ -155,6 +155,9 @@ neonUserForm.on("submit", () => {
     neonUserInput.removeClass("neon-theme-front-warning neon-theme-front-accent");
     return false;
 });
+$(".neon-user-opponents").on("click", "button", event => {
+    $(event.target).removeClass("neon-button-accent").addClass("neon-button-common");
+});
 const formatHtml = (html, data) => {
     return html.replace(/{{(.*?)}}/g, (match, key) => {
         return key in data ? data[key] : match;

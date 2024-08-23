@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Neon.Application.Services.Systems;
 using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Infrastructure.MIddlewares;
@@ -9,7 +10,7 @@ namespace Neon.Infrastructure;
 
 public static class ApplicationBuilderEx
 {
-    public static async Task UseNeonInfrastructure(
+    public static async Task UseNeonInfrastructureAsync(
         this IApplicationBuilder app,
         Func<IServiceProvider, ValueTask>? onSetup)
     {
@@ -25,9 +26,13 @@ public static class ApplicationBuilderEx
                 await roleManager.CreateAsync(new IdentityRole<int>(role));
         }
 
+        var lastActiveAt = await serviceScope.ServiceProvider
+            .GetRequiredService<ISystemService>()
+            .GetLastActiveAtAsync();
+
         await serviceScope.ServiceProvider
             .GetRequiredService<IUserService>()
-            .SetAllInactiveAsync();
+            .SetAllInactiveAsync(lastActiveAt);
 
         if (onSetup is not null)
             await onSetup(serviceScope.ServiceProvider);

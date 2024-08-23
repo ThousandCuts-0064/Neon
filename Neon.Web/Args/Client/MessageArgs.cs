@@ -1,6 +1,6 @@
 ﻿using Neon.Domain.Enums;
 
-namespace Neon.Web.Args;
+namespace Neon.Web.Args.Client;
 
 public abstract class MessageArgs
 {

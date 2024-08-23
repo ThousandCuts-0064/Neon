@@ -13,7 +13,7 @@
         <div class="neon-user-opponents">
             @foreach (var opponent in Model.Opponents)
             {
-                <button type="button" class="neon-user-@opponent.Username neon-button-accented">
+                <button type="button" class="neon-button-accent" data-username="@opponent.Username">
                     @opponent.Username
                 </button>
             }

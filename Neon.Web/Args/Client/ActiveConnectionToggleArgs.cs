@@ -1,4 +1,4 @@
-﻿namespace Neon.Web.Args;
+﻿namespace Neon.Web.Args.Client;
 
 public class ActiveConnectionToggleArgs
 {

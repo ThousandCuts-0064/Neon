@@ -207,6 +207,12 @@ neonUserForm.on("submit", () => {
 	return false;
 });
 
+
+$(".neon-user-opponents").on("click", "button", event => {
+	$(event.target).removeClass("neon-button-accent").addClass("neon-button-common");
+});
+
+
 const formatHtml = (html: string, data: Record<string, string>) => {
 	return html.replace(/{{(.*?)}}/g, (match, key) => {
 		return key in data ? data[key] : match;

@@ -39,25 +39,14 @@ $palette-accent-special: #00ADB5;
 
 	@for $i from 0 through 9 {
 		.neon-theme-back-base-#{$i} {
-			--theme-base-highlighted: color-mix(in srgb, var(--theme-base-#{$i}), var(--theme-contrast) 5%);
+			--theme-back-highlighted: color-mix(in srgb, var(--theme-base-#{$i}), var(--theme-contrast) 5%);
 			background-color: var(--theme-base-#{$i});
 		}
 	}
 
-	.neon-theme-back-accent {
-		--theme-base-highlighted: color-mix(in srgb, var(--theme-accent), var(--theme-contrast) 25%);
-		background-color: var(--theme-accent);
-	}
-
-	@each $value in (common, contrast, accent) {
-		.neon-theme-front-#{$value} {
-			color: var(--theme-#{$value});
-		}
-	}
-
-	@each $value in (danger, warning, success) {
+	@each $value in (common, contrast, accent, danger, warning, success) {
 		.neon-theme-back-#{$value} {
-			--theme-base-highlighted: color-mix(in srgb, var(--theme-#{$value}), var(--theme-contrast) 25%);
+			--theme-back-highlighted: color-mix(in srgb, var(--theme-#{$value}), var(--theme-contrast) 25%);
 			background-color: var(--theme-#{$value});
 		}
 
@@ -70,7 +59,7 @@ $palette-accent-special: #00ADB5;
 		cursor: pointer;
 
 		&:hover {
-			background-color: var(--theme-base-highlighted);
+			background-color: var(--theme-back-highlighted);
 			transition: background-color 0.15s linear;
 		}
 
@@ -79,9 +68,15 @@ $palette-accent-special: #00ADB5;
 		}
 	}
 
-	.neon-button-accented {
+	.neon-button-accent {
 		@extend .neon-interactable;
 		@extend .neon-theme-back-accent;
+		@extend .neon-theme-front-contrast;
+	}
+
+	.neon-button-common {
+		@extend .neon-interactable;
+		@extend .neon-theme-back-common;
 		@extend .neon-theme-front-contrast;
 	}
 }

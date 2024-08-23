@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Neon.Application;
 using Neon.Domain.Entities;
+using Neon.Domain.Notifications.Bases;
 
 namespace Neon.Data;
 
@@ -26,6 +28,9 @@ public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>, IN
     private readonly string? _connectionString;
 
     public DbSet<SystemValue> SystemValues { get; set; }
+    public DbSet<FriendRequest> FriendRequests { get; set; }
+    public DbSet<TradeRequest> TradeRequests { get; set; }
+    public DbSet<DuelRequest> DuelRequests { get; set; }
 
     public NeonDbContext() => _connectionString = CONNECTION_STRING;
 
@@ -34,9 +39,14 @@ public class NeonDbContext : IdentityDbContext<User, IdentityRole<int>, int>, IN
         _connectionString = configuration.GetConnectionString("Default");
     }
 
-    public async Task ListenActiveConnectionToggleAsync()
+    public async Task ListenAsync<T>() where T : Notification
     {
-        await Database.ExecuteSqlRawAsync("LISTEN \"ActiveConnectionToggle\"");
+        await Database.ExecuteSqlAsync($"LISTEN \"{nameof(T)}\"");
+    }
+
+    public async Task NotifyAsync<T>(T payload) where T : Notification
+    {
+        await Database.ExecuteSqlAsync($"NOTIFY \"{nameof(T)}\", {JsonSerializer.Serialize(payload)}");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

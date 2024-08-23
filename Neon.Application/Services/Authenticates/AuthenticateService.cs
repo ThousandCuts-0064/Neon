@@ -1,24 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Neon.Application.Services.Bases;
 using Neon.Domain.Entities;
 using Neon.Domain.Enums;
 
 namespace Neon.Application.Services.Authenticates;
 
-internal class AuthenticateService : IAuthenticateService
+internal class AuthenticateService : DbContextService, IAuthenticateService
 {
-    private readonly INeonDbContext _dbContext;
     private readonly SignInManager<User> _signInManager;
     private UserManager<User> UserManager => _signInManager.UserManager;
 
-    public AuthenticateService(INeonDbContext dbContext, SignInManager<User> signInManager)
+    public AuthenticateService(INeonDbContext dbContext, SignInManager<User> signInManager) : base(dbContext)
     {
-        _dbContext = dbContext;
         _signInManager = signInManager;
     }
 
     public async Task<RegisterResult> GuestAsync(string username, bool rememberMe)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
         var user = NewUser(username);
 
@@ -51,7 +50,7 @@ internal class AuthenticateService : IAuthenticateService
 
     public async Task<LoginResult> LoginAsync(string username, string password, bool rememberMe)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
         var user = await UserManager.FindByNameAsync(username);
 
@@ -73,7 +72,7 @@ internal class AuthenticateService : IAuthenticateService
 
     public async Task<RegisterResult> RegisterAsync(string username, string password, bool rememberMe)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
         var user = NewUser(username);
 
@@ -99,7 +98,7 @@ internal class AuthenticateService : IAuthenticateService
 
     public async Task LogoutAsync()
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
         await _signInManager.SignOutAsync();
 

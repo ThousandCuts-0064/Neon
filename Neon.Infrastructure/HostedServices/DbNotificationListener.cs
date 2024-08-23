@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neon.Application.Services.Notifications;
 using Neon.Data;
+using Neon.Domain.Notifications;
 using Neon.Domain.Notifications.Bases;
 using Npgsql;
 
@@ -51,7 +52,22 @@ internal class DbNotificationListener : BackgroundService
 
         await dbConnection.OpenAsync(stoppingToken);
 
-        await dbContext.ListenActiveConnectionToggleAsync();
+        await dbContext.ListenAsync<ActiveConnectionToggle>();
+
+        await dbContext.ListenAsync<FriendRequestSent>();
+        await dbContext.ListenAsync<FriendRequestAccepted>();
+        await dbContext.ListenAsync<FriendRequestDeclined>();
+        await dbContext.ListenAsync<FriendRequestCanceled>();
+
+        await dbContext.ListenAsync<TradeRequestSent>();
+        await dbContext.ListenAsync<TradeRequestAccepted>();
+        await dbContext.ListenAsync<TradeRequestDeclined>();
+        await dbContext.ListenAsync<TradeRequestCanceled>();
+
+        await dbContext.ListenAsync<DuelRequestSent>();
+        await dbContext.ListenAsync<DuelRequestAccepted>();
+        await dbContext.ListenAsync<DuelRequestDeclined>();
+        await dbContext.ListenAsync<DuelRequestCanceled>();
 
         while (!stoppingToken.IsCancellationRequested)
             await dbConnection.WaitAsync(stoppingToken);

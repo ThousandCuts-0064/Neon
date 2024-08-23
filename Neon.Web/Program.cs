@@ -9,6 +9,8 @@ using Neon.Domain.Enums;
 using Neon.Domain.Notifications;
 using Neon.Infrastructure;
 using Neon.Web.Args;
+using Neon.Web.Args.Client;
+using Neon.Web.Args.Hub;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -116,7 +118,7 @@ app.MapHub<GameplayHub>("/Gameplay/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{key?}");
 
-await app.UseNeonInfrastructure(x =>
+await app.UseNeonInfrastructureAsync(x =>
 {
     var dbNotificationService = x.GetRequiredService<INotificationService>();
     var gameplayHubContex = x.GetRequiredService<IHubContext<GameplayHub, IGameplayHubClient>>();
@@ -129,6 +131,16 @@ await app.UseNeonInfrastructure(x =>
             IsActive = y.IsActive
         });
     });
+
+    dbNotificationService.Listen<FriendRequestSent>(y =>
+    {
+        gameplayHubContex.Clients
+            .User(y.ResponderUserId.ToString())
+            .SendFriendRequest(new SendFriendRequestArgs
+            {
+                ResponderUsername
+            });
+    })
 
     return ValueTask.CompletedTask;
 });
