@@ -51,9 +51,4 @@
     <Folder Include="Args\Hub\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\ts\lobby.js" />
-    <None Include="wwwroot\ts\lobby.js.map" />
-  </ItemGroup>
-
 </Project>

@@ -1,1 +1,0 @@
-{"version":3,"file":"active-connection-toggle-args.js","sourceRoot":"","sources":["active-connection-toggle-args.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,0BAA0B;IAE3B,QAAQ,CAAS;IACjB,QAAQ,CAAU;IAElC,YAAmB,QAAgB,EACnC,QAAiB;QAEb,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;QACzB,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;IAC7B,CAAC;CACJ"}
