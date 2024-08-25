@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Typescript
-**/ts/*.js
-**/ts/*.js.map
+**/ts/**.js
+**/ts/**.js.map
