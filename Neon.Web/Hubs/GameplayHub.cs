@@ -11,7 +11,7 @@ using Neon.Application.Services.UserRequests.Trade;
 using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Web.Args.Client;
-using Neon.Web.Args.Hub;
+using Neon.Web.Args.Shared;
 using Neon.Web.Utils.Extensions;
 
 namespace Neon.Web.Hubs;
@@ -119,44 +119,44 @@ public class GameplayHub : Hub<IGameplayHubClient>
     }
 
 
-    public Task SendFriendRequest(SendFriendRequestArgs args) => _friendRequestHandler.Send(UserId, args);
-    public Task AcceptFriendRequest(AcceptFriendRequestArgs args) => _friendRequestHandler.Accept(UserId, args);
-    public Task DeclineFriendRequest(DeclineFriendRequestArgs args) => _friendRequestHandler.Decline(UserId, args);
-    public Task CancelFriendRequest(CancelFriendRequestArgs args) => _friendRequestHandler.Cancel(UserId, args);
+    public Task SendFriendRequest(SendFriendRequestArgs args) => _friendRequestHandler.SendAsync(UserId, args);
+    public Task AcceptFriendRequest(AcceptFriendRequestArgs args) => _friendRequestHandler.AcceptAsync(UserId, args);
+    public Task DeclineFriendRequest(DeclineFriendRequestArgs args) => _friendRequestHandler.DeclineAsync(UserId, args);
+    public Task CancelFriendRequest(CancelFriendRequestArgs args) => _friendRequestHandler.CancelAsync(UserId, args);
 
-    public Task SendTradeRequest(SendTradeRequestArgs args) => _tradeRequestHandler.Send(UserId, args);
-    public Task AcceptTradeRequest(AcceptTradeRequestArgs args) => _tradeRequestHandler.Accept(UserId, args);
-    public Task DeclineTradeRequest(DeclineTradeRequestArgs args) => _tradeRequestHandler.Decline(UserId, args);
-    public Task CancelTradeRequest(CancelTradeRequestArgs args) => _tradeRequestHandler.Cancel(UserId, args);
+    public Task SendTradeRequest(SendTradeRequestArgs args) => _tradeRequestHandler.SendAsync(UserId, args);
+    public Task AcceptTradeRequest(AcceptTradeRequestArgs args) => _tradeRequestHandler.AcceptAsync(UserId, args);
+    public Task DeclineTradeRequest(DeclineTradeRequestArgs args) => _tradeRequestHandler.DeclineAsync(UserId, args);
+    public Task CancelTradeRequest(CancelTradeRequestArgs args) => _tradeRequestHandler.CancelAsync(UserId, args);
 
-    public Task SendDuelRequest(SendDuelRequestArgs args) => _duelRequestHandler.Send(UserId, args);
-    public Task AcceptDuelRequest(AcceptDuelRequestArgs args) => _duelRequestHandler.Accept(UserId, args);
-    public Task DeclineDuelRequest(DeclineDuelRequestArgs args) => _duelRequestHandler.Decline(UserId, args);
-    public Task CancelDuelRequest(CancelDuelRequestArgs args) => _duelRequestHandler.Cancel(UserId, args);
+    public Task SendDuelRequest(SendDuelRequestArgs args) => _duelRequestHandler.SendAsync(UserId, args);
+    public Task AcceptDuelRequest(AcceptDuelRequestArgs args) => _duelRequestHandler.AcceptAsync(UserId, args);
+    public Task DeclineDuelRequest(DeclineDuelRequestArgs args) => _duelRequestHandler.DeclineAsync(UserId, args);
+    public Task CancelDuelRequest(CancelDuelRequestArgs args) => _duelRequestHandler.CancelAsync(UserId, args);
 
 
     private class FriendRequestHandler : UserRequestHandler<
         IFriendRequestService,
         SendFriendRequestArgs, AcceptFriendRequestArgs, DeclineFriendRequestArgs, CancelFriendRequestArgs>
     {
-        public FriendRequestHandler(IUserService userService, IFriendRequestService userRequestService) : base(
-            userService, userRequestService) { }
+        public FriendRequestHandler(IUserService userService, IFriendRequestService userRequestService)
+            : base(userService, userRequestService) { }
     }
 
     private class TradeRequestHandler : UserRequestHandler<
         ITradeRequestService,
         SendTradeRequestArgs, AcceptTradeRequestArgs, DeclineTradeRequestArgs, CancelTradeRequestArgs>
     {
-        public TradeRequestHandler(IUserService userService, ITradeRequestService userRequestService) : base(
-            userService, userRequestService) { }
+        public TradeRequestHandler(IUserService userService, ITradeRequestService userRequestService)
+            : base(userService, userRequestService) { }
     }
 
     private class DuelRequestHandler : UserRequestHandler<
         IDuelRequestService,
         SendDuelRequestArgs, AcceptDuelRequestArgs, DeclineDuelRequestArgs, CancelDuelRequestArgs>
     {
-        public DuelRequestHandler(IUserService userService, IDuelRequestService userRequestService) : base(
-            userService, userRequestService) { }
+        public DuelRequestHandler(IUserService userService, IDuelRequestService userRequestService)
+            : base(userService, userRequestService) { }
     }
 
     private abstract class UserRequestHandler<
@@ -177,30 +177,30 @@ public class GameplayHub : Hub<IGameplayHubClient>
             _userRequestService = userRequestService;
         }
 
-        public async Task Send(int senderUserId, TSendUserRequestArgs args)
+        public async Task SendAsync(int senderUserId, TSendUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderUsername);
+            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
 
             await _userRequestService.SendAsync(senderUserId, responderUserId);
         }
 
-        public async Task Accept(int senderUserId, TAcceptUserRequestArgs args)
+        public async Task AcceptAsync(int senderUserId, TAcceptUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderUsername);
+            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
 
             await _userRequestService.AcceptAsync(senderUserId, responderUserId);
         }
 
-        public async Task Decline(int senderUserId, TDeclineUserRequestArgs args)
+        public async Task DeclineAsync(int senderUserId, TDeclineUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderUsername);
+            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
 
             await _userRequestService.DeclineAsync(senderUserId, responderUserId);
         }
 
-        public async Task Cancel(int senderUserId, TCancelUserRequestArgs args)
+        public async Task CancelAsync(int senderUserId, TCancelUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderUsername);
+            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
 
             await _userRequestService.CancelAsync(senderUserId, responderUserId);
         }

@@ -32,10 +32,17 @@ internal abstract class UserRequestService<
 
         await DbContext.SaveChangesAsync();
 
+        var responderUser = await DbContext.Users
+            .Where(x => x.Id == responderUserId)
+            .Select(x => new { x.Key, x.UserName })
+            .FirstAsync();
+
         await DbContext.NotifyAsync(new TUserRequestSent
         {
             RequesterUserId = requesterUserId,
-            ResponderUserId = responderUserId
+            ResponderUserId = responderUserId,
+            ResponderKey = responderUser.Key,
+            ResponderUserName = responderUser.UserName
         });
 
         await transaction.CommitAsync();
@@ -45,10 +52,17 @@ internal abstract class UserRequestService<
     {
         await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
+        var responderUser = await DbContext.Users
+            .Where(x => x.Id == responderUserId)
+            .Select(x => new { x.Key, x.UserName })
+            .FirstAsync();
+
         await DbContext.NotifyAsync(new TUserRequestAccepted
         {
             RequesterUserId = requesterUserId,
-            ResponderUserId = responderUserId
+            ResponderUserId = responderUserId,
+            ResponderKey = responderUser.Key,
+            ResponderUserName = responderUser.UserName
         });
 
         await DbSet
@@ -62,10 +76,17 @@ internal abstract class UserRequestService<
     {
         await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
+        var responderUser = await DbContext.Users
+            .Where(x => x.Id == responderUserId)
+            .Select(x => new { x.Key, x.UserName })
+            .FirstAsync();
+
         await DbContext.NotifyAsync(new TUserRequestDeclined
         {
             RequesterUserId = requesterUserId,
-            ResponderUserId = responderUserId
+            ResponderUserId = responderUserId,
+            ResponderKey = responderUser.Key,
+            ResponderUserName = responderUser.UserName
         });
 
         await DbSet
@@ -79,10 +100,17 @@ internal abstract class UserRequestService<
     {
         await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
+        var responderUser = await DbContext.Users
+            .Where(x => x.Id == responderUserId)
+            .Select(x => new { x.Key, x.UserName })
+            .FirstAsync();
+
         await DbContext.NotifyAsync(new TUserRequestCanceled
         {
             RequesterUserId = requesterUserId,
-            ResponderUserId = responderUserId
+            ResponderUserId = responderUserId,
+            ResponderKey = responderUser.Key,
+            ResponderUserName = responderUser.UserName
         });
 
         await DbSet

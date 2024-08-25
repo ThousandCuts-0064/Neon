@@ -1,5 +1,5 @@
 ﻿using Neon.Web.Args.Client;
-using Neon.Web.Args.Hub;
+using Neon.Web.Args.Shared;
 
 namespace Neon.Web.Hubs;
 

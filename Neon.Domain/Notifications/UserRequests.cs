@@ -6,6 +6,8 @@ public interface IUserRequestNotification
 {
     public int RequesterUserId { get; init; }
     public int ResponderUserId { get; init; }
+    public Guid ResponderKey { get; init; }
+    public string ResponderUserName { get; init; }
 }
 
 public interface IUserRequestSent : IUserRequestNotification;
@@ -17,6 +19,8 @@ public abstract class UserRequestNotification : Notification, IUserRequestNotifi
 {
     public int RequesterUserId { get; init; }
     public int ResponderUserId { get; init; }
+    public Guid ResponderKey { get; init; }
+    public string ResponderUserName { get; init; } = "";
 }
 
 public class FriendRequestSent : UserRequestNotification, IUserRequestSent;

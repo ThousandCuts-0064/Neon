@@ -7,10 +7,10 @@ using Neon.Data;
 using Neon.Domain.Entities;
 using Neon.Domain.Enums;
 using Neon.Domain.Notifications;
+using Neon.Domain.Notifications.Bases;
 using Neon.Infrastructure;
-using Neon.Web.Args;
 using Neon.Web.Args.Client;
-using Neon.Web.Args.Hub;
+using Neon.Web.Args.Shared;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -132,17 +132,39 @@ await app.UseNeonInfrastructureAsync(x =>
         });
     });
 
-    dbNotificationService.Listen<FriendRequestSent>(y =>
-    {
-        gameplayHubContex.Clients
-            .User(y.ResponderUserId.ToString())
-            .SendFriendRequest(new SendFriendRequestArgs
-            {
-                ResponderUsername
-            });
-    })
+    ForwardToClient<FriendRequestSent, SendFriendRequestArgs>(y => y.SendFriendRequest);
+    ForwardToClient<FriendRequestAccepted, AcceptFriendRequestArgs>(y => y.AcceptFriendRequest);
+    ForwardToClient<FriendRequestDeclined, DeclineFriendRequestArgs>(y => y.DeclineFriendRequest);
+    ForwardToClient<FriendRequestCanceled, CancelFriendRequestArgs>(y => y.CancelFriendRequest);
+
+    ForwardToClient<TradeRequestSent, SendTradeRequestArgs>(y => y.SendTradeRequest);
+    ForwardToClient<TradeRequestAccepted, AcceptTradeRequestArgs>(y => y.AcceptTradeRequest);
+    ForwardToClient<TradeRequestDeclined, DeclineTradeRequestArgs>(y => y.DeclineTradeRequest);
+    ForwardToClient<TradeRequestCanceled, CancelTradeRequestArgs>(y => y.CancelTradeRequest);
+
+    ForwardToClient<DuelRequestSent, SendDuelRequestArgs>(y => y.SendDuelRequest);
+    ForwardToClient<DuelRequestAccepted, AcceptDuelRequestArgs>(y => y.AcceptDuelRequest);
+    ForwardToClient<DuelRequestDeclined, DeclineDuelRequestArgs>(y => y.DeclineDuelRequest);
+    ForwardToClient<DuelRequestCanceled, CancelDuelRequestArgs>(y => y.CancelDuelRequest);
 
     return ValueTask.CompletedTask;
+
+    void ForwardToClient<TUserRequest, TUserRequestArgs>(
+        Func<IGameplayHubClient, Func<TUserRequestArgs, Task>> methodSelector)
+        where TUserRequest : Notification, IUserRequestNotification
+        where TUserRequestArgs : IUserRequestArgs, new()
+    {
+        dbNotificationService.Listen<TUserRequest>(y =>
+        {
+            var client = gameplayHubContex.Clients.User(y.ResponderUserId.ToString());
+
+            methodSelector(client)(new TUserRequestArgs
+            {
+                ResponderKey = y.ResponderKey,
+                ResponderUsername = y.ResponderUserName
+            });
+        });
+    }
 });
 
 await app.RunAsync();

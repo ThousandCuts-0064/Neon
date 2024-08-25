@@ -11,6 +11,14 @@
   </Target>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\ts\modules\args\active-connection-toggle-args.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\ts\modules\args\active-connection-toggle-args.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.7" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.5.3">
@@ -40,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Args\Hub\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 

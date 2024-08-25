@@ -1,7 +1,8 @@
-﻿namespace Neon.Web.Args.Hub;
+﻿namespace Neon.Web.Args.Shared;
 
 public interface IUserRequestArgs
 {
+    public Guid ResponderKey { get; init; }
     public string ResponderUsername { get; init; }
 }
 
@@ -12,7 +13,8 @@ public interface ICancelUserRequestArgs : IUserRequestArgs;
 
 public abstract class UserRequestArgs : IUserRequestArgs
 {
-    public required string ResponderUsername { get; init; }
+    public Guid ResponderKey { get; init; }
+    public string ResponderUsername { get; init; } = "";
 }
 
 public class SendFriendRequestArgs : UserRequestArgs, ISendUserRequestArgs;

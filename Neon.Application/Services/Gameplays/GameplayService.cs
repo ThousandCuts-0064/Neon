@@ -18,7 +18,7 @@ internal class GameplayService : IGameplayService
         where TOpponentModel : IOpponentModel<TOpponentModel>
     {
         return await _dbContext.Users
-            .Where(x => x.Id != userId && x.ActiveConnectionId != null)
+            .Where(x => x.Id != userId && x.ConnectionId != null)
             .Select(UserSecureProjection.FromEntity)
             .Select(TOpponentModel.FromProjection)
             .ToListAsync();

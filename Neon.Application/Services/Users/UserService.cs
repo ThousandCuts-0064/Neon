@@ -19,10 +19,10 @@ internal class UserService : DbContextService, IUserService
             .FirstAsync();
     }
 
-    public async Task<int> FindIdAsync(string username)
+    public async Task<int> FindIdAsync(Guid key)
     {
         return await DbContext.Users
-            .Where(x => x.UserName == username)
+            .Where(x => x.Key == key)
             .Select(x => x.Id)
             .FirstAsync();
     }
@@ -48,13 +48,13 @@ internal class UserService : DbContextService, IUserService
     {
         var oldConnectionId = await DbContext.Users
             .Where(x => x.Id == id)
-            .Select(x => x.ActiveConnectionId)
+            .Select(x => x.ConnectionId)
             .FirstAsync();
 
         await DbContext.Users
             .Where(x => x.Id == id)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.ActiveConnectionId, connectionId));
+                .SetProperty(y => y.ConnectionId, connectionId));
 
         return oldConnectionId;
     }
@@ -62,18 +62,18 @@ internal class UserService : DbContextService, IUserService
     public async Task SetInactiveAsync(int id, string connectionId)
     {
         await DbContext.Users
-            .Where(x => x.Id == id && x.ActiveConnectionId == connectionId)
+            .Where(x => x.Id == id && x.ConnectionId == connectionId)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.ActiveConnectionId, (string?)null)
+                .SetProperty(y => y.ConnectionId, (string?)null)
                 .SetProperty(y => y.LastActiveAt, DateTime.UtcNow));
     }
 
     public async Task SetAllInactiveAsync(DateTime lastActiveAt)
     {
         await DbContext.Users
-            .Where(x => x.ActiveConnectionId != null)
+            .Where(x => x.ConnectionId != null)
             .ExecuteUpdateAsync(x => x
-                .SetProperty(y => y.ActiveConnectionId, (string?)null)
+                .SetProperty(y => y.ConnectionId, (string?)null)
                 .SetProperty(y => y.LastActiveAt, lastActiveAt));
     }
 }

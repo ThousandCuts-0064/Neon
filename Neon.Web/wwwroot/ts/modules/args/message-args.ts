@@ -1,23 +1,6 @@
-﻿export class ActiveConnectionToggleArgs {
-    public readonly username: string;
-    public readonly isActive: boolean;
+﻿import UserRole from "../enums/user-role";
 
-    public constructor(
-        username: string,
-        isActive: boolean
-    ) {
-        this.username = username;
-        this.isActive = isActive;
-    }
-}
-
-export enum UserRole {
-    Guest = 1,
-    Standard,
-    Admin
-}
-
-export abstract class MessageArgs {
+abstract class MessageArgs {
     public readonly usernamePrefix: string;
     public readonly username: string;
     public readonly usernameSuffix: string;

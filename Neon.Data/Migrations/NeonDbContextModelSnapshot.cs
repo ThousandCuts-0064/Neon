@@ -179,7 +179,7 @@ namespace Neon.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ActiveConnectionId")
+                    b.Property<string>("ConnectionId")
                         .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")

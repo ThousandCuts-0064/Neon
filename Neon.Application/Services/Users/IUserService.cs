@@ -6,7 +6,7 @@ namespace Neon.Application.Services.Users;
 public interface IUserService
 {
     public Task<TUserModel> FindAsync<TUserModel>(int id) where TUserModel : IUserModel<TUserModel>;
-    public Task<int> FindIdAsync(string username);
+    public Task<int> FindIdAsync(Guid key);
     public Task<UserRole> FindRoleAsync(int id);
 
     /// <returns>Old connectionId</returns>
