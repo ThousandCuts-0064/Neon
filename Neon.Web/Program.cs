@@ -123,9 +123,9 @@ await app.UseNeonInfrastructureAsync(x =>
     var dbNotificationService = x.GetRequiredService<INotificationService>();
     var lobbyHubContex = x.GetRequiredService<IHubContext<LobbyHub, ILobbyClient>>();
 
-    dbNotificationService.Listen<ActiveConnectionToggle>(y =>
+    dbNotificationService.Listen<ConnectionToggle>(y =>
     {
-        lobbyHubContex.Clients.All.ActiveConnectionToggle(new ActiveConnectionToggleArgs
+        lobbyHubContex.Clients.All.ConnectionToggle(new ConnectionToggleArgs
         {
             Username = y.UserName,
             IsActive = y.IsActive

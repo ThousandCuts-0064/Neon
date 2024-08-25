@@ -4,7 +4,7 @@ import userMessage from "../html/user-message.html";
 import userOpponent from "../html/user-opponent.html";
 import { formatHtml, escapeHtml } from "./modules/html";
 import UserRole from "./modules/enums/user-role";
-import ActiveConnectionToggleArgs from "./modules/args/active-connection-toggle-args";
+import ConnectionToggleArgs from "./modules/args/connection-toggle-args";
 import { UserMessageArgs, CommandMessageArgs } from "./modules/args/message-args";
 
 const connection = new signalR
@@ -109,7 +109,7 @@ connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 	}, 250);
 });
 
-connection.on("ActiveConnectionToggle", (args: ActiveConnectionToggleArgs) => {
+connection.on("ConnectionToggle", (args: ConnectionToggleArgs) => {
 	if (!args.isActive) {
 		$(`.neon-user-opponents .user-${args.username}`).remove();
 

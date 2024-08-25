@@ -1,4 +1,4 @@
-﻿export default class ActiveConnectionToggleArgs
+﻿export default class ConnectionToggleArgs
 {
     public readonly username: string;
     public readonly isActive: boolean;

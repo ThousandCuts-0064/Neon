@@ -52,7 +52,7 @@ internal class DbNotificationListener : BackgroundService
 
         await dbConnection.OpenAsync(stoppingToken);
 
-        await dbContext.ListenAsync<ActiveConnectionToggle>();
+        await dbContext.ListenAsync<ConnectionToggle>();
 
         await dbContext.ListenAsync<FriendRequestSent>();
         await dbContext.ListenAsync<FriendRequestAccepted>();

@@ -6,7 +6,7 @@ namespace Neon.Web.Hubs;
 public interface ILobbyClient
 {
     public Task ConnectedFromAnotherSource();
-    public Task ActiveConnectionToggle(ActiveConnectionToggleArgs args);
+    public Task ConnectionToggle(ConnectionToggleArgs args);
     public Task SendMessage(UserMessageArgs args);
     public Task ExecutedCommand(CommandMessageArgs args);
     public Task InvalidCommand(CommandMessageArgs args);

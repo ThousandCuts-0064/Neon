@@ -2,7 +2,7 @@
 
 namespace Neon.Domain.Notifications;
 
-public class ActiveConnectionToggle : Notification
+public class ConnectionToggle : Notification
 {
     public required string UserName { get; init; }
     public required bool IsActive { get; init; }
