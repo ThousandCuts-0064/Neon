@@ -14,13 +14,13 @@ internal class LobbyService : ILobbyService
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<TOpponentModel>> FindOpponentsAsync<TOpponentModel>(int userId)
-        where TOpponentModel : IOpponentModel<TOpponentModel>
+    public async Task<IReadOnlyCollection<TUserModel>> FindActiveUsersAsync<TUserModel>(int userId)
+        where TUserModel : IUserModel<TUserModel>
     {
         return await _dbContext.Users
             .Where(x => x.Id != userId && x.ConnectionId != null)
             .Select(UserSecureProjection.FromEntity)
-            .Select(TOpponentModel.FromProjection)
+            .Select(TUserModel.FromProjection)
             .ToListAsync();
     }
 

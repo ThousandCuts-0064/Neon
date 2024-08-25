@@ -1,7 +1,7 @@
 import * as signalR from "@microsoft/signalr";
 import $ from "jquery";
 import userMessage from "../html/user-message.html";
-import userOpponent from "../html/user-opponent.html";
+import lobbyActiveUser from "../html/lobby-active-user.html";
 import { formatHtml, escapeHtml } from "./modules/html";
 import UserRole from "./modules/enums/user-role";
 import ConnectionToggleArgs from "./modules/args/connection-toggle-args";
@@ -111,13 +111,13 @@ connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 
 connection.on("ConnectionToggle", (args: ConnectionToggleArgs) => {
 	if (!args.isActive) {
-		$(`.neon-user-opponents .user-${args.username}`).remove();
+		$(`.neon-lobby-active-users .user-${args.username}`).remove();
 
 		return;
 	}
 
 	for (var i = 0; i < 503; i++) {
-		$(".neon-user-opponents").append(userOpponent.replace(/{{username}}/g, args.username));
+		$(".neon-lobby-active-users").append(lobbyActiveUser.replace(/{{username}}/g, args.username));
 	}
 });
 
@@ -211,6 +211,6 @@ neonUserForm.on("submit", () => {
 });
 
 
-$(".neon-user-opponents").on("click", "button", event => {
+$(".neon-lobby-active-users").on("click", "button", event => {
 	$(event.target).removeClass("neon-button-accent").addClass("neon-button-common");
 });

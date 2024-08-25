@@ -4,11 +4,11 @@ using Neon.Application.Projections;
 
 namespace Neon.Web.Models;
 
-public class OpponentModel : IOpponentModel<OpponentModel>
+public class ActiveUserModel : IUserModel<ActiveUserModel>
 {
     public required string Username { get; init; }
 
-    public static Expression<Func<UserSecureProjection, OpponentModel>> FromProjection { get; } = x => new OpponentModel
+    public static Expression<Func<UserSecureProjection, ActiveUserModel>> FromProjection { get; } = x => new ActiveUserModel
     {
         Username = x.Username
     };

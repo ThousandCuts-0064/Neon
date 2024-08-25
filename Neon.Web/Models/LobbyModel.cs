@@ -3,5 +3,5 @@
 public class LobbyModel
 {
     public required UserModel User { get; init; }
-    public required IReadOnlyCollection<OpponentModel> Opponents { get; init; }
+    public required IReadOnlyCollection<ActiveUserModel> ActiveUsers { get; init; }
 }

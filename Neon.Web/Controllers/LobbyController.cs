@@ -21,12 +21,12 @@ public class LobbyController : Controller
     {
         var userId = User.GetId();
         var user = await _userService.FindAsync<UserModel>(userId);
-        var opponvents = await _lobbyService.FindOpponentsAsync<OpponentModel>(userId);
+        var activeUsers = await _lobbyService.FindActiveUsersAsync<ActiveUserModel>(userId);
 
         return View(new LobbyModel
         {
             User = user,
-            Opponents = opponvents
+            ActiveUsers = activeUsers
         });
     }
 }
