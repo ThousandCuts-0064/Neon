@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Neon.Application.Services.Authenticates;
-using Neon.Application.Services.Gameplays;
+using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.Notifications;
 using Neon.Application.Services.Systems;
 using Neon.Application.Services.UserInputs;
@@ -18,7 +18,7 @@ public static class ServiceCollectionEx
         return services
             .AddSingleton<INotificationService, NotificationService>()
             .AddScoped<IAuthenticateService, AuthenticateService>()
-            .AddScoped<IGameplayService, GameplayService>()
+            .AddScoped<ILobbyService, LobbyService>()
             .AddScoped<ISystemService, SystemService>()
             .AddScoped<IUserInputService, UserInputService>()
             .AddScoped<IUserService, UserService>()

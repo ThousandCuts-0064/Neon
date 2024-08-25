@@ -34,7 +34,7 @@ public class AuthenticateController : Controller
         var result = await _authenticateService.GuestAsync(model.Username, model.RememberMe);
 
         if (result == RegisterResult.Success)
-            return RedirectToAction("Index", "Gameplay");
+            return RedirectToAction("Index", "Lobby");
 
         var usernameError = result switch
         {
@@ -60,7 +60,7 @@ public class AuthenticateController : Controller
         var result = await _authenticateService.LoginAsync(model.Username, model.Password, model.RememberMe);
 
         if (result == LoginResult.Success)
-            return RedirectToAction("Index", "Gameplay");
+            return RedirectToAction("Index", "Lobby");
 
         return View(model);
     }
@@ -76,7 +76,7 @@ public class AuthenticateController : Controller
         var result = await _authenticateService.RegisterAsync(model.Username, model.Password, model.RememberMe);
 
         if (result == RegisterResult.Success)
-            return RedirectToAction("Index", "Gameplay");
+            return RedirectToAction("Index", "Lobby");
 
         return View(model);
     }

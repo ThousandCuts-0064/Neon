@@ -2,10 +2,11 @@ import * as signalR from "@microsoft/signalr";
 import $ from "jquery";
 import userMessage from "../html/user-message.html";
 import userOpponent from "../html/user-opponent.html";
-import { UserRole } from "./modules/gameplay-args";
+import { formatHtml, escapeHtml } from "./modules/html";
+import UserRole from "./modules/enums/user-role";
 const connection = new signalR
     .HubConnectionBuilder()
-    .withUrl("Gameplay/Hub")
+    .withUrl("Lobby/Hub")
     .build();
 const neonUserMessages = $(".neon-user-messages");
 let suppressOnClose = false;
@@ -158,20 +159,4 @@ neonUserForm.on("submit", () => {
 $(".neon-user-opponents").on("click", "button", event => {
     $(event.target).removeClass("neon-button-accent").addClass("neon-button-common");
 });
-const formatHtml = (html, data) => {
-    return html.replace(/{{(.*?)}}/g, (match, key) => {
-        return key in data ? data[key] : match;
-    });
-};
-const escapeHtml = function (unsafe) {
-    return unsafe.replace(/[&<>"']/g, match => {
-        switch (match) {
-            case '&': return '&amp;';
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '"': return '&quot;';
-            default: return '&#039;';
-        }
-    });
-};
-//# sourceMappingURL=gameplay.js.map
+//# sourceMappingURL=lobby.js.map

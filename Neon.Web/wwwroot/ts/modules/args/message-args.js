@@ -1,18 +1,4 @@
-export class ActiveConnectionToggleArgs {
-    username;
-    isActive;
-    constructor(username, isActive) {
-        this.username = username;
-        this.isActive = isActive;
-    }
-}
-export var UserRole;
-(function (UserRole) {
-    UserRole[UserRole["Guest"] = 1] = "Guest";
-    UserRole[UserRole["Standard"] = 2] = "Standard";
-    UserRole[UserRole["Admin"] = 3] = "Admin";
-})(UserRole || (UserRole = {}));
-export class MessageArgs {
+class MessageArgs {
     usernamePrefix;
     username;
     usernameSuffix;
@@ -38,4 +24,4 @@ export class CommandMessageArgs extends MessageArgs {
         super(usernamePrefix, username, usernameSuffix, message);
     }
 }
-//# sourceMappingURL=gameplay-args.js.map
+//# sourceMappingURL=message-args.js.map

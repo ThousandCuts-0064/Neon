@@ -1,8 +1,8 @@
 ﻿using Neon.Application.Models;
 
-namespace Neon.Application.Services.Gameplays;
+namespace Neon.Application.Services.Lobbies;
 
-public interface IGameplayService
+public interface ILobbyService
 {
     public Task<IReadOnlyCollection<TOpponentModel>> FindOpponentsAsync<TOpponentModel>(int userId)
         where TOpponentModel : IOpponentModel<TOpponentModel>;

@@ -114,18 +114,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseWebSockets();
 
-app.MapHub<GameplayHub>("/Gameplay/Hub");
+app.MapHub<LobbyHub>("/Lobby/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{key?}");
 
 await app.UseNeonInfrastructureAsync(x =>
 {
     var dbNotificationService = x.GetRequiredService<INotificationService>();
-    var gameplayHubContex = x.GetRequiredService<IHubContext<GameplayHub, IGameplayHubClient>>();
+    var lobbyHubContex = x.GetRequiredService<IHubContext<LobbyHub, ILobbyClient>>();
 
     dbNotificationService.Listen<ActiveConnectionToggle>(y =>
     {
-        gameplayHubContex.Clients.All.ActiveConnectionToggle(new ActiveConnectionToggleArgs
+        lobbyHubContex.Clients.All.ActiveConnectionToggle(new ActiveConnectionToggleArgs
         {
             Username = y.UserName,
             IsActive = y.IsActive
@@ -150,13 +150,13 @@ await app.UseNeonInfrastructureAsync(x =>
     return ValueTask.CompletedTask;
 
     void ForwardToClient<TUserRequest, TUserRequestArgs>(
-        Func<IGameplayHubClient, Func<TUserRequestArgs, Task>> methodSelector)
+        Func<ILobbyClient, Func<TUserRequestArgs, Task>> methodSelector)
         where TUserRequest : Notification, IUserRequestNotification
         where TUserRequestArgs : IUserRequestArgs, new()
     {
         dbNotificationService.Listen<TUserRequest>(y =>
         {
-            var client = gameplayHubContex.Clients.User(y.ResponderUserId.ToString());
+            var client = lobbyHubContex.Clients.User(y.ResponderUserId.ToString());
 
             methodSelector(client)(new TUserRequestArgs
             {

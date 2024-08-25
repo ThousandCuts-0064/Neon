@@ -3,7 +3,7 @@ using Neon.Web.Args.Shared;
 
 namespace Neon.Web.Hubs;
 
-public interface IGameplayHubClient
+public interface ILobbyClient
 {
     public Task ConnectedFromAnotherSource();
     public Task ActiveConnectionToggle(ActiveConnectionToggleArgs args);

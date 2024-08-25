@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR;
-using Neon.Application.Services.Gameplays;
+using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.UserInputs;
 using Neon.Application.Services.UserInputs.Enums;
 using Neon.Application.Services.UserRequests.Bases;
@@ -16,10 +16,10 @@ using Neon.Web.Utils.Extensions;
 
 namespace Neon.Web.Hubs;
 
-public class GameplayHub : Hub<IGameplayHubClient>
+public class LobbyHub : Hub<ILobbyClient>
 {
     private static readonly ConcurrentDictionary<string, HubCallerContext> _activeContexts = [];
-    private readonly IGameplayService _gameplayService;
+    private readonly ILobbyService _lobbyService;
     private readonly IUserService _userService;
     private readonly IUserInputService _userInputService;
     private readonly FriendRequestHandler _friendRequestHandler;
@@ -28,15 +28,15 @@ public class GameplayHub : Hub<IGameplayHubClient>
 
     private int UserId => int.Parse(Context.UserIdentifier!);
 
-    public GameplayHub(
-        IGameplayService gameplayService,
+    public LobbyHub(
+        ILobbyService lobbyService,
         IUserService userService,
         IUserInputService userInputService,
         IFriendRequestService friendRequestService,
         ITradeRequestService tradeRequestService,
         IDuelRequestService duelRequestService)
     {
-        _gameplayService = gameplayService;
+        _lobbyService = lobbyService;
         _userService = userService;
         _userInputService = userInputService;
         _friendRequestHandler = new FriendRequestHandler(_userService, friendRequestService);

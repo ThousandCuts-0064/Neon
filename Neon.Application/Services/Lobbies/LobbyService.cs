@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Neon.Application.Models;
 using Neon.Application.Projections;
 
-namespace Neon.Application.Services.Gameplays;
+namespace Neon.Application.Services.Lobbies;
 
-internal class GameplayService : IGameplayService
+internal class LobbyService : ILobbyService
 {
     private readonly INeonDbContext _dbContext;
 
-    public GameplayService(INeonDbContext dbContext)
+    public LobbyService(INeonDbContext dbContext)
     {
         _dbContext = dbContext;
     }

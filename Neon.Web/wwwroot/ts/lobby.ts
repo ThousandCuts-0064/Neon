@@ -9,7 +9,7 @@ import { UserMessageArgs, CommandMessageArgs } from "./modules/args/message-args
 
 const connection = new signalR
 	.HubConnectionBuilder()
-	.withUrl("Gameplay/Hub")
+	.withUrl("Lobby/Hub")
 	.build();
 
 const neonUserMessages = $(".neon-user-messages");

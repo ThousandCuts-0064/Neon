@@ -214,11 +214,11 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gameplay.
+        ///   Looks up a localized string similar to Lobby.
         /// </summary>
-        public static string Layout_Title_Gameplay {
+        public static string Layout_Title_Lobby {
             get {
-                return ResourceManager.GetString("Layout_Title_Gameplay", resourceCulture);
+                return ResourceManager.GetString("Layout_Title_Lobby", resourceCulture);
             }
         }
         

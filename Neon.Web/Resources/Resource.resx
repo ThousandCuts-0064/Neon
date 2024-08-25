@@ -126,8 +126,8 @@
   <data name="Error_Validation_StringLengthWithMin" xml:space="preserve">
     <value>{0} must have a length between {2} and {1}.</value>
   </data>
-  <data name="Layout_Title_Gameplay" xml:space="preserve">
-    <value>Gameplay</value>
+  <data name="Layout_Title_Lobby" xml:space="preserve">
+    <value>Lobby</value>
   </data>
   <data name="Layout_Title_Guest" xml:space="preserve">
     <value>Guest</value>

@@ -1,14 +1,14 @@
-﻿@model GameplayModel
+﻿@model LobbyModel
 
 @{
     Layout = "_Layout";
     ViewData.Set(new LayoutViewData
     {
-        Title = Resource.Layout_Title_Gameplay,
+        Title = Resource.Layout_Title_Lobby,
     });
 }
 
-<div class="neon-gameplay-container">
+<div class="neon-lobby-container">
     <div class="neon-user-opponents-container">
         <div class="neon-user-opponents">
             @foreach (var opponent in Model.Opponents)
@@ -49,5 +49,5 @@
 
 @section Scripts
 {
-    <script src="~/js/gameplay.js" asp-append-version="true"></script>
+    <script src="~/js/lobby.js" asp-append-version="true"></script>
 }

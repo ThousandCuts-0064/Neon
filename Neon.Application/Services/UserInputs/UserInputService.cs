@@ -1,15 +1,15 @@
-﻿using Neon.Application.Services.Gameplays;
+﻿using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.UserInputs.Enums;
 
 namespace Neon.Application.Services.UserInputs;
 
 internal class UserInputService : IUserInputService
 {
-    private readonly IGameplayService _gameplayService;
+    private readonly ILobbyService _lobbyService;
 
-    public UserInputService(IGameplayService gameplayService)
+    public UserInputService(ILobbyService lobbyService)
     {
-        _gameplayService = gameplayService;
+        _lobbyService = lobbyService;
     }
 
     public UserInputType Handle(int userId, string input, out string message)
@@ -100,7 +100,7 @@ internal class UserInputService : IUserInputService
 
                 message = "Success";
 
-                _gameplayService.GiveItem(userId, itemKey);
+                _lobbyService.GiveItem(userId, itemKey);
 
                 return UserInputType.ExecutedCommand;
 

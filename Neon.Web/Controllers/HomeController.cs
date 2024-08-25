@@ -8,7 +8,7 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return RedirectToAction("Index", "Gameplay");
+        return RedirectToAction("Index", "Lobby");
     }
 
 

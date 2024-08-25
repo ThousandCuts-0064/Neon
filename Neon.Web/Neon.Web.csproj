@@ -49,12 +49,11 @@
 
   <ItemGroup>
     <Folder Include="Args\Hub\" />
-    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\ts\gameplay.js" />
-    <None Include="wwwroot\ts\gameplay.js.map" />
+    <None Include="wwwroot\ts\lobby.js" />
+    <None Include="wwwroot\ts\lobby.js.map" />
   </ItemGroup>
 
 </Project>
