@@ -8,7 +8,6 @@ public class User : IdentityUser<int>, IEntity<int>, IKeyedEntity<Guid>
     public const int USERNAME_MAX_LENGTH = 16;
     public const int USERNAME_MIN_LENGTH = 4;
     public const int PASSWORD_MIN_LENGTH = 4;
-    public const int ACTIVE_CONNECTION_ID_MAX_LENGTH = 22;
 
     public Guid Key { get; set; }
 
