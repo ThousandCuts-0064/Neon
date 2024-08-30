@@ -4,10 +4,10 @@ namespace Neon.Domain.Notifications;
 
 public interface IUserRequestNotification
 {
-    public int RequesterUserId { get; init; }
-    public int ResponderUserId { get; init; }
-    public Guid ResponderKey { get; init; }
-    public string ResponderUserName { get; init; }
+    public int RequesterId { get; init; }
+    public Guid RequesterKey { get; init; }
+    public string RequesterUsername { get; init; }
+    public int ResponderId { get; init; }
 }
 
 public interface IUserRequestSent : IUserRequestNotification;
@@ -17,10 +17,10 @@ public interface IUserRequestCanceled : IUserRequestNotification;
 
 public abstract class UserRequestNotification : Notification, IUserRequestNotification
 {
-    public int RequesterUserId { get; init; }
-    public int ResponderUserId { get; init; }
-    public Guid ResponderKey { get; init; }
-    public string ResponderUserName { get; init; } = "";
+    public int RequesterId { get; init; }
+    public int ResponderId { get; init; }
+    public Guid RequesterKey { get; init; }
+    public string RequesterUsername { get; init; } = null!;
 }
 
 public class FriendRequestSent : UserRequestNotification, IUserRequestSent;

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Neon.Application;
+using Neon.Data;
 using Neon.Infrastructure.Configurations;
 using Neon.Infrastructure.Configurations.Bases;
 using Neon.Infrastructure.HostedServices;
-using Neon.Infrastructure.MIddlewares;
-
 namespace Neon.Infrastructure;
 
 public static class ServiceCollectionEx
@@ -17,7 +17,7 @@ public static class ServiceCollectionEx
             .ConfigureBindable<LastActiveAtUpserterConfiguration>(configuration)
             .AddHostedService<LastActiveAtUpserter>()
             .AddHostedService<DbNotificationListener>()
-            .AddScoped<ChallengeDeletedUsers>();
+            .AddDbContext<INeonDbContext, NeonDbContext>();
     }
 
     private static IServiceCollection ConfigureBindable<T>(

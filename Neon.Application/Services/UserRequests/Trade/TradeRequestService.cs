@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services.UserRequests.Bases;
-using Neon.Domain.Entities;
+using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications;
 
 namespace Neon.Application.Services.UserRequests.Trade;

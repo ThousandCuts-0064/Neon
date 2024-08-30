@@ -5,5 +5,6 @@ public enum RegisterResult
     Error,
     UsernameTaken,
     UsernameInvalidCharacters,
+    WeakPassword,
     Success
 }

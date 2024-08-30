@@ -4,7 +4,7 @@ import userMessage from "../html/user-message.html";
 import lobbyActiveUser from "../html/lobby-active-user.html";
 import { formatHtml, escapeHtml } from "./modules/html";
 import UserRole from "./modules/enums/user-role";
-import ConnectionToggleArgs from "./modules/args/connection-toggle-args";
+import UserConnectionToggledArgs from "./modules/args/user-connection-toggle-args";
 import { UserMessageArgs, CommandMessageArgs } from "./modules/args/message-args";
 
 const connection = new signalR
@@ -109,7 +109,7 @@ connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 	}, 250);
 });
 
-connection.on("ConnectionToggle", (args: ConnectionToggleArgs) => {
+connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
 	if (!args.isActive) {
 		$(`.neon-lobby-active-users .user-${args.username}`).remove();
 

@@ -29,19 +29,10 @@ internal class UserService : DbContextService, IUserService
 
     public async Task<UserRole> FindRoleAsync(int id)
     {
-        var role = await DbContext.Users
+        return await DbContext.Users
             .Where(x => x.Id == id)
-            .Join(DbContext.UserRoles,
-                x => x.Id,
-                x => x.UserId,
-                (x, y) => y.RoleId)
-            .Join(DbContext.Roles,
-                x => x,
-                x => x.Id,
-                (x, y) => y.Name)
+            .Select(x => x.Role)
             .FirstAsync();
-
-        return Enum.Parse<UserRole>(role!);
     }
 
     public async Task<string?> SetActiveAsync(int id, string connectionId)

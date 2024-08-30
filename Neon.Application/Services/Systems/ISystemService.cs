@@ -2,6 +2,6 @@
 
 public interface ISystemService
 {
-    Task<DateTime> GetLastActiveAtAsync();
+    Task<DateTime?> FindLastActiveAtAsync();
     Task UpsertLastActiveAtAsync();
 }

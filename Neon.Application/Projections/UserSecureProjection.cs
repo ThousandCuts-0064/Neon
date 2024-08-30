@@ -10,6 +10,6 @@ public class UserSecureProjection : IProjection<User, UserSecureProjection>
 
     public static Expression<Func<User, UserSecureProjection>> FromEntity { get; } = x => new UserSecureProjection
     {
-        Username = x.UserName
+        Username = x.Username
     };
 }

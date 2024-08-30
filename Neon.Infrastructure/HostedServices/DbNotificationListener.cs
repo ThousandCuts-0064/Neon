@@ -37,7 +37,7 @@ internal class DbNotificationListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var dbNotificationServcie = _asyncServiceScope.ServiceProvider.GetRequiredService<INotificationService>();
+        var notificationServcie = _asyncServiceScope.ServiceProvider.GetRequiredService<INotificationService>();
         var dbContext = _asyncServiceScope.ServiceProvider.GetRequiredService<NeonDbContext>();
         var dbConnection = (NpgsqlConnection)dbContext.Database.GetDbConnection();
 
@@ -46,13 +46,13 @@ internal class DbNotificationListener : BackgroundService
             if (!_dbNotificationTypes.TryGetValue(e.Channel, out var dbNotificationType))
                 return;
 
-            dbNotificationServcie.Notify(
+            notificationServcie.Notify(
                 (Notification)JsonSerializer.Deserialize(e.Payload, dbNotificationType)!);
         };
 
         await dbConnection.OpenAsync(stoppingToken);
 
-        await dbContext.ListenAsync<ConnectionToggle>();
+        await dbContext.ListenAsync<UserConnectionToggled>();
 
         await dbContext.ListenAsync<FriendRequestSent>();
         await dbContext.ListenAsync<FriendRequestAccepted>();

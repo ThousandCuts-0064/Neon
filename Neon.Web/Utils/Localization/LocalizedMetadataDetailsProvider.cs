@@ -10,7 +10,7 @@ public class LocalizedMetadataDetailsProvider : IValidationMetadataProvider
     public void CreateValidationMetadata(ValidationMetadataProviderContext context)
     {
         if (context.Key.ModelType.IsValueType &&
-            context.ValidationMetadata.ValidatorMetadata.All(m => m.GetType() != typeof(RequiredAttribute)))
+            context.ValidationMetadata.ValidatorMetadata.All(x => x.GetType() != typeof(RequiredAttribute)))
         {
             context.ValidationMetadata.ValidatorMetadata.Add(new RequiredAttribute());
         }
@@ -20,17 +20,24 @@ public class LocalizedMetadataDetailsProvider : IValidationMetadataProvider
             if (metadata is not ValidationAttribute
                 {
                     ErrorMessage: null,
-                    ErrorMessageResourceName: null
+                    ErrorMessageResourceType: null
                 }
                 attribute)
             {
                 continue;
             }
 
+            if (attribute.ErrorMessageResourceName is not null)
+            {
+                attribute.ErrorMessageResourceType = typeof(Resource);
+
+                continue;
+            }
+
             attribute.ErrorMessage = attribute switch
             {
                 RequiredAttribute => Resource.Error_Validation_Required,
-                StringLengthAttribute a when a.MinimumLength != 0 => Resource.Error_Validation_StringLengthWithMin,
+                StringLengthAttribute x when x.MinimumLength != 0 => Resource.Error_Validation_StringLengthWithMin,
                 StringLengthAttribute => Resource.Error_Validation_StringLength,
                 CompareAttribute => Resource.Error_Validation_Compare,
                 MinLengthAttribute => Resource.Error_Validation_MinLength,
@@ -54,7 +61,9 @@ public class LocalizedMetadataDetailsProvider : IValidationMetadataProvider
                 DeniedValuesAttribute => throw new NotImplementedException(),
                 LengthAttribute => throw new NotImplementedException(),
                 RangeAttribute => throw new NotImplementedException(),
-                RegularExpressionAttribute => throw new NotImplementedException(),
+
+                RegularExpressionAttribute => throw new NotSupportedException(),
+
                 _ => throw new NotImplementedException()
             };
         }

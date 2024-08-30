@@ -1,16 +1,15 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Neon.Application;
 using Neon.Application.Services.Notifications;
-using Neon.Data;
-using Neon.Domain.Entities;
+using Neon.Application.Validators.Principals;
 using Neon.Domain.Enums;
 using Neon.Domain.Notifications;
 using Neon.Domain.Notifications.Bases;
 using Neon.Infrastructure;
 using Neon.Web.Args.Client;
-using Neon.Web.Args.Shared;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -57,38 +56,24 @@ builder.Services
         x.MinificationSettings.WhitespaceMinificationMode = WhitespaceMinificationMode.Aggressive;
     });
 
-builder.Services
-    .AddDbContext<INeonDbContext, NeonDbContext>()
-    .AddNeonInfrastructure(builder.Configuration)
-    .AddNeonApplication()
-    .AddIdentity<User, IdentityRole<int>>(x =>
-    {
-        x.User.AllowedUserNameCharacters = new string(Enumerable
-            .Range('a', 'z' - 'a' + 1)
-            .Concat(Enumerable.Range('A', 'Z' - 'A' + 1))
-            .Concat(Enumerable.Range('0', '9' - '0' + 1))
-            .Select(y => (char)y)
-            .Concat(['_', '-'])
-            .ToArray());
-
-        x.Password.RequiredLength = User.PASSWORD_MIN_LENGTH;
-        x.Password.RequireLowercase = true;
-        x.Password.RequireUppercase = true;
-        x.Password.RequireDigit = true;
-    })
-    .AddEntityFrameworkStores<NeonDbContext>();
-
 builder.Services.AddAntiforgery();
 
-builder.Services.ConfigureApplicationCookie(x =>
-{
-    x.Cookie.HttpOnly = true;
-    x.Cookie.SameSite = SameSiteMode.Strict;
-    x.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    x.Cookie.IsEssential = true;
-    x.LoginPath = "/Authenticate";
-    x.LogoutPath = x.LoginPath;
-});
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x =>
+    {
+        x.Cookie.HttpOnly = true;
+        x.Cookie.SameSite = SameSiteMode.Strict;
+        x.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        x.Cookie.IsEssential = true;
+        x.LoginPath = "/Authenticate";
+        x.LogoutPath = x.LoginPath;
+
+        x.Events.OnValidatePrincipal = y => y.HttpContext.RequestServices
+            .GetRequiredService<IPrincipalValidator>()
+            .ValidateAsync(y);
+    })
+    .AddIdentityCookies();
 
 builder.Services
     .AddAuthorizationBuilder()
@@ -96,6 +81,11 @@ builder.Services
         .RequireAuthenticatedUser()
         .RequireRole(Enum.GetNames<UserRole>())
         .Build());
+
+builder.Services
+    .AddHttpContextAccessor()
+    .AddNeonInfrastructure(builder.Configuration)
+    .AddNeonApplication();
 
 var app = builder.Build();
 
@@ -120,48 +110,48 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 
 await app.UseNeonInfrastructureAsync(x =>
 {
-    var dbNotificationService = x.GetRequiredService<INotificationService>();
+    var notificationService = x.GetRequiredService<INotificationService>();
     var lobbyHubContex = x.GetRequiredService<IHubContext<LobbyHub, ILobbyClient>>();
 
-    dbNotificationService.Listen<ConnectionToggle>(y =>
+    notificationService.Listen<UserConnectionToggled>(y =>
     {
-        lobbyHubContex.Clients.All.ConnectionToggle(new ConnectionToggleArgs
+        lobbyHubContex.Clients.All.UserConnectionToggled(new UserConnectionToggledArgs
         {
-            Username = y.UserName,
+            Username = y.Username,
             IsActive = y.IsActive
         });
     });
 
-    ForwardToClient<FriendRequestSent, SendFriendRequestArgs>(y => y.SendFriendRequest);
-    ForwardToClient<FriendRequestAccepted, AcceptFriendRequestArgs>(y => y.AcceptFriendRequest);
-    ForwardToClient<FriendRequestDeclined, DeclineFriendRequestArgs>(y => y.DeclineFriendRequest);
-    ForwardToClient<FriendRequestCanceled, CancelFriendRequestArgs>(y => y.CancelFriendRequest);
+    ForwardToClient<FriendRequestSent, FriendRequestSentArgs>(y => y.FriendRequestSent);
+    ForwardToClient<FriendRequestAccepted, FriendRequestAcceptedArgs>(y => y.FriendRequestAccepted);
+    ForwardToClient<FriendRequestDeclined, FriendRequestDeclinedArgs>(y => y.FriendRequestDeclined);
+    ForwardToClient<FriendRequestCanceled, FriendRequestCanceledArgs>(y => y.FriendRequestCanceled);
 
-    ForwardToClient<TradeRequestSent, SendTradeRequestArgs>(y => y.SendTradeRequest);
-    ForwardToClient<TradeRequestAccepted, AcceptTradeRequestArgs>(y => y.AcceptTradeRequest);
-    ForwardToClient<TradeRequestDeclined, DeclineTradeRequestArgs>(y => y.DeclineTradeRequest);
-    ForwardToClient<TradeRequestCanceled, CancelTradeRequestArgs>(y => y.CancelTradeRequest);
+    ForwardToClient<TradeRequestSent, TradeRequestSentArgs>(y => y.TradeRequestSent);
+    ForwardToClient<TradeRequestAccepted, TradeRequestAcceptedArgs>(y => y.TradeRequestAccepted);
+    ForwardToClient<TradeRequestDeclined, TradeRequestDeclinedArgs>(y => y.TradeRequestDeclined);
+    ForwardToClient<TradeRequestCanceled, TradeRequestCanceledArgs>(y => y.TradeRequestCanceled);
 
-    ForwardToClient<DuelRequestSent, SendDuelRequestArgs>(y => y.SendDuelRequest);
-    ForwardToClient<DuelRequestAccepted, AcceptDuelRequestArgs>(y => y.AcceptDuelRequest);
-    ForwardToClient<DuelRequestDeclined, DeclineDuelRequestArgs>(y => y.DeclineDuelRequest);
-    ForwardToClient<DuelRequestCanceled, CancelDuelRequestArgs>(y => y.CancelDuelRequest);
+    ForwardToClient<DuelRequestSent, DuelRequestSentArgs>(y => y.DuelRequestSent);
+    ForwardToClient<DuelRequestAccepted, DuelRequestAcceptedArgs>(y => y.DuelRequestAccepted);
+    ForwardToClient<DuelRequestDeclined, DuelRequestDeclinedArgs>(y => y.DuelRequestDeclined);
+    ForwardToClient<DuelRequestCanceled, DuelRequestCanceledArgs>(y => y.DuelRequestCanceled);
 
     return ValueTask.CompletedTask;
 
-    void ForwardToClient<TUserRequest, TUserRequestArgs>(
-        Func<ILobbyClient, Func<TUserRequestArgs, Task>> methodSelector)
+    void ForwardToClient<TUserRequest, TServerUserRequestArgs>(
+        Func<ILobbyClient, Func<TServerUserRequestArgs, Task>> methodSelector)
         where TUserRequest : Notification, IUserRequestNotification
-        where TUserRequestArgs : IUserRequestArgs, new()
+        where TServerUserRequestArgs : IServerUserRequestArgs, new()
     {
-        dbNotificationService.Listen<TUserRequest>(y =>
+        notificationService.Listen<TUserRequest>(y =>
         {
-            var client = lobbyHubContex.Clients.User(y.ResponderUserId.ToString());
+            var client = lobbyHubContex.Clients.User(y.ResponderId.ToString());
 
-            methodSelector(client)(new TUserRequestArgs
+            methodSelector(client)(new TServerUserRequestArgs
             {
-                ResponderKey = y.ResponderKey,
-                ResponderUsername = y.ResponderUserName
+                RequesterKey = y.RequesterKey,
+                RequesterUsername = y.RequesterUsername
             });
         });
     }

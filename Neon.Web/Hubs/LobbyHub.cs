@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using Microsoft.AspNetCore.SignalR;
+using Neon.Application.Extensions;
 using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.UserInputs;
 using Neon.Application.Services.UserInputs.Enums;
@@ -11,8 +12,7 @@ using Neon.Application.Services.UserRequests.Trade;
 using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Web.Args.Client;
-using Neon.Web.Args.Shared;
-using Neon.Web.Utils.Extensions;
+using Neon.Web.Args.Hub;
 
 namespace Neon.Web.Hubs;
 
@@ -177,32 +177,32 @@ public class LobbyHub : Hub<ILobbyClient>
             _userRequestService = userRequestService;
         }
 
-        public async Task SendAsync(int senderUserId, TSendUserRequestArgs args)
+        public async Task SendAsync(int requesterId, TSendUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
+            var responderId = await _userService.FindIdAsync(args.ResponderKey);
 
-            await _userRequestService.SendAsync(senderUserId, responderUserId);
+            await _userRequestService.SendAsync(requesterId, responderId);
         }
 
-        public async Task AcceptAsync(int senderUserId, TAcceptUserRequestArgs args)
+        public async Task AcceptAsync(int requesterId, TAcceptUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
+            var responderId = await _userService.FindIdAsync(args.ResponderKey);
 
-            await _userRequestService.AcceptAsync(senderUserId, responderUserId);
+            await _userRequestService.AcceptAsync(requesterId, responderId);
         }
 
-        public async Task DeclineAsync(int senderUserId, TDeclineUserRequestArgs args)
+        public async Task DeclineAsync(int requesterId, TDeclineUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
+            var responderId = await _userService.FindIdAsync(args.ResponderKey);
 
-            await _userRequestService.DeclineAsync(senderUserId, responderUserId);
+            await _userRequestService.DeclineAsync(requesterId, responderId);
         }
 
-        public async Task CancelAsync(int senderUserId, TCancelUserRequestArgs args)
+        public async Task CancelAsync(int requesterId, TCancelUserRequestArgs args)
         {
-            var responderUserId = await _userService.FindIdAsync(args.ResponderKey);
+            var responderId = await _userService.FindIdAsync(args.ResponderKey);
 
-            await _userRequestService.CancelAsync(senderUserId, responderUserId);
+            await _userRequestService.CancelAsync(requesterId, responderId);
         }
     }
 }

@@ -61,6 +61,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t log in Guest. They don&apos;t have password and are per computer only..
+        /// </summary>
+        public static string Error_Validation_CannotLogInGuest {
+            get {
+                return ResourceManager.GetString("Error_Validation_CannotLogInGuest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} and {1} do not match..
         /// </summary>
         public static string Error_Validation_Compare {
@@ -160,6 +169,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least 1 lower and upper case letter and digit..
+        /// </summary>
+        public static string Error_Validation_WeakPassword {
+            get {
+                return ResourceManager.GetString("Error_Validation_WeakPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong password..
         /// </summary>
         public static string Error_Validation_WrongPassword {
@@ -214,20 +232,20 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lobby.
-        /// </summary>
-        public static string Layout_Title_Lobby {
-            get {
-                return ResourceManager.GetString("Layout_Title_Lobby", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Guest.
         /// </summary>
         public static string Layout_Title_Guest {
             get {
                 return ResourceManager.GetString("Layout_Title_Guest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lobby.
+        /// </summary>
+        public static string Layout_Title_Lobby {
+            get {
+                return ResourceManager.GetString("Layout_Title_Lobby", resourceCulture);
             }
         }
         

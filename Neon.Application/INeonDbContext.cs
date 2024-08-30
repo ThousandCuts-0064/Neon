@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Neon.Domain.Entities;
+using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications.Bases;
 
 namespace Neon.Application;
@@ -12,8 +12,7 @@ public interface INeonDbContext
 
     public DbSet<SystemValue> SystemValues { get; }
     public DbSet<User> Users { get; }
-    public DbSet<IdentityUserRole<int>> UserRoles { get; }
-    public DbSet<IdentityRole<int>> Roles { get; }
+    public DbSet<Friendship> Friendships { get; }
     public DbSet<FriendRequest> FriendRequests { get; }
     public DbSet<TradeRequest> TradeRequests { get; }
     public DbSet<DuelRequest> DuelRequests { get; }

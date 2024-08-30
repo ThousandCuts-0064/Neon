@@ -7,16 +7,20 @@ namespace Neon.Application.Services.Systems;
 
 internal class SystemService : DbContextService, ISystemService
 {
+    private const string LAST_ACTIVE_AT = "LastActiveAt";
     private const string DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.ffffffzzz";
 
     public SystemService(INeonDbContext dbContext) : base(dbContext) { }
 
-    public async Task<DateTime> GetLastActiveAtAsync()
+    public async Task<DateTime?> FindLastActiveAtAsync()
     {
         var lastActiveAt = await DbContext.SystemValues
-            .Where(x => x.Id == SystemValue.LAST_ACTIVE_AT)
+            .Where(x => x.Id == LAST_ACTIVE_AT)
             .Select(x => x.Value)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
+
+        if (lastActiveAt is null)
+            return null;
 
         return DateTime.ParseExact(
             lastActiveAt,
@@ -30,7 +34,7 @@ internal class SystemService : DbContextService, ISystemService
         var dateTimeString = DateTime.Now.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
 
         var updatedCount = await DbContext.SystemValues
-            .Where(x => x.Id == SystemValue.LAST_ACTIVE_AT)
+            .Where(x => x.Id == LAST_ACTIVE_AT)
             .ExecuteUpdateAsync(x => x.SetProperty(y => y.Value, dateTimeString));
 
         if (updatedCount > 0)
@@ -38,7 +42,7 @@ internal class SystemService : DbContextService, ISystemService
 
         DbContext.SystemValues.Add(new SystemValue
         {
-            Id = SystemValue.LAST_ACTIVE_AT,
+            Id = LAST_ACTIVE_AT,
             Value = dateTimeString
         });
 

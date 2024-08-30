@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Models;
 using Neon.Application.Projections;
 
@@ -22,11 +21,5 @@ internal class LobbyService : ILobbyService
             .Select(UserSecureProjection.FromEntity)
             .Select(TUserModel.FromProjection)
             .ToListAsync();
-    }
-
-    public async Task GiveItem(int userId, Guid itemKey)
-    {
-        // TODO
-        Debugger.Break();
     }
 }

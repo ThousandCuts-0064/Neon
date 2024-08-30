@@ -10,6 +10,6 @@ internal class FriendshipConfiguration : IEntityTypeConfiguration<Friendship>
     {
         builder.HasKey(x => new { x.User1Id, x.User2Id });
 
-        builder.ToTable(x => x.HasCheckConstraint("CK_Friendship_UserId1_LessThan_UserId2", "[UserId1] < [UserId2]"));
+        builder.ToTable(x => x.HasCheckConstraint("CK_Friendship_UserId1_LessThan_UserId2", $"\"{nameof(Friendship.User1Id)}\" < \"{nameof(Friendship.User2Id)}\""));
     }
 }

@@ -1,23 +1,36 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Diagnostics.CodeAnalysis;
 using Neon.Domain.Entities.Bases;
+using Neon.Domain.Enums;
 
 namespace Neon.Domain.Entities;
 
-public class User : IdentityUser<int>, IEntity<int>, IKeyedEntity<Guid>
+public class User : KeyedEntity<int, Guid>
 {
     public const int USERNAME_MAX_LENGTH = 16;
     public const int USERNAME_MIN_LENGTH = 4;
-    public const int PASSWORD_MIN_LENGTH = 4;
 
-    public Guid Key { get; set; }
+    [StringSyntax(StringSyntaxAttribute.Regex)]
+    public const string USERNAME_REGEX = "^[a-zA-Z0-9-_]+$";
 
-    public new required string UserName
-    {
-        get => base.UserName!;
-        set => base.UserName = value;
-    }
+    public const int PASSWORD_MIN_LENGTH = 8;
 
-    public DateTime RegisteredAt { get; set; }
-    public DateTime LastActiveAt { get; set; }
-    public string? ConnectionId { get; set; }
+    [StringSyntax(StringSyntaxAttribute.Regex)]
+    public const string PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$";
+
+    public required string Username { get; init; }
+    public string? PasswordHash { get; init; }
+    public required UserRole Role { get; init; }
+    public required DateTime RegisteredAt { get; init; }
+    public required DateTime LastActiveAt { get; init; }
+    public string? ConnectionId { get; init; }
+
+    /// <summary>
+    /// Updated every time <see cref="PasswordHash"/> changes.
+    /// </summary>
+    public required Guid SecurityKey { get; init; }
+
+    /// <summary>
+    /// Updated every time <see cref="Username"/> or <see cref="Role"/> changes.
+    /// </summary>
+    public required Guid IdentityKey { get; init; }
 }

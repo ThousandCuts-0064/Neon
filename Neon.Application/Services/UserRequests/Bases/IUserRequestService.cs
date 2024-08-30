@@ -2,8 +2,8 @@
 
 public interface IUserRequestService
 {
-    public Task SendAsync(int requesterUserId, int responderUserId);
-    public Task AcceptAsync(int requesterUserId, int responderUserId);
-    public Task DeclineAsync(int requesterUserId, int responderUserId);
-    public Task CancelAsync(int requesterUserId, int responderUserId);
+    public Task SendAsync(int requesterId, int responderId);
+    public Task AcceptAsync(int requesterId, int responderId);
+    public Task DeclineAsync(int requesterId, int responderId);
+    public Task CancelAsync(int requesterId, int responderId);
 }

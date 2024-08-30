@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Neon.Application.Extensions;
 using Neon.Application.Services.Users;
 using Neon.Web.Models;
-using Neon.Web.Utils.Extensions;
 
 namespace Neon.Web.Controllers;
 

@@ -201,4 +201,10 @@
   <data name="Project_Name" xml:space="preserve">
     <value>Neon</value>
   </data>
+  <data name="Error_Validation_WeakPassword" xml:space="preserve">
+    <value>Password must contain at least 1 lower and upper case letter and digit.</value>
+  </data>
+  <data name="Error_Validation_CannotLogInGuest" xml:space="preserve">
+    <value>Can't log in Guest. They don't have password and are per computer only.</value>
+  </data>
 </root>
