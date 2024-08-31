@@ -38,15 +38,15 @@ public class AuthenticateController : Controller
 
         if (result == RegisterResult.Error)
         {
-            ModelState.AddModelError("", Resource.Error_Validation_UnexpectedError);
+            ModelState.AddModelError("", Resource.Error_Generic_UnexpectedError);
 
             return View(model);
         }
 
         var usernameError = result switch
         {
-            RegisterResult.UsernameTaken => Resource.Error_Validation_UsernameTaken,
-            RegisterResult.UsernameInvalidCharacters => Resource.Error_Validation_UsernameInvalidCharacters,
+            RegisterResult.UsernameTaken => Resource.Error_Authenticate_UsernameTaken,
+            RegisterResult.UsernameInvalidCharacters => Resource.Error_Authenticate_UsernameInvalidCharacters,
             _ => throw new UnreachableException()
         };
 
@@ -70,16 +70,16 @@ public class AuthenticateController : Controller
 
         if (result == LoginResult.Error)
         {
-            ModelState.AddModelError("", Resource.Error_Validation_UnexpectedError);
+            ModelState.AddModelError("", Resource.Error_Generic_UnexpectedError);
 
             return View(model);
         }
 
         var (errorKey, errorMessage) = result switch
         {
-            LoginResult.CannotLogInGuest => (nameof(model.Username), Resource.Error_Validation_CannotLogInGuest),
-            LoginResult.UsernameNotFound => (nameof(model.Username), Resource.Error_Validation_UsernameNotFound),
-            LoginResult.WrongPassword => (nameof(model.Password), Resource.Error_Validation_WrongPassword),
+            LoginResult.CannotLogInGuest => (nameof(model.Username), Resource.Error_Authenticate_CannotLogInGuest),
+            LoginResult.UsernameNotFound => (nameof(model.Username), Resource.Error_Authenticate_UsernameNotFound),
+            LoginResult.WrongPassword => (nameof(model.Password), Resource.Error_Authenticate_WrongPassword),
             _ => throw new UnreachableException()
         };
 
@@ -103,16 +103,16 @@ public class AuthenticateController : Controller
 
         if (result == RegisterResult.Error)
         {
-            ModelState.AddModelError("", Resource.Error_Validation_UnexpectedError);
+            ModelState.AddModelError("", Resource.Error_Generic_UnexpectedError);
 
             return View(model);
         }
 
         var usernameError = result switch
         {
-            RegisterResult.UsernameTaken => Resource.Error_Validation_UsernameTaken,
-            RegisterResult.UsernameInvalidCharacters => Resource.Error_Validation_UsernameInvalidCharacters,
-            RegisterResult.WeakPassword => Resource.Error_Validation_WeakPassword,
+            RegisterResult.UsernameTaken => Resource.Error_Authenticate_UsernameTaken,
+            RegisterResult.UsernameInvalidCharacters => Resource.Error_Authenticate_UsernameInvalidCharacters,
+            RegisterResult.WeakPassword => Resource.Error_Authenticate_WeakPassword,
             _ => throw new UnreachableException()
         };
 

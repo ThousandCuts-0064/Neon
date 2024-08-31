@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Error_Validation_UsernameTaken" xml:space="preserve">
+  <data name="Error_Authenticate_UsernameTaken" xml:space="preserve">
     <value>Username is taken.</value>
   </data>
   <data name="Error_Validation_Required" xml:space="preserve">
@@ -159,10 +159,10 @@
   <data name="Error_Validation_Invalid" xml:space="preserve">
     <value>{0} is invalid.</value>
   </data>
-  <data name="Error_Validation_UsernameNotFound" xml:space="preserve">
+  <data name="Error_Authenticate_UsernameNotFound" xml:space="preserve">
     <value>Username not found.</value>
   </data>
-  <data name="Error_Validation_WrongPassword" xml:space="preserve">
+  <data name="Error_Authenticate_WrongPassword" xml:space="preserve">
     <value>Wrong password.</value>
   </data>
   <data name="User_Property_Password" xml:space="preserve">
@@ -183,10 +183,10 @@
   <data name="Layout_Nav_Logout" xml:space="preserve">
     <value>Logout</value>
   </data>
-  <data name="Error_Validation_UsernameInvalidCharacters" xml:space="preserve">
+  <data name="Error_Authenticate_UsernameInvalidCharacters" xml:space="preserve">
     <value>Username can only contain letters, digits, dashes and underscores.</value>
   </data>
-  <data name="Error_Validation_UnexpectedError" xml:space="preserve">
+  <data name="Error_Generic_UnexpectedError" xml:space="preserve">
     <value>Unexpected error occurred.</value>
   </data>
   <data name="Error_Validation_MaxLength" xml:space="preserve">
@@ -201,10 +201,10 @@
   <data name="Project_Name" xml:space="preserve">
     <value>Neon</value>
   </data>
-  <data name="Error_Validation_WeakPassword" xml:space="preserve">
+  <data name="Error_Authenticate_WeakPassword" xml:space="preserve">
     <value>Password must contain at least 1 lower and upper case letter and digit.</value>
   </data>
-  <data name="Error_Validation_CannotLogInGuest" xml:space="preserve">
+  <data name="Error_Authenticate_CannotLogInGuest" xml:space="preserve">
     <value>Can't log in Guest. They don't have password and are per computer only.</value>
   </data>
 </root>

@@ -11,6 +11,6 @@ public class LoginModel : GuestModel
     [MinLength(User.PASSWORD_MIN_LENGTH)]
     [RegularExpression(
         User.PASSWORD_REGEX,
-        ErrorMessageResourceName = nameof(Resource.Error_Validation_WeakPassword))]
+        ErrorMessageResourceName = nameof(Resource.Error_Authenticate_WeakPassword))]
     public required string Password { get; init; }
 }

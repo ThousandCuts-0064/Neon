@@ -63,9 +63,63 @@ namespace Neon.Web.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t log in Guest. They don&apos;t have password and are per computer only..
         /// </summary>
-        public static string Error_Validation_CannotLogInGuest {
+        public static string Error_Authenticate_CannotLogInGuest {
             get {
-                return ResourceManager.GetString("Error_Validation_CannotLogInGuest", resourceCulture);
+                return ResourceManager.GetString("Error_Authenticate_CannotLogInGuest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username can only contain letters, digits, dashes and underscores..
+        /// </summary>
+        public static string Error_Authenticate_UsernameInvalidCharacters {
+            get {
+                return ResourceManager.GetString("Error_Authenticate_UsernameInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username not found..
+        /// </summary>
+        public static string Error_Authenticate_UsernameNotFound {
+            get {
+                return ResourceManager.GetString("Error_Authenticate_UsernameNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username is taken..
+        /// </summary>
+        public static string Error_Authenticate_UsernameTaken {
+            get {
+                return ResourceManager.GetString("Error_Authenticate_UsernameTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least 1 lower and upper case letter and digit..
+        /// </summary>
+        public static string Error_Authenticate_WeakPassword {
+            get {
+                return ResourceManager.GetString("Error_Authenticate_WeakPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong password..
+        /// </summary>
+        public static string Error_Authenticate_WrongPassword {
+            get {
+                return ResourceManager.GetString("Error_Authenticate_WrongPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error occurred..
+        /// </summary>
+        public static string Error_Generic_UnexpectedError {
+            get {
+                return ResourceManager.GetString("Error_Generic_UnexpectedError", resourceCulture);
             }
         }
         
@@ -129,60 +183,6 @@ namespace Neon.Web.Resources {
         public static string Error_Validation_StringLengthWithMin {
             get {
                 return ResourceManager.GetString("Error_Validation_StringLengthWithMin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unexpected error occurred..
-        /// </summary>
-        public static string Error_Validation_UnexpectedError {
-            get {
-                return ResourceManager.GetString("Error_Validation_UnexpectedError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username can only contain letters, digits, dashes and underscores..
-        /// </summary>
-        public static string Error_Validation_UsernameInvalidCharacters {
-            get {
-                return ResourceManager.GetString("Error_Validation_UsernameInvalidCharacters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username not found..
-        /// </summary>
-        public static string Error_Validation_UsernameNotFound {
-            get {
-                return ResourceManager.GetString("Error_Validation_UsernameNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Username is taken..
-        /// </summary>
-        public static string Error_Validation_UsernameTaken {
-            get {
-                return ResourceManager.GetString("Error_Validation_UsernameTaken", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password must contain at least 1 lower and upper case letter and digit..
-        /// </summary>
-        public static string Error_Validation_WeakPassword {
-            get {
-                return ResourceManager.GetString("Error_Validation_WeakPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wrong password..
-        /// </summary>
-        public static string Error_Validation_WrongPassword {
-            get {
-                return ResourceManager.GetString("Error_Validation_WrongPassword", resourceCulture);
             }
         }
         
