@@ -306,6 +306,7 @@ input:not([type]) {
 .neon-lobby-active-users,
 .neon-user-equipment,
 .neon-user-inventory {
+  height: fit-content;
   min-width: fit-content;
   display: grid;
   gap: 4px;

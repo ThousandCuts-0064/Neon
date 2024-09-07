@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Neon.Data.Migrations
 {
     [DbContext(typeof(NeonDbContext))]
-    [Migration("20240830203848_Initial")]
+    [Migration("20240906065639_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -70,9 +70,7 @@ namespace Neon.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("Key")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("LastActiveAt")
                         .HasColumnType("timestamp with time zone");

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 using Neon.Application.Extensions;
 using Neon.Application.Services.Lobbies;
@@ -13,6 +14,7 @@ using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Web.Args.Client;
 using Neon.Web.Args.Hub;
+using Neon.Web.Resources;
 
 namespace Neon.Web.Hubs;
 
@@ -27,6 +29,7 @@ public class LobbyHub : Hub<ILobbyClient>
     private readonly DuelRequestHandler _duelRequestHandler;
 
     private int UserId => int.Parse(Context.UserIdentifier!);
+    private ClaimsPrincipal User => Context.User!;
 
     public LobbyHub(
         ILobbyService lobbyService,
@@ -39,9 +42,9 @@ public class LobbyHub : Hub<ILobbyClient>
         _lobbyService = lobbyService;
         _userService = userService;
         _userInputService = userInputService;
-        _friendRequestHandler = new FriendRequestHandler(_userService, friendRequestService);
-        _tradeRequestHandler = new TradeRequestHandler(_userService, tradeRequestService);
-        _duelRequestHandler = new DuelRequestHandler(_userService, duelRequestService);
+        _friendRequestHandler = new FriendRequestHandler(friendRequestService);
+        _tradeRequestHandler = new TradeRequestHandler(tradeRequestService);
+        _duelRequestHandler = new DuelRequestHandler(duelRequestService);
     }
 
     public override async Task OnConnectedAsync()
@@ -98,7 +101,7 @@ public class LobbyHub : Hub<ILobbyClient>
                 await Clients.All.ExecutedCommand(new CommandMessageArgs
                 {
                     UsernamePrefix = "[",
-                    Username = "System",
+                    Username = Resource.Client_Generic_SystemName,
                     UsernameSuffix = "]",
                     Message = message
                 });
@@ -109,7 +112,7 @@ public class LobbyHub : Hub<ILobbyClient>
                 await Clients.All.InvalidCommand(new CommandMessageArgs
                 {
                     UsernamePrefix = "[",
-                    Username = "System",
+                    Username = Resource.Client_Generic_SystemName,
                     UsernameSuffix = "]",
                     Message = message
                 });
@@ -119,90 +122,93 @@ public class LobbyHub : Hub<ILobbyClient>
     }
 
 
-    public Task SendFriendRequest(SendFriendRequestArgs args) => _friendRequestHandler.SendAsync(UserId, args);
-    public Task AcceptFriendRequest(AcceptFriendRequestArgs args) => _friendRequestHandler.AcceptAsync(UserId, args);
-    public Task DeclineFriendRequest(DeclineFriendRequestArgs args) => _friendRequestHandler.DeclineAsync(UserId, args);
-    public Task CancelFriendRequest(CancelFriendRequestArgs args) => _friendRequestHandler.CancelAsync(UserId, args);
+    public Task SendFriendRequest(SendFriendRequestArgs args) => _friendRequestHandler.SendAsync(User, args);
+    public Task AcceptFriendRequest(AcceptFriendRequestArgs args) => _friendRequestHandler.AcceptAsync(User, args);
+    public Task DeclineFriendRequest(DeclineFriendRequestArgs args) => _friendRequestHandler.DeclineAsync(User, args);
+    public Task CancelFriendRequest(CancelFriendRequestArgs args) => _friendRequestHandler.CancelAsync(User, args);
 
-    public Task SendTradeRequest(SendTradeRequestArgs args) => _tradeRequestHandler.SendAsync(UserId, args);
-    public Task AcceptTradeRequest(AcceptTradeRequestArgs args) => _tradeRequestHandler.AcceptAsync(UserId, args);
-    public Task DeclineTradeRequest(DeclineTradeRequestArgs args) => _tradeRequestHandler.DeclineAsync(UserId, args);
-    public Task CancelTradeRequest(CancelTradeRequestArgs args) => _tradeRequestHandler.CancelAsync(UserId, args);
+    public Task SendTradeRequest(SendTradeRequestArgs args) => _tradeRequestHandler.SendAsync(User, args);
+    public Task AcceptTradeRequest(AcceptTradeRequestArgs args) => _tradeRequestHandler.AcceptAsync(User, args);
+    public Task DeclineTradeRequest(DeclineTradeRequestArgs args) => _tradeRequestHandler.DeclineAsync(User, args);
+    public Task CancelTradeRequest(CancelTradeRequestArgs args) => _tradeRequestHandler.CancelAsync(User, args);
 
-    public Task SendDuelRequest(SendDuelRequestArgs args) => _duelRequestHandler.SendAsync(UserId, args);
-    public Task AcceptDuelRequest(AcceptDuelRequestArgs args) => _duelRequestHandler.AcceptAsync(UserId, args);
-    public Task DeclineDuelRequest(DeclineDuelRequestArgs args) => _duelRequestHandler.DeclineAsync(UserId, args);
-    public Task CancelDuelRequest(CancelDuelRequestArgs args) => _duelRequestHandler.CancelAsync(UserId, args);
+    public Task SendDuelRequest(SendDuelRequestArgs args) => _duelRequestHandler.SendAsync(User, args);
+    public Task AcceptDuelRequest(AcceptDuelRequestArgs args) => _duelRequestHandler.AcceptAsync(User, args);
+    public Task DeclineDuelRequest(DeclineDuelRequestArgs args) => _duelRequestHandler.DeclineAsync(User, args);
+    public Task CancelDuelRequest(CancelDuelRequestArgs args) => _duelRequestHandler.CancelAsync(User, args);
 
 
     private class FriendRequestHandler : UserRequestHandler<
         IFriendRequestService,
         SendFriendRequestArgs, AcceptFriendRequestArgs, DeclineFriendRequestArgs, CancelFriendRequestArgs>
     {
-        public FriendRequestHandler(IUserService userService, IFriendRequestService userRequestService)
-            : base(userService, userRequestService) { }
+        public FriendRequestHandler(IFriendRequestService userRequestService) : base(userRequestService) { }
     }
 
     private class TradeRequestHandler : UserRequestHandler<
         ITradeRequestService,
         SendTradeRequestArgs, AcceptTradeRequestArgs, DeclineTradeRequestArgs, CancelTradeRequestArgs>
     {
-        public TradeRequestHandler(IUserService userService, ITradeRequestService userRequestService)
-            : base(userService, userRequestService) { }
+        public TradeRequestHandler(ITradeRequestService userRequestService) : base(userRequestService) { }
     }
 
     private class DuelRequestHandler : UserRequestHandler<
         IDuelRequestService,
         SendDuelRequestArgs, AcceptDuelRequestArgs, DeclineDuelRequestArgs, CancelDuelRequestArgs>
     {
-        public DuelRequestHandler(IUserService userService, IDuelRequestService userRequestService)
-            : base(userService, userRequestService) { }
+        public DuelRequestHandler(IDuelRequestService userRequestService) : base(userRequestService) { }
     }
 
     private abstract class UserRequestHandler<
         TUserRequestService,
         TSendUserRequestArgs, TAcceptUserRequestArgs, TDeclineUserRequestArgs, TCancelUserRequestArgs>
         where TUserRequestService : IUserRequestService
-        where TSendUserRequestArgs : ISendUserRequestArgs
-        where TAcceptUserRequestArgs : IAcceptUserRequestArgs
-        where TDeclineUserRequestArgs : IDeclineUserRequestArgs
-        where TCancelUserRequestArgs : ICancelUserRequestArgs
+        where TSendUserRequestArgs : SendUserRequestArgs
+        where TAcceptUserRequestArgs : AcceptUserRequestArgs
+        where TDeclineUserRequestArgs : DeclineUserRequestArgs
+        where TCancelUserRequestArgs : CancelUserRequestArgs
     {
-        private readonly IUserService _userService;
         private readonly TUserRequestService _userRequestService;
 
-        protected UserRequestHandler(IUserService userService, TUserRequestService userRequestService)
+        protected UserRequestHandler(TUserRequestService userRequestService)
         {
-            _userService = userService;
             _userRequestService = userRequestService;
         }
 
-        public async Task SendAsync(int requesterId, TSendUserRequestArgs args)
+        public async Task SendAsync(ClaimsPrincipal user, TSendUserRequestArgs args)
         {
-            var responderId = await _userService.FindIdAsync(args.ResponderKey);
-
-            await _userRequestService.SendAsync(requesterId, responderId);
+            await _userRequestService.SendAsync(
+                user.GetId(),
+                user.GetKey(),
+                user.GetUsername(),
+                args.ResponderKey);
         }
 
-        public async Task AcceptAsync(int requesterId, TAcceptUserRequestArgs args)
+        public async Task AcceptAsync(ClaimsPrincipal user, TAcceptUserRequestArgs args)
         {
-            var responderId = await _userService.FindIdAsync(args.ResponderKey);
-
-            await _userRequestService.AcceptAsync(requesterId, responderId);
+            await _userRequestService.AcceptAsync(
+                args.RequesterKey,
+                user.GetId(),
+                user.GetKey(),
+                user.GetUsername());
         }
 
-        public async Task DeclineAsync(int requesterId, TDeclineUserRequestArgs args)
+        public async Task DeclineAsync(ClaimsPrincipal user, TDeclineUserRequestArgs args)
         {
-            var responderId = await _userService.FindIdAsync(args.ResponderKey);
-
-            await _userRequestService.DeclineAsync(requesterId, responderId);
+            await _userRequestService.DeclineAsync(
+                args.RequesterKey,
+                user.GetId(),
+                user.GetKey(),
+                user.GetUsername());
         }
 
-        public async Task CancelAsync(int requesterId, TCancelUserRequestArgs args)
+        public async Task CancelAsync(ClaimsPrincipal user, TCancelUserRequestArgs args)
         {
-            var responderId = await _userService.FindIdAsync(args.ResponderKey);
-
-            await _userRequestService.CancelAsync(requesterId, responderId);
+            await _userRequestService.CancelAsync(
+                user.GetId(),
+                user.GetKey(),
+                user.GetUsername(),
+                args.ResponderKey);
         }
     }
 }

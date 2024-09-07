@@ -11,6 +11,14 @@
   </Target>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\ts\modules\resources\lobby-resource.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\ts\modules\resources\lobby-resource.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.5.3">
@@ -37,6 +45,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
 </Project>

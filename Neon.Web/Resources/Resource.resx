@@ -207,4 +207,13 @@
   <data name="Error_Authenticate_CannotLogInGuest" xml:space="preserve">
     <value>Can't log in Guest. They don't have password and are per computer only.</value>
   </data>
+  <data name="Client_Generic_ConnectionLost" xml:space="preserve">
+    <value>Connection lost. Refresh the page to reconnect.</value>
+  </data>
+  <data name="Client_Generic_SystemName" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Client_Generic_ConnectedFromAnotherSource" xml:space="preserve">
+    <value>Connected from another source. Refresh the page to reconnect.</value>
+  </data>
 </root>

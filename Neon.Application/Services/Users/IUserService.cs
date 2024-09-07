@@ -7,6 +7,7 @@ public interface IUserService
 {
     public Task<TUserModel> FindAsync<TUserModel>(int id) where TUserModel : IUserModel<TUserModel>;
     public Task<int> FindIdAsync(Guid key);
+    public Task<string> FindUsername(int id);
     public Task<UserRole> FindRoleAsync(int id);
 
     /// <returns>Old connectionId</returns>

@@ -1,6 +1,6 @@
 ﻿namespace Neon.Domain.Entities.UserRequests.Bases;
 
-public class UserRequest : IUserRequest
+public abstract class UserRequest
 {
     public int RequesterId { get; init; }
     public int ResponderId { get; init; }

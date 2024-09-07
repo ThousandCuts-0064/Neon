@@ -21,13 +21,13 @@ internal class LastActiveAtUpserter : BackgroundService
 
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        await Upsert();
+        await UpsertAsync();
         await base.StartAsync(cancellationToken);
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        await Upsert();
+        await UpsertAsync();
         await base.StopAsync(cancellationToken);
     }
 
@@ -37,13 +37,13 @@ internal class LastActiveAtUpserter : BackgroundService
 
         while (await timer.WaitForNextTickAsync(stoppingToken))
         {
-            await Upsert();
+            await UpsertAsync();
 
             timer.Period = TimeSpan.FromSeconds(_configuration.CurrentValue.DeltaSeconds);
         }
     }
 
-    private async Task Upsert()
+    private async Task UpsertAsync()
     {
         await using var serviceScope = _serviceScopeFactory.CreateAsyncScope();
 

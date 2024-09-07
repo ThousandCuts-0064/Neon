@@ -9,7 +9,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Key).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(x => x.Username).HasMaxLength(User.USERNAME_MAX_LENGTH);
 
         builder.HasIndex(x => x.Key).IsUnique();

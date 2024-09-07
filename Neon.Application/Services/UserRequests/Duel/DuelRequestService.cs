@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services.UserRequests.Bases;
+using Neon.Application.Services.Users;
 using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications;
 
@@ -13,5 +14,5 @@ internal class DuelRequestService :
 {
     protected override DbSet<DuelRequest> DbSet => DbContext.DuelRequests;
 
-    public DuelRequestService(INeonDbContext dbContext) : base(dbContext) { }
+    public DuelRequestService(INeonDbContext dbContext, IUserService userService) : base(dbContext, userService) { }
 }

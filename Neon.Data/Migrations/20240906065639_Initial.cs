@@ -90,7 +90,7 @@ namespace Neon.Data.Migrations
                     ConnectionId = table.Column<string>(type: "text", nullable: true),
                     SecurityKey = table.Column<Guid>(type: "uuid", nullable: false),
                     IdentityKey = table.Column<Guid>(type: "uuid", nullable: false),
-                    Key = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()")
+                    Key = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

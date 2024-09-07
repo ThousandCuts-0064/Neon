@@ -2,38 +2,40 @@
 
 namespace Neon.Domain.Notifications;
 
-public interface IUserRequestNotification
+public abstract class UserRequestNotification : Notification
 {
     public int RequesterId { get; init; }
     public Guid RequesterKey { get; init; }
-    public string RequesterUsername { get; init; }
     public int ResponderId { get; init; }
+    public Guid ResponderKey { get; init; }
 }
 
-public interface IUserRequestSent : IUserRequestNotification;
-public interface IUserRequestAccepted : IUserRequestNotification;
-public interface IUserRequestDeclined : IUserRequestNotification;
-public interface IUserRequestCanceled : IUserRequestNotification;
-
-public abstract class UserRequestNotification : Notification, IUserRequestNotification
+public abstract class RequesterRequestNotification : UserRequestNotification
 {
-    public int RequesterId { get; init; }
-    public int ResponderId { get; init; }
-    public Guid RequesterKey { get; init; }
     public string RequesterUsername { get; init; } = null!;
 }
 
-public class FriendRequestSent : UserRequestNotification, IUserRequestSent;
-public class FriendRequestAccepted : UserRequestNotification, IUserRequestAccepted;
-public class FriendRequestDeclined : UserRequestNotification, IUserRequestDeclined;
-public class FriendRequestCanceled : UserRequestNotification, IUserRequestCanceled;
+public abstract class ResponderRequestNotification : UserRequestNotification
+{
+    public string ResponderUsername { get; init; } = null!;
+}
 
-public class DuelRequestSent : UserRequestNotification, IUserRequestSent;
-public class DuelRequestAccepted : UserRequestNotification, IUserRequestAccepted;
-public class DuelRequestDeclined : UserRequestNotification, IUserRequestDeclined;
-public class DuelRequestCanceled : UserRequestNotification, IUserRequestCanceled;
+public abstract class UserRequestSent : RequesterRequestNotification;
+public abstract class UserRequestAccepted : ResponderRequestNotification;
+public abstract class UserRequestDeclined : ResponderRequestNotification;
+public abstract class UserRequestCanceled : RequesterRequestNotification;
 
-public class TradeRequestSent : UserRequestNotification, IUserRequestSent;
-public class TradeRequestAccepted : UserRequestNotification, IUserRequestAccepted;
-public class TradeRequestDeclined : UserRequestNotification, IUserRequestDeclined;
-public class TradeRequestCanceled : UserRequestNotification, IUserRequestCanceled;
+public class FriendRequestSent : UserRequestSent;
+public class FriendRequestAccepted : UserRequestAccepted;
+public class FriendRequestDeclined : UserRequestDeclined;
+public class FriendRequestCanceled : UserRequestCanceled;
+
+public class DuelRequestSent : UserRequestSent;
+public class DuelRequestAccepted : UserRequestAccepted;
+public class DuelRequestDeclined : UserRequestDeclined;
+public class DuelRequestCanceled : UserRequestCanceled;
+
+public class TradeRequestSent : UserRequestSent;
+public class TradeRequestAccepted : UserRequestAccepted;
+public class TradeRequestDeclined : UserRequestDeclined;
+public class TradeRequestCanceled : UserRequestCanceled;

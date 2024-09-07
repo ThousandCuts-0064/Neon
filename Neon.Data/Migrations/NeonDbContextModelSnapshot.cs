@@ -67,9 +67,7 @@ namespace Neon.Data.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("Key")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("LastActiveAt")
                         .HasColumnType("timestamp with time zone");

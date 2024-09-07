@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Neon.Application;
-using Neon.Application.Services.Notifications;
 using Neon.Application.Validators.Principals;
 using Neon.Domain.Enums;
-using Neon.Domain.Notifications;
-using Neon.Domain.Notifications.Bases;
 using Neon.Infrastructure;
-using Neon.Web.Args.Client;
+using Neon.Web;
 using Neon.Web.Hubs;
 using Neon.Web.Resources;
 using Neon.Web.Utils.Localization;
@@ -87,7 +83,11 @@ builder.Services
     .AddNeonInfrastructure(builder.Configuration)
     .AddNeonApplication();
 
+builder.Host.UseNeonInfrastructure();
+
 var app = builder.Build();
+
+app.UseNeonInfrastructure();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -108,53 +108,6 @@ app.MapHub<LobbyHub>("/Lobby/Hub");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{key?}");
 
-await app.UseNeonInfrastructureAsync(x =>
-{
-    var notificationService = x.GetRequiredService<INotificationService>();
-    var lobbyHubContex = x.GetRequiredService<IHubContext<LobbyHub, ILobbyClient>>();
-
-    notificationService.Listen<UserConnectionToggled>(y =>
-    {
-        lobbyHubContex.Clients.All.UserConnectionToggled(new UserConnectionToggledArgs
-        {
-            Username = y.Username,
-            IsActive = y.IsActive
-        });
-    });
-
-    ForwardToClient<FriendRequestSent, FriendRequestSentArgs>(y => y.FriendRequestSent);
-    ForwardToClient<FriendRequestAccepted, FriendRequestAcceptedArgs>(y => y.FriendRequestAccepted);
-    ForwardToClient<FriendRequestDeclined, FriendRequestDeclinedArgs>(y => y.FriendRequestDeclined);
-    ForwardToClient<FriendRequestCanceled, FriendRequestCanceledArgs>(y => y.FriendRequestCanceled);
-
-    ForwardToClient<TradeRequestSent, TradeRequestSentArgs>(y => y.TradeRequestSent);
-    ForwardToClient<TradeRequestAccepted, TradeRequestAcceptedArgs>(y => y.TradeRequestAccepted);
-    ForwardToClient<TradeRequestDeclined, TradeRequestDeclinedArgs>(y => y.TradeRequestDeclined);
-    ForwardToClient<TradeRequestCanceled, TradeRequestCanceledArgs>(y => y.TradeRequestCanceled);
-
-    ForwardToClient<DuelRequestSent, DuelRequestSentArgs>(y => y.DuelRequestSent);
-    ForwardToClient<DuelRequestAccepted, DuelRequestAcceptedArgs>(y => y.DuelRequestAccepted);
-    ForwardToClient<DuelRequestDeclined, DuelRequestDeclinedArgs>(y => y.DuelRequestDeclined);
-    ForwardToClient<DuelRequestCanceled, DuelRequestCanceledArgs>(y => y.DuelRequestCanceled);
-
-    return ValueTask.CompletedTask;
-
-    void ForwardToClient<TUserRequest, TServerUserRequestArgs>(
-        Func<ILobbyClient, Func<TServerUserRequestArgs, Task>> methodSelector)
-        where TUserRequest : Notification, IUserRequestNotification
-        where TServerUserRequestArgs : IServerUserRequestArgs, new()
-    {
-        notificationService.Listen<TUserRequest>(y =>
-        {
-            var client = lobbyHubContex.Clients.User(y.ResponderId.ToString());
-
-            methodSelector(client)(new TServerUserRequestArgs
-            {
-                RequesterKey = y.RequesterKey,
-                RequesterUsername = y.RequesterUsername
-            });
-        });
-    }
-});
+await app.InitializeNeonAsync<Initializer>();
 
 await app.RunAsync();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services.UserRequests.Bases;
+using Neon.Application.Services.Users;
 using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications;
 
@@ -13,5 +14,5 @@ internal class TradeRequestService :
 {
     protected override DbSet<TradeRequest> DbSet => DbContext.TradeRequests;
 
-    public TradeRequestService(INeonDbContext dbContext) : base(dbContext) { }
+    public TradeRequestService(INeonDbContext dbContext, IUserService userService) : base(dbContext, userService) { }
 }

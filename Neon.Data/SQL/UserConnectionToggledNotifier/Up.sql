@@ -3,6 +3,7 @@
     BEGIN
     PERFORM pg_notify('UserConnectionToggled',
         json_build_object(
+            'Key', NEW."Key",
             'Username', NEW."Username",
             'IsActive', NEW."ConnectionId" IS NOT NULL)
         ::TEXT);

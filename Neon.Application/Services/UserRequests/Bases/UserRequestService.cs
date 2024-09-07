@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neon.Application.Services.Bases;
+using Neon.Application.Services.Users;
 using Neon.Domain.Entities.UserRequests.Bases;
 using Neon.Domain.Notifications;
-using Neon.Domain.Notifications.Bases;
 
 namespace Neon.Application.Services.UserRequests.Bases;
 
@@ -11,119 +11,174 @@ internal abstract class UserRequestService<
     TUserRequestSent, TUserRequestAccepted, TUserRequestDeclined, TUserRequestCanceled> :
     DbContextService,
     IUserRequestService
-    where TUserRequest : class, IUserRequest, new()
-    where TUserRequestSent : Notification, IUserRequestSent, new()
-    where TUserRequestAccepted : Notification, IUserRequestAccepted, new()
-    where TUserRequestDeclined : Notification, IUserRequestDeclined, new()
-    where TUserRequestCanceled : Notification, IUserRequestCanceled, new()
+    where TUserRequest : UserRequest, new()
+    where TUserRequestSent : UserRequestSent, new()
+    where TUserRequestAccepted : UserRequestAccepted, new()
+    where TUserRequestDeclined : UserRequestDeclined, new()
+    where TUserRequestCanceled : UserRequestCanceled, new()
 {
+    private readonly IUserService _userService;
     protected abstract DbSet<TUserRequest> DbSet { get; }
 
-    protected UserRequestService(INeonDbContext dbContext) : base(dbContext) { }
-
-    public async Task SendAsync(int requesterId, int responderId)
+    protected UserRequestService(INeonDbContext dbContext, IUserService userService) : base(dbContext)
     {
-        await using var transaction = await DbContext.Database.BeginTransactionAsync();
-
-        DbSet.Add(new TUserRequest
-        {
-            RequesterId = requesterId,
-            ResponderId = responderId
-        });
-
-        await DbContext.SaveChangesAsync();
-
-        var requester = await FindRequesterAsync(requesterId);
-
-        await DbContext.NotifyAsync(new TUserRequestSent
-        {
-            RequesterId = requesterId,
-            RequesterKey = requester.Key,
-            RequesterUsername = requester.Username,
-            ResponderId = responderId
-        });
-
-        await transaction.CommitAsync();
+        _userService = userService;
     }
 
-    public async Task AcceptAsync(int requesterId, int responderId)
+    public async Task SendAsync(int requesterId, Guid requesterKey, string requesterUsername, Guid responderKey)
     {
+        if (requesterKey == responderKey)
+            return;
+
         await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
-        var requester = await FindRequesterAsync(requesterId);
+        var responderId = await _userService.FindIdAsync(responderKey);
 
+        var existingRequesterId = await DbSet
+            .Where(x =>
+                x.RequesterId == requesterId && x.ResponderId == responderId ||
+                x.RequesterId == responderId && x.ResponderId == requesterId)
+            .Select(x => x.RequesterId)
+            .FirstOrDefaultAsync();
+
+        if (existingRequesterId == 0)
+        {
+            DbSet.Add(new TUserRequest
+            {
+                RequesterId = requesterId,
+                ResponderId = responderId
+            });
+
+            await DbContext.SaveChangesAsync();
+
+            await DbContext.NotifyAsync(new TUserRequestSent
+            {
+                RequesterId = requesterId,
+                RequesterKey = requesterKey,
+                RequesterUsername = requesterUsername,
+                ResponderId = responderId,
+                ResponderKey = responderKey
+            });
+
+            await transaction.CommitAsync();
+
+            return;
+        }
+
+        if (existingRequesterId == requesterId)
+            return;
+
+        var responderUsername = await _userService.FindUsername(responderId);
+
+        // The responder accepts because they have sent a request too.
         await DbContext.NotifyAsync(new TUserRequestAccepted
         {
             RequesterId = requesterId,
-            RequesterKey = requester.Key,
-            RequesterUsername = requester.Username,
-            ResponderId = responderId
+            RequesterKey = requesterKey,
+            ResponderId = responderId,
+            ResponderKey = responderKey,
+            ResponderUsername = responderUsername
         });
 
+        // The requester becomes a responder and accepts.
+        await DbContext.NotifyAsync(new TUserRequestAccepted
+        {
+            RequesterId = responderId,
+            RequesterKey = responderKey,
+            ResponderId = requesterId,
+            ResponderKey = requesterKey,
+            ResponderUsername = requesterUsername
+        });
+
+        // Remove the existing request that is with reversed requester and responder.
         await DbSet
-            .Where(x => x.ResponderId == requesterId && x.ResponderId == requesterId)
+            .Where(x => x.RequesterId == responderId && x.ResponderId == requesterId)
             .ExecuteDeleteAsync();
 
         await transaction.CommitAsync();
     }
 
-    public async Task DeclineAsync(int requesterId, int responderId)
+    public async Task AcceptAsync(Guid requesterKey, int responderId, Guid responderKey, string responderUsername)
     {
+        if (requesterKey == responderKey)
+            return;
+
         await using var transaction = await DbContext.Database.BeginTransactionAsync();
 
-        var requester = await FindRequesterAsync(requesterId);
+        var requesterId = await _userService.FindIdAsync(requesterKey);
 
-        await DbContext.NotifyAsync(new TUserRequestDeclined
-        {
-            RequesterId = requesterId,
-            RequesterKey = requester.Key,
-            RequesterUsername = requester.Username,
-            ResponderId = responderId
-        });
-
-        await DbSet
-            .Where(x => x.ResponderId == requesterId && x.ResponderId == requesterId)
+        var deletedCount = await DbSet
+            .Where(x => x.RequesterId == requesterId && x.ResponderId == responderId)
             .ExecuteDeleteAsync();
 
-        await transaction.CommitAsync();
-    }
-
-    public async Task CancelAsync(int requesterId, int responderId)
-    {
-        await using var transaction = await DbContext.Database.BeginTransactionAsync();
-
-        var requester = await FindRequesterAsync(requesterId);
-
-        await DbContext.NotifyAsync(new TUserRequestCanceled
+        if (deletedCount > 0)
         {
-            RequesterId = requesterId,
-            RequesterKey = requester.Key,
-            RequesterUsername = requester.Username,
-            ResponderId = responderId
-        });
-
-        await DbSet
-            .Where(x => x.ResponderId == requesterId && x.ResponderId == requesterId)
-            .ExecuteDeleteAsync();
-
-        await transaction.CommitAsync();
-    }
-
-    private Task<Requester> FindRequesterAsync(int id)
-    {
-        return DbContext.Users
-            .Where(x => x.Id == id)
-            .Select(x => new Requester
+            await DbContext.NotifyAsync(new TUserRequestAccepted
             {
-                Key = x.Key,
-                Username = x.Username
-            })
-            .FirstAsync();
+                RequesterId = requesterId,
+                RequesterKey = requesterKey,
+                ResponderId = responderId,
+                ResponderKey = responderKey,
+                ResponderUsername = responderUsername
+            });
+        }
+
+        await transaction.CommitAsync();
     }
 
-    private class Requester
+    public async Task DeclineAsync(Guid requesterKey, int responderId, Guid responderKey, string responderUsername)
     {
-        public required Guid Key { get; init; }
-        public required string Username { get; init; }
+        if (requesterKey == responderKey)
+            return;
+
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
+
+        var requesterId = await _userService.FindIdAsync(requesterKey);
+
+        var deletedCount = await DbSet
+            .Where(x => x.RequesterId == requesterId && x.ResponderId == responderId)
+            .ExecuteDeleteAsync();
+
+        if (deletedCount > 0)
+        {
+            await DbContext.NotifyAsync(new TUserRequestDeclined
+            {
+                RequesterId = requesterId,
+                RequesterKey = requesterKey,
+                ResponderId = responderId,
+                ResponderKey = responderKey,
+                ResponderUsername = responderUsername
+            });
+        }
+
+        await transaction.CommitAsync();
+    }
+
+    public async Task CancelAsync(int requesterId, Guid requesterKey, string requesterUsername, Guid responderKey)
+    {
+        if (requesterKey == responderKey)
+            return;
+
+        await using var transaction = await DbContext.Database.BeginTransactionAsync();
+
+        var responderId = await _userService.FindIdAsync(responderKey);
+
+        var deletedCount = await DbSet
+            .Where(x => x.RequesterId == requesterId && x.ResponderId == responderId)
+            .ExecuteDeleteAsync();
+
+        if (deletedCount > 0)
+        {
+            await DbContext.NotifyAsync(new TUserRequestCanceled
+            {
+                RequesterId = requesterId,
+                RequesterKey = requesterKey,
+                RequesterUsername = requesterUsername,
+                ResponderId = responderId,
+                ResponderKey = responderKey
+            });
+        }
+
+        await transaction.CommitAsync();
     }
 }

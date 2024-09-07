@@ -1,8 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Neon.Application;
 using Neon.Domain.Entities;
 using Neon.Domain.Entities.UserRequests;
@@ -12,59 +13,68 @@ namespace Neon.Data;
 
 public class NeonDbContext : DbContext, INeonDbContext
 {
-    private const string SCHEMA = "public";
+    private readonly ILoggerFactory? _loggerFactory;
+    private readonly string _connectionString;
+    private readonly bool _isDevelopment;
 
-    private const string CONNECTION_STRING =
-        $"""
-         User Id=postgres;
-         Password=pgsql;
-         Host=localhost;
-         Database=neon;
-         Port=5432;
-         Persist Security Info=true;
-         Search Path={SCHEMA};
-         """;
+    public required DbSet<SystemValue> SystemValues { get; init; }
+    public required DbSet<User> Users { get; init; }
+    public required DbSet<Friendship> Friendships { get; init; }
+    public required DbSet<FriendRequest> FriendRequests { get; init; }
+    public required DbSet<TradeRequest> TradeRequests { get; init; }
+    public required DbSet<DuelRequest> DuelRequests { get; init; }
 
-    private readonly string? _connectionString;
+    public NeonDbContext() : this(FindAppSettings()) { }
 
-    public DbSet<SystemValue> SystemValues { get; init; }
-    public DbSet<User> Users { get; init; }
-    public DbSet<Friendship> Friendships { get; init; }
-    public DbSet<FriendRequest> FriendRequests { get; init; }
-    public DbSet<TradeRequest> TradeRequests { get; init; }
-    public DbSet<DuelRequest> DuelRequests { get; init; }
-
-    public NeonDbContext() => _connectionString = CONNECTION_STRING;
-
-    public NeonDbContext(IConfiguration configuration)
+    public NeonDbContext(IConfiguration configuration, ILoggerFactory? loggerFactory = null, IHostEnvironment? hostEnvironment = null)
     {
-        _connectionString = configuration.GetConnectionString("Default");
+        _connectionString = configuration.GetConnectionString("Default") ??
+            throw new ArgumentNullException(nameof(configuration), "No connection string with name \"Default\" found!");
+
+        _loggerFactory = loggerFactory;
+        _isDevelopment = hostEnvironment?.IsDevelopment() ?? true;
     }
 
-    #pragma warning disable EF1002
     public async Task ListenAsync<T>() where T : Notification
     {
+        #pragma warning disable EF1002
         await Database.ExecuteSqlRawAsync($"LISTEN \"{typeof(T).Name}\"");
+        #pragma warning restore EF1002
     }
 
     public async Task NotifyAsync<T>(T payload) where T : Notification
     {
-        await Database.ExecuteSqlRawAsync($"NOTIFY \"{typeof(T).Name}\", {JsonSerializer.Serialize(payload)}");
+        await Database.ExecuteSqlAsync($"SELECT pg_notify({typeof(T).Name}, {JsonSerializer.Serialize(payload)})");
     }
-    #pragma warning restore EF1002
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured)
+            return;
+
         optionsBuilder
-            .UseNpgsql(_connectionString, x =>
-            {
-                x.MigrationsHistoryTable(HistoryRepository.DefaultTableName, SCHEMA);
-            })
+            .UseNpgsql(_connectionString)
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+        if (!_isDevelopment)
+            return;
+
+        optionsBuilder
+            .EnableDetailedErrors()
+            .EnableSensitiveDataLogging()
+            .UseLoggerFactory(_loggerFactory);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(NeonDbContext).Assembly);
+    }
+
+    private static IConfiguration FindAppSettings([CallerFilePath] string filePath = null!)
+    {
+        return new ConfigurationBuilder()
+            .SetBasePath(Path.GetFullPath("../../Neon.Web", filePath))
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
     }
 }

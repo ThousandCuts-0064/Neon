@@ -5,15 +5,18 @@ using Neon.Data;
 using Neon.Infrastructure.Configurations;
 using Neon.Infrastructure.Configurations.Bases;
 using Neon.Infrastructure.HostedServices;
+using Serilog;
+
 namespace Neon.Infrastructure;
 
 public static class ServiceCollectionEx
 {
     public static IServiceCollection AddNeonInfrastructure(
         this IServiceCollection services,
-        IConfigurationRoot configuration)
+        IConfiguration configuration)
     {
         return services
+            .AddSerilog()
             .ConfigureBindable<LastActiveAtUpserterConfiguration>(configuration)
             .AddHostedService<LastActiveAtUpserter>()
             .AddHostedService<DbNotificationListener>()
@@ -22,7 +25,7 @@ public static class ServiceCollectionEx
 
     private static IServiceCollection ConfigureBindable<T>(
         this IServiceCollection services,
-        IConfigurationRoot configuration)
+        IConfiguration configuration)
         where T : class, IConfigurationBindable
     {
         return services.Configure<T>(configuration.GetSection(T.Key));

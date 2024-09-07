@@ -5,6 +5,12 @@
     ViewData.Set(new LayoutViewData
     {
         Title = Resource.Layout_Title_Lobby,
+        Resource = new Dictionary<string, string>
+        {
+            { "systemName", Resource.Client_Generic_SystemName },
+            { "connectionLost", Resource.Client_Generic_ConnectionLost },
+            { "connectedFromAnotherSource", Resource.Client_Generic_ConnectedFromAnotherSource }
+        }
     });
 }
 
@@ -13,7 +19,7 @@
         <div class="neon-lobby-active-users">
             @foreach (var activeUser in Model.ActiveUsers)
             {
-                <button type="button" class="neon-button-accent" data-username="@activeUser.Username">
+                <button type="button" class="neon-button-accent" data-user-key="@activeUser.Key.ToString()">
                     @activeUser.Username
                 </button>
             }
@@ -23,7 +29,7 @@
         <div class="neon-user-equipment">
             @for (var i = 0; i < 25; i++)
             {
-                <button id="neon-user-equipment-slot-@i" type="button" class="neon-item-slot">
+                <button id="neon-user-equipment-slot-@i.ToString()" type="button" class="neon-item-slot">
                     <img src="~/img/item/empty.png" alt="Empty" asp-append-version="true"/>
                 </button>
             }
@@ -39,7 +45,7 @@
         <div class="neon-user-inventory">
             @for (var i = 0; i < 100; i++)
             {
-                <button id="neon-user-inventory-slot-@i" type="button" class="neon-item-slot">
+                <button id="neon-user-inventory-slot-@i.ToString()" type="button" class="neon-item-slot">
                     <img src="~/img/item/empty.png" alt="Empty" asp-append-version="true"/>
                 </button>
             }

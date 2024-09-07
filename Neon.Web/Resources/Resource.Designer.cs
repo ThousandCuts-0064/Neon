@@ -61,6 +61,33 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected from another source. Refresh the page to reconnect..
+        /// </summary>
+        public static string Client_Generic_ConnectedFromAnotherSource {
+            get {
+                return ResourceManager.GetString("Client_Generic_ConnectedFromAnotherSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection lost. Refresh the page to reconnect..
+        /// </summary>
+        public static string Client_Generic_ConnectionLost {
+            get {
+                return ResourceManager.GetString("Client_Generic_ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string Client_Generic_SystemName {
+            get {
+                return ResourceManager.GetString("Client_Generic_SystemName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t log in Guest. They don&apos;t have password and are per computer only..
         /// </summary>
         public static string Error_Authenticate_CannotLogInGuest {

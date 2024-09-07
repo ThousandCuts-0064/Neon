@@ -4,8 +4,19 @@ import userMessage from "../html/user-message.html";
 import lobbyActiveUser from "../html/lobby-active-user.html";
 import { formatHtml, escapeHtml } from "./modules/html";
 import UserRole from "./modules/enums/user-role";
+import Resource from "./modules/resources/lobby-resource";
 import UserConnectionToggledArgs from "./modules/args/user-connection-toggle-args";
 import { UserMessageArgs, CommandMessageArgs } from "./modules/args/message-args";
+import {
+	UserRequestSentArgs,
+	UserRequestAcceptedArgs,
+	UserRequestDeclinedArgs,
+	UserRequestCanceledArgs
+} from "./modules/args/user-request-args";
+
+console.log($(`meta[name="resource"]`).attr("content"));
+
+const resource: Resource = JSON.parse($(`meta[name="resource"]`).attr("content"));
 
 const connection = new signalR
 	.HubConnectionBuilder()
@@ -24,11 +35,11 @@ connection.onclose(() => {
 
 	neonUserMessages.append(formatHtml(userMessage, {
 		"username-class": "",
-		"username-prefix": "",
-		"username": "",
-		"username-suffix": "",
+		"username-prefix": "[",
+		"username": resource.systemName,
+		"username-suffix": "]",
 		"message-class": "neon-theme-front-warning",
-		"message": "Connection lost. Refresh the page to reconnect."
+		"message": resource.connectionLost
 	}));
 });
 
@@ -37,11 +48,11 @@ connection.on("ConnectedFromAnotherSource", () => {
 
 	neonUserMessages.append(formatHtml(userMessage, {
 		"username-class": "",
-		"username-prefix": "",
-		"username": "",
-		"username-suffix": "",
+		"username-prefix": "[",
+		"username": resource.systemName,
+		"username-suffix": "]",
 		"message-class": "neon-theme-front-warning",
-		"message": "Logged in from another source. Refresh the page to reconnect."
+		"message": resource.connectedFromAnotherSource
 	}));
 });
 
@@ -111,14 +122,19 @@ connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 
 connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
 	if (!args.isActive) {
-		$(`.neon-lobby-active-users .user-${args.username}`).remove();
+		$(`.neon-lobby-active-users [data-user-key="${args.key}"]`).remove();
 
 		return;
 	}
 
-	for (var i = 0; i < 503; i++) {
-		$(".neon-lobby-active-users").append(lobbyActiveUser.replace(/{{username}}/g, args.username));
-	}
+	$(".neon-lobby-active-users").append(formatHtml(lobbyActiveUser, {
+		key: args.key,
+		username: args.username
+	}));
+});
+
+connection.on("DuelRequestSent", (args: UserRequestSentArgs) => {
+	alert(args.requesterUsername + " sent you duel request");
 });
 
 connection.start();
@@ -212,5 +228,11 @@ neonUserForm.on("submit", () => {
 
 
 $(".neon-lobby-active-users").on("click", "button", event => {
-	$(event.target).removeClass("neon-button-accent").addClass("neon-button-common");
+	const target = $(event.target);
+
+	target.removeClass("neon-button-accent").addClass("neon-button-common");
+
+	connection.send("SendDuelRequest", {
+		responderKey: target.attr("data-user-key")
+	});
 });

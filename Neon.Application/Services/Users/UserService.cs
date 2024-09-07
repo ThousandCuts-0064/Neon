@@ -27,6 +27,14 @@ internal class UserService : DbContextService, IUserService
             .FirstAsync();
     }
 
+    public async Task<string> FindUsername(int id)
+    {
+        return await DbContext.Users
+            .Where(x => x.Id == id)
+            .Select(x => x.Username)
+            .FirstAsync();
+    }
+
     public async Task<UserRole> FindRoleAsync(int id)
     {
         return await DbContext.Users

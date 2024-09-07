@@ -38,6 +38,7 @@ $item-slot-gap: 4px;
 .neon-lobby-active-users,
 .neon-user-equipment,
 .neon-user-inventory {
+	height: fit-content;
 	min-width: fit-content;
 	display: grid;
 	gap: $item-slot-gap;
