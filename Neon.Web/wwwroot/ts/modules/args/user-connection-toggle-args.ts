@@ -1,8 +1,5 @@
-﻿export default class UserConnectionToggledArgs
-{
-    public constructor(
-        public readonly key: string,
-        public readonly username: string,
-        public readonly isActive: boolean
-    ) {}
+﻿export default interface UserConnectionToggledArgs {
+	readonly key: string;
+	readonly username: string;
+	readonly isActive: boolean;
 }

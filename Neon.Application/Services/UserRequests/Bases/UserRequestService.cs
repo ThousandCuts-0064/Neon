@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using Neon.Application.Interfaces;
 using Neon.Application.Services.Bases;
 using Neon.Application.Services.Users;
 using Neon.Domain.Entities.UserRequests.Bases;
@@ -46,7 +48,8 @@ internal abstract class UserRequestService<
             DbSet.Add(new TUserRequest
             {
                 RequesterId = requesterId,
-                ResponderId = responderId
+                ResponderId = responderId,
+                CreatedAt = DateTime.UtcNow
             });
 
             await DbContext.SaveChangesAsync();

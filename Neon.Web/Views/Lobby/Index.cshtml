@@ -1,4 +1,5 @@
-﻿@model LobbyModel
+﻿@using Neon.Domain.Enums
+@model LobbyModel
 
 @{
     Layout = "_Layout";
@@ -16,13 +17,86 @@
 
 <div class="neon-lobby-container">
     <div class="neon-lobby-active-users-container">
-        <div class="neon-lobby-active-users">
-            @foreach (var activeUser in Model.ActiveUsers)
-            {
-                <button type="button" class="neon-button-accent" data-user-key="@activeUser.Key.ToString()">
-                    @activeUser.Username
-                </button>
-            }
+        <div class="neon-lobby-request-action-menu">
+            <label class="neon-theme-front-common">
+                <input type="radio" name="request-action" value="Send" checked>
+                <partial name="Svg/RequestAction/Send"/>
+            </label>
+            <label class="neon-theme-front-common">
+                <input type="radio" name="request-action" value="Respond">
+                <partial name="Svg/RequestAction/Respond"/>
+            </label>
+            <label class="neon-theme-front-common">
+                <input type="radio" name="request-action" value="Cancel">
+                <partial name="Svg/RequestAction/Cancel"/>
+
+            </label>
+        </div>
+        <div>
+            <div class="neon-lobby-active-users" data-data="@Model.ActiveUsers">
+                @foreach (var activeUser in Model.ActiveUsers)
+                {
+                    <div class="neon-lobby-user-row" data-user-key="@activeUser.Key.ToString()">
+                        <div class="neon-username">
+                            @activeUser.Username
+                        </div>
+                        <div class="neon-lobby-user-row-menu">
+                            <button class="neon-theme-front-common" data-request-type="Duel">
+                                <raw src="svg/request-type/duel"/>
+                            </button>
+                            <button class="neon-theme-front-common" data-request-type="Trade">
+                                <raw src="svg/request-type/trade"/>
+                            </button>
+                            <button class="neon-theme-front-common" data-request-type="Friend">
+                                <raw src="svg/request-type/friend"/>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="neon-lobby-incoming-user-requests">
+                @foreach (var userRequest in Model.IncomingUserRequests)
+                {
+                    <div class="neon-lobby-user-row" data-created-at="@userRequest.CreatedAt.ToString(Resource.Project_DateTimeFormat)" data-user-key="@userRequest.RequesterKey.ToString()">
+                        <div class="neon-lobby-user-row-info">
+                            <div class="neon-theme-front-common" data-request-type="@userRequest.Type">
+                                @switch (userRequest.Type)
+                                {
+                                    case UserRequestType.Duel:
+                                        <raw src="svg/request-type/duel"/>
+
+                                        break;
+
+                                    case UserRequestType.Trade:
+                                        <raw src="svg/request-type/trade"/>
+
+                                        break;
+
+                                    case UserRequestType.Friend:
+                                        <raw src="svg/request-type/friend"/>
+
+                                        break;
+
+                                    default: throw new ArgumentOutOfRangeException();
+                                }
+                            </div>
+                        </div>
+                        <div class="neon-username">
+                            @userRequest.RequesterUsername
+                        </div>
+                        <div class="neon-lobby-user-row-menu">
+                            <button class="neon-theme-front-common" data-request-response="Accept">
+                                <raw src="svg/user-action/check"/>
+                            </button>
+                            <button class="neon-theme-front-common" data-request-response="Decline">
+                                <raw src="svg/user-action/cross"/>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="neon-lobby-outgoing-user-requests">
+            </div>
         </div>
     </div>
     <div class="neon-user-equipment-container">
@@ -35,7 +109,11 @@
             }
         </div>
         <div class="neon-user-chat">
-            <ol class="neon-user-messages"></ol>
+            <ol class="neon-user-messages">
+                <li>
+                    <link src="html/user-message.html" asp-append-version="true"></link>
+                </li>
+            </ol>
             <form class="neon-user-form">
                 <input id="neon-user-input" class="neon-theme-back-base-3" autocomplete="off" maxlength="64"/>
             </form>
@@ -52,6 +130,25 @@
         </div>
     </div>
 </div>
+@*
+<tempslate id="neon-lobby-active-user-template">
+    <div class="neon-lobby-user-row" data-user-key="{{key}}">
+        <div class="neon-username">
+            {{username}}
+        </div>
+        <div class="neon-lobby-user-row-menu">
+            <button class="neon-theme-front-common" data-request-type="Duel">
+                <partial name="Svg/RequestType/Duel"/>
+            </button>
+            <button class="neon-theme-front-common" data-request-type="Trade">
+                <partial name="Svg/RequestType/Trade"/>
+            </button>
+            <button class="neon-theme-front-common" data-request-type="Friend">
+                <partial name="Svg/RequestType/Friend"/>
+            </button>
+        </div>
+    </div>
+</tempslate> *@
 
 @section Scripts
 {

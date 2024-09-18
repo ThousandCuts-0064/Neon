@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;
 using Neon.Application.Extensions;
-using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.UserInputs;
 using Neon.Application.Services.UserInputs.Enums;
 using Neon.Application.Services.UserRequests.Bases;
@@ -21,7 +20,6 @@ namespace Neon.Web.Hubs;
 public class LobbyHub : Hub<ILobbyClient>
 {
     private static readonly ConcurrentDictionary<string, HubCallerContext> _activeContexts = [];
-    private readonly ILobbyService _lobbyService;
     private readonly IUserService _userService;
     private readonly IUserInputService _userInputService;
     private readonly FriendRequestHandler _friendRequestHandler;
@@ -32,14 +30,12 @@ public class LobbyHub : Hub<ILobbyClient>
     private ClaimsPrincipal User => Context.User!;
 
     public LobbyHub(
-        ILobbyService lobbyService,
         IUserService userService,
         IUserInputService userInputService,
         IFriendRequestService friendRequestService,
         ITradeRequestService tradeRequestService,
         IDuelRequestService duelRequestService)
     {
-        _lobbyService = lobbyService;
         _userService = userService;
         _userInputService = userInputService;
         _friendRequestHandler = new FriendRequestHandler(friendRequestService);

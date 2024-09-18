@@ -1,7 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import $ from "jquery";
 import userMessage from "../html/user-message.html";
-import lobbyActiveUser from "../html/lobby-active-user.html";
 import { formatHtml, escapeHtml } from "./modules/html";
 import UserRole from "./modules/enums/user-role";
 import Resource from "./modules/resources/lobby-resource";
@@ -14,9 +13,9 @@ import {
 	UserRequestCanceledArgs
 } from "./modules/args/user-request-args";
 
-console.log($(`meta[name="resource"]`).attr("content"));
-
+const lobbyActiveUser = $("#neon-lobby-active-user-template").html();
 const resource: Resource = JSON.parse($(`meta[name="resource"]`).attr("content"));
+const userKey: string = $(`meta[name="user-key"]`).attr("content");
 
 const connection = new signalR
 	.HubConnectionBuilder()
@@ -121,6 +120,9 @@ connection.on("InvalidCommand", (args: CommandMessageArgs) => {
 });
 
 connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
+	if (args.key === userKey)
+		return;
+
 	if (!args.isActive) {
 		$(`.neon-lobby-active-users [data-user-key="${args.key}"]`).remove();
 
@@ -134,7 +136,12 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
 });
 
 connection.on("DuelRequestSent", (args: UserRequestSentArgs) => {
-	alert(args.requesterUsername + " sent you duel request");
+});
+
+connection.on("TradeRequestSent", (args: UserRequestSentArgs) => {
+});
+
+connection.on("FriendRequestSent", (args: UserRequestSentArgs) => {
 });
 
 connection.start();
@@ -226,13 +233,30 @@ neonUserForm.on("submit", () => {
 	return false;
 });
 
+const activeUsersMenu = $(".neon-lobby-request-type-menu");
 
-$(".neon-lobby-active-users").on("click", "button", event => {
-	const target = $(event.target);
+$(".neon-lobby-active-users").on("click", ".neon-lobby-user-row-menu button", function() {
+	const target = $(this);
+	const userRequestType = target.attr("data-request-type");
 
-	target.removeClass("neon-button-accent").addClass("neon-button-common");
+	target.addClass("neon-theme-front-accent");
 
-	connection.send("SendDuelRequest", {
-		responderKey: target.attr("data-user-key")
+	connection.send(`Send${userRequestType}Request`, {
+		responderKey: target.closest("[data-user-key]").attr("data-user-key")
 	});
+});
+
+$(".neon-lobby-incoming-user-requests").on("click", ".neon-lobby-user-row-menu button", function() {
+	const target = $(this);
+	const row = target.closest(".neon-lobby-user-row");
+	const userRequestType = row.find("[data-request-type]").attr("data-request-type");
+	const userRequestResponse = target.attr("data-request-response");
+
+	console.log(`${userRequestResponse}${userRequestType}Request`);
+
+	connection.send(`${userRequestResponse}${userRequestType}Request`, {
+		requesterKey: target.closest("[data-user-key]").attr("data-user-key")
+	});
+
+	row.remove();
 });

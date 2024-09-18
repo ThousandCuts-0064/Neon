@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Neon.Application.Extensions;
 using Neon.Application.Factories.Principals;
+using Neon.Application.Interfaces;
 using Neon.Application.Services.Bases;
 using Neon.Application.Services.Passwords;
 using Neon.Application.Validators.Users;

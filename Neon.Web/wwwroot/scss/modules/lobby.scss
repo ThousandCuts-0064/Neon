@@ -35,6 +35,55 @@ $item-slot-gap: 4px;
 	justify-content: end;
 }
 
+
+.neon-lobby-user-row{
+	display: flex;
+
+	.neon-username{
+		text-align: center;
+	}
+}
+
+.neon-lobby-request-action-menu{
+	height: 100%;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+
+	label {
+		height: 100%;
+		width: $item-slot-size;
+		cursor: pointer;
+		display: flex;
+	}
+
+	input[type="radio"] {
+		display: none;
+
+		&:checked ~ svg {
+			color: var(--theme-accent);
+		}
+	}
+
+	svg {
+		width: $item-img-size;
+		height: $item-img-size;
+		margin: auto;
+	}
+}
+
+.neon-lobby-user-row-info,
+.neon-lobby-user-row-menu{
+	display: flex;
+
+	svg {
+		width: 1lh;
+		height: 1lh;
+		margin: auto;
+	}
+}
+
 .neon-lobby-active-users,
 .neon-user-equipment,
 .neon-user-inventory {
@@ -49,11 +98,7 @@ $item-slot-gap: 4px;
 	max-width: 100%;
 	max-height: 100%;
 	overflow: hidden auto;
-	grid-template-columns: repeat(auto-fit, $username-width);
-
-	* {
-		width: 100%;
-	}
+	grid-template-columns: repeat(auto-fit, fit-content(100%));
 }
 
 .neon-user-equipment,
@@ -62,7 +107,7 @@ $item-slot-gap: 4px;
 }
 
 .neon-user-equipment {
-	grid-template-columns: repeat(5, $item-slot-size);
+	grid-template-columns: repeat(5, fit-content(100%));
 }
 
 .neon-user-chat {
@@ -104,7 +149,7 @@ $item-slot-gap: 4px;
 	max-height: 100%;
 	padding-left: $item-slot-gap * 2;
 	overflow: hidden auto;
-	grid-template-columns: $item-slot-size $item-slot-size repeat(auto-fit, $item-slot-size);
+	grid-template-columns: repeat(5, fit-content(100%));
 }
 
 @property --angle {
@@ -164,8 +209,6 @@ $item-slot-gap: 4px;
 		height: $item-img-size;
 		background-color: black;
 		margin: auto;
-		justify-content: center;
-		align-content: center;
 	}
 
 	@keyframes spin {

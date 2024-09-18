@@ -1,4 +1,6 @@
-﻿* {
+﻿@import "constants.scss";
+
+* {
 	scrollbar-width: thin;
 }
 
@@ -31,6 +33,14 @@ main {
 	justify-content: center;
 }
 
+button{
+	cursor: pointer;
+}
+
 input:not([type]) {
 	outline: none;
+}
+
+.neon-username{
+	width: $username-width !important;
 }

@@ -4,7 +4,7 @@ using Neon.Domain.Entities;
 using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications.Bases;
 
-namespace Neon.Application;
+namespace Neon.Application.Interfaces;
 
 public interface INeonDbContext
 {

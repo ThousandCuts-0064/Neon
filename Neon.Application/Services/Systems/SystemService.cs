@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Neon.Application.Interfaces;
 using Neon.Application.Services.Bases;
 using Neon.Domain.Entities;
 

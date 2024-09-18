@@ -2,7 +2,6 @@
 using Neon.Application.Factories.Principals;
 using Neon.Application.Services.Authentications;
 using Neon.Application.Services.Items;
-using Neon.Application.Services.Lobbies;
 using Neon.Application.Services.Notifications;
 using Neon.Application.Services.Passwords;
 using Neon.Application.Services.Systems;
@@ -26,7 +25,6 @@ public static class ServiceCollectionEx
             .AddScoped<IPrincipalValidator, PrincipalValidator>()
             .AddScoped<IUserValidator, UserValidator>()
             .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddScoped<ILobbyService, LobbyService>()
             .AddScoped<ISystemService, SystemService>()
             .AddScoped<IPasswordService, PasswordService>()
             .AddScoped<IUserService, UserService>()

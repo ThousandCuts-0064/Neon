@@ -1,4 +1,4 @@
-﻿namespace Neon.Application;
+﻿namespace Neon.Application.Interfaces;
 
 public interface IInitializer
 {

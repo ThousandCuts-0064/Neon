@@ -3,6 +3,7 @@
   border: 0;
   margin: 0;
   border-color: transparent;
+  background-color: transparent;
 }
 *, *::before, *::after {
   box-sizing: border-box;
@@ -178,8 +179,16 @@ main {
   justify-content: center;
 }
 
+button {
+  cursor: pointer;
+}
+
 input:not([type]) {
   outline: none;
+}
+
+.neon-username {
+  width: 30ch !important;
 }
 
 .neon-nav,
@@ -258,7 +267,7 @@ input:not([type]) {
 .neon-form {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
   width: 30ch;
 }
 .neon-form input {
@@ -303,6 +312,49 @@ input:not([type]) {
   justify-content: end;
 }
 
+.neon-lobby-user-row {
+  display: flex;
+}
+.neon-lobby-user-row .neon-username {
+  text-align: center;
+}
+
+.neon-lobby-request-action-menu {
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.neon-lobby-request-action-menu label {
+  height: 100%;
+  width: 76px;
+  cursor: pointer;
+  display: flex;
+}
+.neon-lobby-request-action-menu input[type=radio] {
+  display: none;
+}
+.neon-lobby-request-action-menu input[type=radio]:checked ~ svg {
+  color: var(--theme-accent);
+}
+.neon-lobby-request-action-menu svg {
+  width: 64px;
+  height: 64px;
+  margin: auto;
+}
+
+.neon-lobby-user-row-info,
+.neon-lobby-user-row-menu {
+  display: flex;
+}
+.neon-lobby-user-row-info svg,
+.neon-lobby-user-row-menu svg {
+  width: 1lh;
+  height: 1lh;
+  margin: auto;
+}
+
 .neon-lobby-active-users,
 .neon-user-equipment,
 .neon-user-inventory {
@@ -317,10 +369,7 @@ input:not([type]) {
   max-width: 100%;
   max-height: 100%;
   overflow: hidden auto;
-  grid-template-columns: repeat(auto-fit, 30ch);
-}
-.neon-lobby-active-users * {
-  width: 100%;
+  grid-template-columns: repeat(auto-fit, fit-content(100%));
 }
 
 .neon-user-equipment,
@@ -329,7 +378,7 @@ input:not([type]) {
 }
 
 .neon-user-equipment {
-  grid-template-columns: repeat(5, 76px);
+  grid-template-columns: repeat(5, fit-content(100%));
 }
 
 .neon-user-chat {
@@ -368,7 +417,7 @@ input:not([type]) {
   max-height: 100%;
   padding-left: 8px;
   overflow: hidden auto;
-  grid-template-columns: 76px 76px repeat(auto-fit, 76px);
+  grid-template-columns: repeat(5, fit-content(100%));
 }
 
 @property --angle {
@@ -423,8 +472,6 @@ input:not([type]) {
   height: 64px;
   background-color: black;
   margin: auto;
-  justify-content: center;
-  align-content: center;
 }
 @keyframes spin {
   from {

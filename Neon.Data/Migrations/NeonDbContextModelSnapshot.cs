@@ -32,6 +32,8 @@ namespace Neon.Data.Migrations
 
                     b.HasKey("User1Id", "User2Id");
 
+                    b.HasIndex("User1Id");
+
                     b.ToTable("Friendships", t =>
                         {
                             t.HasCheckConstraint("CK_Friendship_UserId1_LessThan_UserId2", "\"User1Id\" < \"User2Id\"");
@@ -108,6 +110,9 @@ namespace Neon.Data.Migrations
                     b.Property<int>("ResponderId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("RequesterId", "ResponderId");
 
                     b.ToTable("DuelRequests");
@@ -121,6 +126,9 @@ namespace Neon.Data.Migrations
                     b.Property<int>("ResponderId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("RequesterId", "ResponderId");
 
                     b.ToTable("FriendRequests");
@@ -133,6 +141,9 @@ namespace Neon.Data.Migrations
 
                     b.Property<int>("ResponderId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("RequesterId", "ResponderId");
 

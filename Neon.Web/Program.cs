@@ -15,8 +15,7 @@ using WebMarkupMin.Core;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddControllersWithViews()
-    .AddMvcOptions(x =>
+    .AddControllersWithViews(x =>
     {
         x.ModelBindingMessageProvider.CopyFrom<LocalizedBindingMessageProvider>();
         x.ModelMetadataDetailsProviders.Add(new LocalizedMetadataDetailsProvider());

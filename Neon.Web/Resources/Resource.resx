@@ -216,4 +216,7 @@
   <data name="Client_Generic_ConnectedFromAnotherSource" xml:space="preserve">
     <value>Connected from another source. Refresh the page to reconnect.</value>
   </data>
+  <data name="Project_DateTimeFormat" xml:space="preserve">
+    <value>hh:mm:ss dd/MM/yyyy</value>
+  </data>
 </root>

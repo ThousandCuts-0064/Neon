@@ -1,4 +1,6 @@
-﻿namespace Neon.Application.Services.Bases;
+﻿using Neon.Application.Interfaces;
+
+namespace Neon.Application.Services.Bases;
 
 internal abstract class DbContextService
 {

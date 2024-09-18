@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Neon.Application;
+using Neon.Application.Interfaces;
 using Neon.Domain.Entities;
 using Neon.Domain.Entities.UserRequests;
 using Neon.Domain.Notifications.Bases;
@@ -26,7 +27,10 @@ public class NeonDbContext : DbContext, INeonDbContext
 
     public NeonDbContext() : this(FindAppSettings()) { }
 
-    public NeonDbContext(IConfiguration configuration, ILoggerFactory? loggerFactory = null, IHostEnvironment? hostEnvironment = null)
+    public NeonDbContext(
+        IConfiguration configuration,
+        ILoggerFactory? loggerFactory = null,
+        IHostEnvironment? hostEnvironment = null)
     {
         _connectionString = configuration.GetConnectionString("Default") ??
             throw new ArgumentNullException(nameof(configuration), "No connection string with name \"Default\" found!");

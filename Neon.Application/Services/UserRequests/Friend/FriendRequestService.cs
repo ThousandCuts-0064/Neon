@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Neon.Application.Interfaces;
 using Neon.Application.Services.UserRequests.Bases;
 using Neon.Application.Services.Users;
 using Neon.Domain.Entities.UserRequests;

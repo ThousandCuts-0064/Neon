@@ -295,6 +295,15 @@ namespace Neon.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hh:mm:ss dd/MM/yyyy.
+        /// </summary>
+        public static string Project_DateTimeFormat {
+            get {
+                return ResourceManager.GetString("Project_DateTimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to en.
         /// </summary>
         public static string Project_LanguageShort {
