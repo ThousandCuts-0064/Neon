@@ -1,22 +1,22 @@
 ﻿@import "constants.scss";
 
 .neon-form {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	width: $username-width;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: $username-width;
 
-	input {
-		text-align: center
-	}
+    input {
+        text-align: center
+    }
 
-	.neon-form-col {
-		display: flex;
-		flex-direction: column;
-	}
+    .neon-form-col {
+        display: flex;
+        flex-direction: column;
+    }
 
-	.neon-form-row {
-		display: flex;
-		justify-content: space-between;
-	}
+    .neon-form-row {
+        display: flex;
+        justify-content: space-between;
+    }
 }

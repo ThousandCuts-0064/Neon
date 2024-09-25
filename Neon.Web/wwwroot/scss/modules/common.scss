@@ -1,46 +1,46 @@
 ﻿@import "constants.scss";
 
 * {
-	scrollbar-width: thin;
+    scrollbar-width: thin;
 }
 
 body {
-	height: 100svh;
-	display: flex;
-	flex-direction: column;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
 }
 
 header, footer {
-	position: sticky;
-	width: 100%;
-	padding: 0.5rem;
+    position: sticky;
+    width: 100%;
+    padding: 0.5rem;
 }
 
 header {
-	top: 0;
+    top: 0;
 }
 
 footer {
-	bottom: 0;
+    bottom: 0;
 }
 
 main {
-	height: 100%;
-	overflow: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-button{
-	cursor: pointer;
+button {
+    cursor: pointer;
 }
 
 input:not([type]) {
-	outline: none;
+    outline: none;
 }
 
-.neon-username{
-	width: $username-width !important;
+.neon-username {
+    width: $username-width !important;
 }

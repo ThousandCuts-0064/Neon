@@ -1,33 +1,33 @@
 ﻿* {
-	padding: 0;
-	border: 0;
-	margin: 0;
-	border-color: transparent;
-	background-color: transparent;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    border-color: transparent;
+    background-color: transparent;
 
-	&, &::before, &::after {
-		box-sizing: border-box;
-	}
+    &, &::before, &::after {
+        box-sizing: border-box;
+    }
 }
 
 #root, #__next {
-	isolation: isolate;
+    isolation: isolate;
 }
 
 body {
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
 img, picture, video, canvas, svg {
-	display: block;
-	max-width: 100%;
+    display: block;
+    max-width: 100%;
 }
 
 input, button, textarea, select {
-	font: inherit;
+    font: inherit;
 }
 
 p, h1, h2, h3, h4, h5, h6 {
-	overflow-wrap: break-word;
+    overflow-wrap: break-word;
 }

@@ -1,11 +1,11 @@
 ﻿interface RequesterRequestArgs {
-	readonly requesterKey: string;
-	readonly requesterUsername: string;
+    readonly requesterKey: string;
+    readonly requesterUsername: string;
 }
 
 interface ResponderRequestArgs {
-	readonly responderKey: string;
-	readonly responderUsername: string;
+    readonly responderKey: string;
+    readonly responderUsername: string;
 }
 
 export interface UserRequestSentArgs extends RequesterRequestArgs { }

@@ -1,30 +1,30 @@
 ﻿.neon-nav,
 .neon-nav-center {
-	display: flex;
-	gap: 3ch;
+    display: flex;
+    gap: 3ch;
 }
 
 .neon-nav-center {
-	justify-content: center;
+    justify-content: center;
 }
 
 .neon-menu {
-	display: flex;
-	width: 100%;
-	gap: 1ch;
-	list-style-type: none;
+    display: flex;
+    width: 100%;
+    gap: 1ch;
+    list-style-type: none;
 
-	li {
-		display: flex;
-		align-content: center;
-		justify-content: center;
-	}
+    li {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+    }
 }
 
 .neon-nav-button {
-	@extend .neon-interactable;
-	padding: .5rem;
-	border-radius: .5rem;
-	text-decoration: none;
-	font-weight: bold;
+    @extend .neon-interactable;
+    padding: .5rem;
+    border-radius: .5rem;
+    text-decoration: none;
+    font-weight: bold;
 }

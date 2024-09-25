@@ -6,232 +6,232 @@ $item-slot-size: $item-img-size + $item-border-size;
 $item-slot-gap: 4px;
 
 .neon-lobby-container {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1ch;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1ch;
 }
 
 .neon-lobby-active-users-container,
 .neon-user-equipment-container,
 .neon-user-inventory-container {
-	max-height: 100%;
-	display: flex;
+    max-height: 100%;
+    display: flex;
 }
 
 .neon-lobby-active-users-container,
 .neon-user-inventory-container {
-	flex: 1;
+    flex: 1;
 }
 
 .neon-user-equipment-container {
-	flex-direction: column;
-	justify-content: space-between;
-	gap: 1rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .neon-user-inventory-container {
-	justify-content: end;
+    justify-content: end;
 }
 
 
-.neon-lobby-user-row{
-	display: flex;
+.neon-lobby-user-row {
+    display: flex;
 
-	.neon-username{
-		text-align: center;
-	}
+    .neon-username {
+        text-align: center;
+    }
 }
 
-.neon-lobby-request-action-menu{
-	height: 100%;
-	cursor: pointer;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
+.neon-lobby-request-action-menu {
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 
-	label {
-		height: 100%;
-		width: $item-slot-size;
-		cursor: pointer;
-		display: flex;
-	}
+    label {
+        height: 100%;
+        width: $item-slot-size;
+        cursor: pointer;
+        display: flex;
+    }
 
-	input[type="radio"] {
-		display: none;
+    input[type="radio"] {
+        display: none;
 
-		&:checked ~ svg {
-			color: var(--theme-accent);
-		}
-	}
+        &:checked ~ svg {
+            color: var(--theme-accent);
+        }
+    }
 
-	svg {
-		width: $item-img-size;
-		height: $item-img-size;
-		margin: auto;
-	}
+    svg {
+        width: $item-img-size;
+        height: $item-img-size;
+        margin: auto;
+    }
 }
 
 .neon-lobby-user-row-info,
-.neon-lobby-user-row-menu{
-	display: flex;
+.neon-lobby-user-row-menu {
+    display: flex;
 
-	svg {
-		width: 1lh;
-		height: 1lh;
-		margin: auto;
-	}
+    svg {
+        width: 1lh;
+        height: 1lh;
+        margin: auto;
+    }
 }
 
 .neon-lobby-active-users,
 .neon-user-equipment,
 .neon-user-inventory {
-	height: fit-content;
-	min-width: fit-content;
-	display: grid;
-	gap: $item-slot-gap;
-	cursor: pointer;
+    height: fit-content;
+    min-width: fit-content;
+    display: grid;
+    gap: $item-slot-gap;
+    cursor: pointer;
 }
 
 .neon-lobby-active-users {
-	max-width: 100%;
-	max-height: 100%;
-	overflow: hidden auto;
-	grid-template-columns: repeat(auto-fit, fit-content(100%));
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden auto;
+    grid-template-columns: repeat(auto-fit, fit-content(100%));
 }
 
 .neon-user-equipment,
 .neon-user-inventory {
-	grid-auto-rows: $item-slot-size;
+    grid-auto-rows: $item-slot-size;
 }
 
 .neon-user-equipment {
-	grid-template-columns: repeat(5, fit-content(100%));
+    grid-template-columns: repeat(5, fit-content(100%));
 }
 
 .neon-user-chat {
-	display: flex;
-	flex-direction: column;
-	overflow: hidden auto;
-	gap: 1px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden auto;
+    gap: 1px;
 }
 
 .neon-user-messages {
-	width: 0;
-	min-width: 100%;
-	padding: 0;
-	margin: 0;
-	list-style-type: none;
-	overflow: hidden auto;
-	scroll-snap-type: y mandatory;
-	scroll-behavior: smooth;
+    width: 0;
+    min-width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow: hidden auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
 
-	li {
-		scroll-snap-align: start;
-	}
+    li {
+        scroll-snap-align: start;
+    }
 
-	.neon-user-message {
-		word-wrap: break-word;
-	}
+    .neon-user-message {
+        word-wrap: break-word;
+    }
 }
 
 .neon-user-form {
-	width: 100%;
+    width: 100%;
 
-	* {
-		width: 100%;
-	}
+    * {
+        width: 100%;
+    }
 }
 
 .neon-user-inventory {
-	max-width: 100%;
-	max-height: 100%;
-	padding-left: $item-slot-gap * 2;
-	overflow: hidden auto;
-	grid-template-columns: repeat(5, fit-content(100%));
+    max-width: 100%;
+    max-height: 100%;
+    padding-left: $item-slot-gap * 2;
+    overflow: hidden auto;
+    grid-template-columns: repeat(5, fit-content(100%));
 }
 
 @property --angle {
-	syntax: "<angle>";
-	initial-value: 0deg;
-	inherits: false;
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
 }
 
 @property --opacity {
-	syntax: "<number>";
-	initial-value: 1;
-	inherits: false;
+    syntax: "<number>";
+    initial-value: 1;
+    inherits: false;
 }
 
 .neon-item-slot {
-	--border-color: slategray;
-	--animation-spin-duration: 0s;
-	--animation-spin-direction: normal;
-	--animation-pulse-duration: 0s;
-	--glow-z-index: -1;
-	display: block;
-	position: relative;
-	width: $item-slot-size;
-	height: $item-slot-size;
-	padding: 0;
-	background-color: transparent;
-	cursor: pointer;
+    --border-color: slategray;
+    --animation-spin-duration: 0s;
+    --animation-spin-direction: normal;
+    --animation-pulse-duration: 0s;
+    --glow-z-index: -1;
+    display: block;
+    position: relative;
+    width: $item-slot-size;
+    height: $item-slot-size;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
 
-	&:hover {
-		--glow-z-index: 1;
-	}
+    &:hover {
+        --glow-z-index: 1;
+    }
 
-	&::before, &::after {
-		content: "";
-		display: inline-block;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		left: 0;
-		top: 0;
-		background: repeating-conic-gradient(from var(--angle), var(--border-color) 0deg, transparent 45deg, var(--border-color) 90deg);
-		opacity: var(--opacity);
-		z-index: -1;
-		animation: var(--animation-spin-duration) spin linear infinite var(--animation-spin-direction), var(--animation-pulse-duration) pulse linear infinite;
-	}
+    &::before, &::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: repeating-conic-gradient(from var(--angle), var(--border-color) 0deg, transparent 45deg, var(--border-color) 90deg);
+        opacity: var(--opacity);
+        z-index: -1;
+        animation: var(--animation-spin-duration) spin linear infinite var(--animation-spin-direction), var(--animation-pulse-duration) pulse linear infinite;
+    }
 
-	&::before {
-		filter: blur($item-slot-gap);
-		opacity: var(--opacity);
-		z-index: var(--glow-z-index);
-	}
+    &::before {
+        filter: blur($item-slot-gap);
+        opacity: var(--opacity);
+        z-index: var(--glow-z-index);
+    }
 
-	> img {
-		display: block;
-		line-height: 1;
-		width: $item-img-size;
-		height: $item-img-size;
-		background-color: black;
-		margin: auto;
-	}
+    > img {
+        display: block;
+        line-height: 1;
+        width: $item-img-size;
+        height: $item-img-size;
+        background-color: black;
+        margin: auto;
+    }
 
-	@keyframes spin {
-		from {
-			--angle: 0deg;
-		}
+    @keyframes spin {
+        from {
+            --angle: 0deg;
+        }
 
-		to {
-			--angle: 360deg;
-		}
-	}
+        to {
+            --angle: 360deg;
+        }
+    }
 
-	@keyframes pulse {
-		0% {
-			--opacity: 1;
-		}
+    @keyframes pulse {
+        0% {
+            --opacity: 1;
+        }
 
-		50% {
-			--opacity: 0.2;
-		}
+        50% {
+            --opacity: 0.2;
+        }
 
-		100% {
-			--opacity: 1;
-		}
-	}
+        100% {
+            --opacity: 1;
+        }
+    }
 }

@@ -14,69 +14,69 @@ $palette-accent-contrast: #FFFFFF;
 $palette-accent-special: #00ADB5;
 
 .neon-theme {
-	--theme-base-0: #020303;
-	--theme-base-1: #040606;
-	--theme-base-2: #070909;
-	--theme-base-3: #090C0C;
-	--theme-base-4: #0B0E0F;
-	--theme-base-5: #0D1112;
-	--theme-base-6: #0F1415;
-	--theme-base-7: #111717;
-	--theme-base-8: #141A1A;
-	--theme-base-9: #161D1D;
-	--theme-common: #AAAAAA;
-	--theme-contrast: #FFFFFF;
-	--theme-accent: #00ADB5;
-	--theme-danger: #DC3545;
-	--theme-warning: #FFC107;
-	--theme-success: #28A745;
-	color-scheme: dark light;
-	font-family: "Roboto Condensed"; //, "Zilla Slab", "Roboto Slab", "Bitter", "Merriweather", "Slabo 27px", "Nunito", "Arvo", "Poppins", "Montserrat", "Aleo", "Oswald"
+    --theme-base-0: #020303;
+    --theme-base-1: #040606;
+    --theme-base-2: #070909;
+    --theme-base-3: #090C0C;
+    --theme-base-4: #0B0E0F;
+    --theme-base-5: #0D1112;
+    --theme-base-6: #0F1415;
+    --theme-base-7: #111717;
+    --theme-base-8: #141A1A;
+    --theme-base-9: #161D1D;
+    --theme-common: #AAAAAA;
+    --theme-contrast: #FFFFFF;
+    --theme-accent: #00ADB5;
+    --theme-danger: #DC3545;
+    --theme-warning: #FFC107;
+    --theme-success: #28A745;
+    color-scheme: dark light;
+    font-family: "Roboto Condensed"; //, "Zilla Slab", "Roboto Slab", "Bitter", "Merriweather", "Slabo 27px", "Nunito", "Arvo", "Poppins", "Montserrat", "Aleo", "Oswald"
 
-	input {
-		color: var(--theme-common);
-	}
+    input {
+        color: var(--theme-common);
+    }
 
-	@for $i from 0 through 9 {
-		.neon-theme-back-base-#{$i} {
-			--theme-back-highlighted: color-mix(in srgb, var(--theme-base-#{$i}), var(--theme-contrast) 5%);
-			background-color: var(--theme-base-#{$i});
-		}
-	}
+    @for $i from 0 through 9 {
+        .neon-theme-back-base-#{$i} {
+            --theme-back-highlighted: color-mix(in srgb, var(--theme-base-#{$i}), var(--theme-contrast) 5%);
+            background-color: var(--theme-base-#{$i});
+        }
+    }
 
-	@each $value in (common, contrast, accent, danger, warning, success) {
-		.neon-theme-back-#{$value} {
-			--theme-back-highlighted: color-mix(in srgb, var(--theme-#{$value}), var(--theme-contrast) 25%);
-			background-color: var(--theme-#{$value});
-		}
+    @each $value in (common, contrast, accent, danger, warning, success) {
+        .neon-theme-back-#{$value} {
+            --theme-back-highlighted: color-mix(in srgb, var(--theme-#{$value}), var(--theme-contrast) 25%);
+            background-color: var(--theme-#{$value});
+        }
 
-		.neon-theme-front-#{$value} {
-			color: var(--theme-#{$value});
-		}
-	}
+        .neon-theme-front-#{$value} {
+            color: var(--theme-#{$value});
+        }
+    }
 
-	.neon-interactable {
-		cursor: pointer;
+    .neon-interactable {
+        cursor: pointer;
 
-		&:hover {
-			background-color: var(--theme-back-highlighted);
-			transition: background-color 0.15s linear;
-		}
+        &:hover {
+            background-color: var(--theme-back-highlighted);
+            transition: background-color 0.15s linear;
+        }
 
-		&:not(:hover) {
-			transition: background-color 0.15s linear;
-		}
-	}
+        &:not(:hover) {
+            transition: background-color 0.15s linear;
+        }
+    }
 
-	.neon-button-accent {
-		@extend .neon-interactable;
-		@extend .neon-theme-back-accent;
-		@extend .neon-theme-front-contrast;
-	}
+    .neon-button-accent {
+        @extend .neon-interactable;
+        @extend .neon-theme-back-accent;
+        @extend .neon-theme-front-contrast;
+    }
 
-	.neon-button-common {
-		@extend .neon-interactable;
-		@extend .neon-theme-back-common;
-		@extend .neon-theme-front-contrast;
-	}
+    .neon-button-common {
+        @extend .neon-interactable;
+        @extend .neon-theme-back-common;
+        @extend .neon-theme-front-contrast;
+    }
 }

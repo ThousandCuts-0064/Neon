@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "baseUrl": "wwwroot/ts/modules",
     "noImplicitAny": true,
     "noEmitOnError": true,
     "removeComments": true,
@@ -7,9 +11,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ESNext",
-    "rootDir": "wwwroot/ts"
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   }
 }

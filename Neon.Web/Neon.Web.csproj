@@ -11,16 +11,20 @@
   </Target>
 
   <ItemGroup>
-    <Content Remove="wwwroot\html\svg\request-type\duel.html" />
-    <Content Remove="wwwroot\html\svg\request-type\friend.html" />
-    <Content Remove="wwwroot\html\svg\request-type\trade.html" />
+    <Content Remove="wwwroot\svg\request-type\duel.svg" />
+    <Content Remove="wwwroot\svg\request-type\friend.svg" />
+    <Content Remove="wwwroot\svg\request-type\trade.svg" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\tsx\lobby\ActiveUserRow.tsx" />
+    <TypeScriptCompile Remove="wwwroot\tsx\lobby\UserMessage.tsx" />
     <TypeScriptCompile Remove="wwwroot\ts\modules\resources\lobby-resource.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\tsx\lobby\ActiveUserRow.tsx" />
+    <Content Include="wwwroot\tsx\lobby\UserMessage.tsx" />
     <Content Include="wwwroot\ts\modules\resources\lobby-resource.ts" />
   </ItemGroup>
 
@@ -55,16 +59,15 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Lobby\Svg\RequestType\Duel.cshtml" />
     <None Include="Views\Lobby\Svg\RequestType\Friend.cshtml" />
     <None Include="Views\Lobby\Svg\RequestType\Trade.cshtml" />
-    <None Include="wwwroot\html\svg\request-type\duel.html" />
-    <None Include="wwwroot\html\svg\request-type\friend.html" />
-    <None Include="wwwroot\html\svg\request-type\trade.html" />
+    <None Include="wwwroot\svg\request-type\duel.svg" />
+    <None Include="wwwroot\svg\request-type\friend.svg" />
+    <None Include="wwwroot\svg\request-type\trade.svg" />
   </ItemGroup>
 
 </Project>
