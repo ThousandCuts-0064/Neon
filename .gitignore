@@ -361,16 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-# Typescript
-
-To ignore all .js files located in any ts directory, regardless of how deeply nested they are, you can use a pattern in your .gitignore file. Here's how you can do it:
-
-Open your .gitignore file. If you don't have one, create it in the root directory of your repository.
-
-Add the following line to ignore all .js files in any ts directory:
-
-gitignore
-Copy code
-**/ts/**/*.js
-**/ts/**/*.js.map

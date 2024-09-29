@@ -13,6 +13,7 @@ using Neon.Application.Services.Users;
 using Neon.Domain.Enums;
 using Neon.Web.Args.Client;
 using Neon.Web.Args.Hub;
+using Neon.Web.Models;
 using Neon.Web.Resources;
 
 namespace Neon.Web.Hubs;
@@ -45,6 +46,19 @@ public class LobbyHub : Hub<ILobbyClient>
 
     public override async Task OnConnectedAsync()
     {
+        var activeUsers = await _userService.FindOtherActiveUsersAsync<ActiveUserModel>(UserId);
+        var friends = await _userService.FindFriendsAsync<UserModel>(UserId);
+        var incomingUserRequests = await _userService.FindIncomingUserRequests<IncomingUserRequestModel>(UserId);
+        var outgoingUserRequests = await _userService.FindOutgoingUserRequests<OutgoingUserRequestModel>(UserId);
+
+        await Clients.Caller.Initialize(new InitializeArgs
+        {
+            ActiveUsers = activeUsers,
+            Friends = friends,
+            IncomingUserRequests = incomingUserRequests,
+            OutgoingUserRequests = outgoingUserRequests
+        });
+
         var oldConnectionId = await _userService.SetActiveAsync(UserId, Context.ConnectionId);
 
         if (oldConnectionId is not null)
@@ -61,6 +75,8 @@ public class LobbyHub : Hub<ILobbyClient>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await _userService.SetInactiveAsync(UserId, Context.ConnectionId);
+
+        _activeContexts.TryRemove(Context.ConnectionId, out _);
     }
 
     public async Task HandleInput(string text)

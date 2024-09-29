@@ -4,6 +4,7 @@ namespace Neon.Web.Hubs;
 
 public interface ILobbyClient
 {
+    public Task Initialize(InitializeArgs args);
     public Task ConnectedFromAnotherSource();
     public Task UserConnectionToggled(UserConnectionToggledArgs args);
     public Task SendMessage(UserMessageArgs args);

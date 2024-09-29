@@ -4,6 +4,7 @@ import Resource from "resources/lobby-resource";
 import { escapeHtml } from "html";
 import UserRole from "enums/user-role";
 import UserRequestType from "enums/user-request-type";
+import InitializeArgs from "args/initialize-args";
 import UserConnectionToggledArgs from "args/user-connection-toggle-args";
 import { UserMessageArgs, CommandMessageArgs } from "args/message-args";
 import {
@@ -15,19 +16,25 @@ import {
 import { render } from "solid-js/web";
 import UserMessage from "./lobby/UserMessage";
 import ActiveUserRow from "./lobby/ActiveUserRow";
-import UserSignals from "signals/user-signals";
+import ActiveUser from "signals/online-user";
+import { JSX } from "solid-js/jsx-runtime";
 
-const resource: Resource = JSON.parse($(`meta[name="resource"]`).attr("content"));
-const userKey: string = $(`meta[name="user-key"]`).attr("content");
+const resource: Resource = JSON.parse(document
+    .querySelector(`meta[name="resource"]`)!
+    .getAttribute("content")!);
 
-const users = new Map<string, UserSignals>();
+const userKey: string = document
+    .querySelector(`meta[name="user-key"]`)!
+    .getAttribute("content")!;
+
+const activeUsers = new Map<string, ActiveUser>();
 
 const connection = new signalR
     .HubConnectionBuilder()
     .withUrl("Lobby/Hub")
     .build();
 
-const neonUserMessages = $(".neon-user-messages");
+const neonUserMessages = () => [...document.getElementsByClassName("neon-user-messages")];
 let suppressOnClose = false;
 
 connection.onclose(() => {
@@ -37,7 +44,7 @@ connection.onclose(() => {
         return;
     }
 
-    neonUserMessages.each((_, x) => {
+    neonUserMessages().forEach(x => {
         render(
             () => <UserMessage
                 usernameClass=""
@@ -50,10 +57,14 @@ connection.onclose(() => {
     });
 });
 
+connection.on("Initialize", (args: InitializeArgs) => {
+
+})
+
 connection.on("ConnectedFromAnotherSource", () => {
     suppressOnClose = true;
 
-    neonUserMessages.each((_, x) => {
+    neonUserMessages().forEach(x => {
         render(
             () => <UserMessage
                 usernameClass=""
@@ -86,48 +97,45 @@ connection.on("SendMessage", (args: UserMessageArgs) => {
             break;
     }
 
-    neonUserMessages.append(formatHtml(userMessage, {
-        "username-class": usernameClass,
-        "username-prefix": escapeHtml(args.usernamePrefix),
-        "username": args.username,
-        "username-suffix": escapeHtml(args.usernameSuffix),
-        "message-class": args.isImportant ? "neon-theme-front-accent" : "neon-theme-front-common",
-        "message": escapeHtml(args.message)
-    }));
-
-    neonUserMessages.animate({
-        scrollTop: neonUserMessages[0].scrollHeight - neonUserMessages.height()
-    }, 250);
+    neonUserMessages().forEach(x => {
+        render(
+            () => <UserMessage
+                usernameClass={usernameClass}
+                usernamePrefix={escapeHtml(args.usernamePrefix)}
+                username={args.username}
+                usernameSuffix={escapeHtml(args.usernameSuffix)}
+                messageClass={args.isImportant ? "neon-theme-front-accent" : "neon-theme-front-common"}
+                message={escapeHtml(args.message)} />,
+            x);
+    });
 });
 
 connection.on("ExecutedCommand", (args: CommandMessageArgs) => {
-    neonUserMessages.append(formatHtml(userMessage, {
-        "username-class": "neon-theme-front-contrast",
-        "username-prefix": escapeHtml(args.usernamePrefix),
-        "username": args.username,
-        "username-suffix": escapeHtml(args.usernameSuffix),
-        "message-class": "neon-theme-front-success",
-        "message": escapeHtml(args.message)
-    }));
-
-    neonUserMessages.animate({
-        scrollTop: neonUserMessages[0].scrollHeight - neonUserMessages.height()
-    }, 250);
+    neonUserMessages().forEach(x => {
+        render(
+            () => <UserMessage
+                usernameClass="neon-theme-front-contrast"
+                usernamePrefix={escapeHtml(args.usernamePrefix)}
+                username={args.username}
+                usernameSuffix={escapeHtml(args.usernameSuffix)}
+                messageClass="neon-theme-front-success"
+                message={escapeHtml(args.message)} />,
+            x);
+    });
 });
 
 connection.on("InvalidCommand", (args: CommandMessageArgs) => {
-    neonUserMessages.append(formatHtml(userMessage, {
-        "username-class": "neon-theme-front-contrast",
-        "username-prefix": escapeHtml(args.usernamePrefix),
-        "username": args.username,
-        "username-suffix": escapeHtml(args.usernameSuffix),
-        "message-class": "neon-theme-front-danger",
-        "message": escapeHtml(args.message)
-    }));
-
-    neonUserMessages.animate({
-        scrollTop: neonUserMessages[0].scrollHeight - neonUserMessages.height()
-    }, 250);
+    neonUserMessages().forEach(x => {
+        render(
+            () => <UserMessage
+                usernameClass="neon-theme-front-contrast"
+                usernamePrefix={escapeHtml(args.usernamePrefix)}
+                username={args.username}
+                usernameSuffix={escapeHtml(args.usernameSuffix)}
+                messageClass="neon-theme-front-danger"
+                message={escapeHtml(args.message)} />,
+            x);
+    });
 });
 
 connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
@@ -135,36 +143,33 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
         return;
 
     if (!args.isActive) {
-        $(`.neon-lobby-active-users [data-user-key="${args.key}"]`).remove();
+        activeUsers.get(args.key)?.[Symbol.dispose]();
+        activeUsers.delete(args.key);
 
         return;
     }
-
-    const userSignals = new UserSignals(args.username, {
-        Duel: true,
-        Trade: true,
-        Friend: true,
-    });
-
-    users.set(args.key, userSignals);
 
     const onUserRequestButtonClick = (userRequestType: UserRequestType, responderKey: string) => {
         connection.send(`Send${userRequestType}Request`, {
             responderKey: responderKey
         });
 
-        userSignals.setCanSendUserRequest[userRequestType](false);
+        activeUser.setCanReceiveUserRequest[userRequestType](false);
     };
 
-    $(".neon-lobby-active-users").each((_, x) => {
-        render(
-            () => <ActiveUserRow
-                key={args.key}
-                username={userSignals.username}
-                canSendUserRequest={userSignals.canSendUserRequest}
-                onUserRequestButtonClick={onUserRequestButtonClick} />,
-            x);
-    });
+    const activeUser = new ActiveUser(
+        args.key,
+        args.username,
+        {
+            Duel: true,
+            Trade: true,
+            Friend: true,
+        },
+        [...document.getElementsByClassName(".neon-lobby-active-users")],
+        onUserRequestButtonClick
+    );
+
+    activeUsers.set(args.key, activeUser);
 });
 
 connection.on("DuelRequestSent", (args: UserRequestSentArgs) => {
@@ -179,10 +184,10 @@ connection.on("FriendRequestSent", (args: UserRequestSentArgs) => {
 connection.start();
 
 
-const neonUserForm = $(".neon-user-form");
-const neonUserInput = $("#neon-user-input");
+const neonUserForm = document.getElementById("neon-user-form") as HTMLFormElement;
+const neonUserInput = document.getElementById("neon-user-input") as HTMLInputElement;
 
-$(document).on("keydown", event => {
+document.addEventListener("keydown", event => {
     switch (event.key) {
         case "Enter": {
             if (event.ctrlKey || event.shiftKey || event.altKey) {
@@ -191,91 +196,79 @@ $(document).on("keydown", event => {
                 return;
             }
 
-            const text = neonUserInput.val();
+            const text = neonUserInput.value;
 
             if (text !== "")
                 return;
 
             event.preventDefault();
 
-            neonUserInput.trigger(neonUserInput.is(":focus") ? "blur" : "focus");
+            if (document.activeElement === neonUserInput)
+                neonUserInput.blur();
+            else
+                neonUserInput.focus();
 
             break;
         }
         case '/': {
-            const text = neonUserInput.val();
+            const text = neonUserInput.value;
 
             if (text !== "")
                 return;
 
             event.preventDefault();
 
-            neonUserInput
-                .trigger("focus")
-                .val("/")
-                .trigger("input");
+            neonUserInput.focus();
+            neonUserInput.value = '/';
+            neonUserInput.dispatchEvent(new Event("input"));
 
             break;
         }
         case '!': {
-            const text = neonUserInput.val();
+            const text = neonUserInput.value;
 
             if (text !== "")
                 return;
 
             event.preventDefault();
 
-            neonUserInput
-                .trigger("focus")
-                .val("!")
-                .trigger("input");
+            neonUserInput.focus();
+            neonUserInput.value = '!';
+            neonUserInput.dispatchEvent(new Event("input"));
 
             break;
         }
     }
 });
 
-neonUserInput.on("input", () => {
-    const messagePrefix = neonUserInput.val().toString()[0];
+neonUserInput.addEventListener("input", () => {
+    const messagePrefix = neonUserInput.value[0];
 
     switch (messagePrefix) {
         case '/':
-            neonUserInput.addClass("neon-theme-front-warning");
+            neonUserInput.classList.add("neon-theme-front-warning");
 
             break;
 
         case '!':
-            neonUserInput.addClass("neon-theme-front-accent");
+            neonUserInput.classList.add("neon-theme-front-accent");
 
             break;
 
         case undefined:
-            neonUserInput.removeClass("neon-theme-front-warning neon-theme-front-accent");
+            neonUserInput.classList.remove("neon-theme-front-warning", "neon-theme-front-accent");
 
             break;
     }
 });
 
-neonUserForm.on("submit", () => {
-    connection.send("HandleInput", neonUserInput.val());
+neonUserForm.addEventListener("submit", () => {
+    connection.send("HandleInput", neonUserInput.value);
 
-    neonUserForm.trigger("reset");
-    neonUserInput.removeClass("neon-theme-front-warning neon-theme-front-accent");
+    neonUserForm.reset();
+    neonUserInput.classList.remove("neon-theme-front-warning", "neon-theme-front-accent");
 
     return false;
-});
-
-const activeUsersMenu = $(".neon-lobby-request-type-menu");
-
-$(".neon-lobby-active-users").on("click", ".neon-lobby-user-row-menu button", function () {
-    const target = $(this);
-    const userRequestType = target.attr("data-request-type");
-
-    target.addClass("neon-theme-front-accent");
-
-    connection.send(`Send${userRequestType}Request`, {
-        responderKey: target.closest("[data-user-key]").attr("data-user-key")
-    });
 });
 
 $(".neon-lobby-incoming-user-requests").on("click", ".neon-lobby-user-row-menu button", function () {

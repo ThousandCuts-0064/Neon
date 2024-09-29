@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
+    //"noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
     "target": "ESNext",
-    "baseUrl": "wwwroot/ts/modules",
+    "moduleResolution": "Node",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "paths": {
+      "*": [
+        "wwwroot/ts/modules/*",
+        "wwwroot/svg/*"
+      ]
+    },
+    "strict": true,
     "noImplicitAny": true,
     "noEmitOnError": true,
     "removeComments": true,
-    "sourceMap": true,
+    //"sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "allowSyntheticDefaultImports": true
   }
 }

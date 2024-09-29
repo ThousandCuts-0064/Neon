@@ -405,10 +405,10 @@ input:not([type]) {
   word-wrap: break-word;
 }
 
-.neon-user-form {
+#neon-user-form {
   width: 100%;
 }
-.neon-user-form * {
+#neon-user-form * {
   width: 100%;
 }
 

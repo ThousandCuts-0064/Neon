@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Neon.Application;
 using Neon.Application.Interfaces;
 using Neon.Application.Services.Notifications;
 using Neon.Domain.Notifications;

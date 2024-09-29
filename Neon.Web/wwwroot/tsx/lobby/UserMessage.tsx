@@ -1,8 +1,4 @@
-﻿import SvgDuel from "../../svg/request-type/duel.svg";
-import SvgTrade from "../../svg/request-type/trade.svg";
-import SvgFriend from "../../svg/request-type/friend.svg";
-
-import { Component } from "solid-js";
+﻿import { Component } from "solid-js";
 
 interface UserMessageProps {
     readonly usernameClass: string,

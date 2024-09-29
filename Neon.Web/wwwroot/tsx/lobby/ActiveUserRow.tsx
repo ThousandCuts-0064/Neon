@@ -8,36 +8,36 @@ import { Component, Accessor, JSXElement } from "solid-js";
 interface ActiveUserRowProps {
     readonly key: string;
     readonly username: Accessor<string>;
-    readonly canSendUserRequest: Record<UserRequestType, Accessor<boolean>>;
+    readonly canReceiveUserRequest: Readonly<Record<UserRequestType, Accessor<boolean>>>;
     readonly onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
 const ActiveUserRow: Component<ActiveUserRowProps> = ({
     key,
     username,
-    canSendUserRequest,
+    canReceiveUserRequest,
     onUserRequestButtonClick }) => (
-    <div class="neon-lobby-user-row" data-user-key={key}>
+    <div class="neon-lobby-user-row">
         <div class="neon-username">{username()}</div>
         <div class="neon-lobby-user-row-menu">
             <UserRequestButton
                 type={UserRequestType.Duel}
                 key={key}
-                canSendUserRequest={canSendUserRequest}
+                canReceiveUserRequest={canReceiveUserRequest}
                 onUserRequestButtonClick={onUserRequestButtonClick}>
                 <SvgDuel />
             </UserRequestButton>
             <UserRequestButton
                 type={UserRequestType.Trade}
                 key={key}
-                canSendUserRequest={canSendUserRequest}
+                canReceiveUserRequest={canReceiveUserRequest}
                 onUserRequestButtonClick={onUserRequestButtonClick}>
                 <SvgTrade />
             </UserRequestButton>
             <UserRequestButton
                 type={UserRequestType.Friend}
                 key={key}
-                canSendUserRequest={canSendUserRequest}
+                canReceiveUserRequest={canReceiveUserRequest}
                 onUserRequestButtonClick={onUserRequestButtonClick}>
                 <SvgFriend />
             </UserRequestButton>
@@ -50,7 +50,7 @@ export default ActiveUserRow;
 interface UserRequestButtonProps {
     readonly type: UserRequestType;
     readonly key: string;
-    readonly canSendUserRequest: Record<UserRequestType, Accessor<boolean>>;
+    readonly canReceiveUserRequest: Record<UserRequestType, Accessor<boolean>>;
     readonly onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
     readonly children: JSXElement;
 }
@@ -60,13 +60,13 @@ const getButtonColor = (isEnabled: boolean) => isEnabled ? ThemeColor.Accent : T
 const UserRequestButton: Component<UserRequestButtonProps> = ({
     type,
     key,
-    canSendUserRequest,
+    canReceiveUserRequest,
     onUserRequestButtonClick,
     children }) => (
     <button
-        class={`neon-theme-front-${getButtonColor(canSendUserRequest[type]())}`}
+        class={`neon-theme-front-${getButtonColor(canReceiveUserRequest[type]())}`}
         onClick={() => onUserRequestButtonClick(type, key)}
-        disabled={!canSendUserRequest[type]()}>
+        disabled={!canReceiveUserRequest[type]()}>
         {children}
     </button>
 );
