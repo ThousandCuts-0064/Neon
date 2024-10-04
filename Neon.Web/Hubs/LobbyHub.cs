@@ -47,7 +47,7 @@ public class LobbyHub : Hub<ILobbyClient>
     public override async Task OnConnectedAsync()
     {
         var activeUsers = await _userService.FindOtherActiveUsersAsync<ActiveUserModel>(UserId);
-        var friends = await _userService.FindFriendsAsync<UserModel>(UserId);
+        var friends = await _userService.FindFriendsAsync<FriendModel>(UserId);
         var incomingUserRequests = await _userService.FindIncomingUserRequests<IncomingUserRequestModel>(UserId);
         var outgoingUserRequests = await _userService.FindOutgoingUserRequests<OutgoingUserRequestModel>(UserId);
 

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\tsx\lobby\UserRequestManager.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
     <PackageReference Include="WebMarkupMin.AspNetCore8" Version="2.17.0" />
@@ -34,6 +38,10 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\tsx\lobby\UserRequestManager.tsx" />
   </ItemGroup>
 
 </Project>

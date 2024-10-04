@@ -3,7 +3,7 @@ import { render } from "solid-js/web";
 import UserRequestType from "../enums/user-request-type";
 import ActiveUserRow from "../../../tsx/lobby/ActiveUserRow";
 
-class ActiveUser implements Disposable {
+class UserSignals {
     private readonly renderedComponentsDispose: Array<() => void>;
 
     public readonly key: string;
@@ -51,4 +51,4 @@ class ActiveUser implements Disposable {
     }
 };
 
-export default ActiveUser;
+export default UserSignals;

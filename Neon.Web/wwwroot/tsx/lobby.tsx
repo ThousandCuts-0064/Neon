@@ -16,7 +16,7 @@ import {
 import { render } from "solid-js/web";
 import UserMessage from "./lobby/UserMessage";
 import ActiveUserRow from "./lobby/ActiveUserRow";
-import ActiveUser from "signals/online-user";
+import UserSignals from "signals/online-user";
 import { JSX } from "solid-js/jsx-runtime";
 
 const resource: Resource = JSON.parse(document
@@ -27,7 +27,7 @@ const userKey: string = document
     .querySelector(`meta[name="user-key"]`)!
     .getAttribute("content")!;
 
-const activeUsers = new Map<string, ActiveUser>();
+const activeUsers = new Map<string, UserSignals>();
 
 const connection = new signalR
     .HubConnectionBuilder()
@@ -58,7 +58,9 @@ connection.onclose(() => {
 });
 
 connection.on("Initialize", (args: InitializeArgs) => {
+    for (const activeUser in args.activeUsers) {
 
+    }
 })
 
 connection.on("ConnectedFromAnotherSource", () => {
@@ -157,7 +159,7 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
         activeUser.setCanReceiveUserRequest[userRequestType](false);
     };
 
-    const activeUser = new ActiveUser(
+    const activeUser = new UserSignals(
         args.key,
         args.username,
         {
