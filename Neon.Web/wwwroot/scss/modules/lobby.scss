@@ -13,14 +13,14 @@ $item-slot-gap: 4px;
     gap: 1ch;
 }
 
-.neon-lobby-active-users-container,
+#neon-lobby-active-users-container,
 .neon-user-equipment-container,
 .neon-user-inventory-container {
     max-height: 100%;
     display: flex;
 }
 
-.neon-lobby-active-users-container,
+#neon-lobby-active-users-container,
 .neon-user-inventory-container {
     flex: 1;
 }

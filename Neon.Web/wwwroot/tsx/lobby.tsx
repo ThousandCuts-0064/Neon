@@ -15,9 +15,8 @@ import {
 } from "args/user-request-args";
 import { render } from "solid-js/web";
 import UserMessage from "./lobby/UserMessage";
-import ActiveUserRow from "./lobby/ActiveUserRow";
-import UserSignals from "signals/online-user";
-import { JSX } from "solid-js/jsx-runtime";
+import UserSignals from "signals/user-signals";
+import UserRequestManager from "./lobby/UserRequestManager";
 
 const resource: Resource = JSON.parse(document
     .querySelector(`meta[name="resource"]`)!
@@ -27,12 +26,50 @@ const userKey: string = document
     .querySelector(`meta[name="user-key"]`)!
     .getAttribute("content")!;
 
-const activeUsers = new Map<string, UserSignals>();
+const usersSignals = new Map<string, UserSignals>();
 
 const connection = new signalR
     .HubConnectionBuilder()
     .withUrl("Lobby/Hub")
     .build();
+
+const onUserRequestButtonClick = (userRequestType: UserRequestType, responderKey: string) => {
+    connection.send(`Send${userRequestType}Request`, {
+        responderKey: responderKey
+    });
+
+    usersSignals
+        .get(responderKey)!
+        .setCanReceiveUserRequest[userRequestType](false);
+};
+
+const onAcceptButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
+
+};
+
+const onDeclineButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
+
+};
+
+const onCancelButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
+
+};
+
+const userRequestManager = new UserRequestManager(
+    document.getElementById("neon-lobby-active-users")!,
+    document.getElementById("neon-lobby-incoming-user-requests")!,
+    document.getElementById("neon-lobby-outgoing-user-requests")!,
+    onUserRequestButtonClick,
+    onAcceptButtonClick,
+    onDeclineButtonClick,
+    onCancelButtonClick
+);
+
+connection.on("Initialize", (args: InitializeArgs) => {
+    for (const activeUser in args.activeUsers) {
+
+    }
+});
 
 const neonUserMessages = () => [...document.getElementsByClassName("neon-user-messages")];
 let suppressOnClose = false;
@@ -56,12 +93,6 @@ connection.onclose(() => {
             x);
     });
 });
-
-connection.on("Initialize", (args: InitializeArgs) => {
-    for (const activeUser in args.activeUsers) {
-
-    }
-})
 
 connection.on("ConnectedFromAnotherSource", () => {
     suppressOnClose = true;
@@ -145,19 +176,10 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
         return;
 
     if (!args.isActive) {
-        activeUsers.get(args.key)?.[Symbol.dispose]();
-        activeUsers.delete(args.key);
+        usersSignals.delete(args.key);
 
         return;
     }
-
-    const onUserRequestButtonClick = (userRequestType: UserRequestType, responderKey: string) => {
-        connection.send(`Send${userRequestType}Request`, {
-            responderKey: responderKey
-        });
-
-        activeUser.setCanReceiveUserRequest[userRequestType](false);
-    };
 
     const activeUser = new UserSignals(
         args.key,
@@ -166,12 +188,10 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
             Duel: true,
             Trade: true,
             Friend: true,
-        },
-        [...document.getElementsByClassName(".neon-lobby-active-users")],
-        onUserRequestButtonClick
+        }
     );
 
-    activeUsers.set(args.key, activeUser);
+    usersSignals.set(args.key, activeUser);
 });
 
 connection.on("DuelRequestSent", (args: UserRequestSentArgs) => {
@@ -273,7 +293,7 @@ neonUserForm.addEventListener("submit", () => {
     return false;
 });
 
-$(".neon-lobby-incoming-user-requests").on("click", ".neon-lobby-user-row-menu button", function () {
+$("#neon-lobby-incoming-user-requests").on("click", ".neon-lobby-user-row-menu button", function () {
     const target = $(this);
     const row = target.closest(".neon-lobby-user-row");
     const userRequestType = row.find("[data-request-type]").attr("data-request-type");

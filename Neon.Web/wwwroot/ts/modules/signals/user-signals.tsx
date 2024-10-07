@@ -4,8 +4,6 @@ import UserRequestType from "../enums/user-request-type";
 import ActiveUserRow from "../../../tsx/lobby/ActiveUserRow";
 
 class UserSignals {
-    private readonly renderedComponentsDispose: Array<() => void>;
-
     public readonly key: string;
     public readonly username: Accessor<string>;
     public readonly setUsername: Setter<string>;
@@ -16,9 +14,7 @@ class UserSignals {
     public constructor(
         key: string,
         username: string,
-        canSend: Record<UserRequestType, boolean>,
-        parents: Array<Element>,
-        onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void) {
+        canSend: Record<UserRequestType, boolean>) {
         this.key = key;
 
         [this.username, this.setUsername] = createSignal(username);
@@ -35,19 +31,6 @@ class UserSignals {
 
         this.canReceiveUserRequest = canReceiveUserRequest;
         this.setCanReceiveUserRequest = setCanReceiveUserRequest;
-
-        this.renderedComponentsDispose = parents.map(x => render(
-            () => <ActiveUserRow
-                key={key}
-                username={this.username}
-                canReceiveUserRequest={this.canReceiveUserRequest}
-                onUserRequestButtonClick={onUserRequestButtonClick} />,
-            x)
-        );
-    }
-
-    [Symbol.dispose]() {
-        this.renderedComponentsDispose.forEach(x => x());
     }
 };
 

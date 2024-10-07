@@ -5,7 +5,7 @@ import UserRequestType from "enums/user-request-type";
 import ThemeColor from "enums/theme-color";
 import { Component, Accessor, JSXElement } from "solid-js";
 
-interface ActiveUserRowProps {
+export interface ActiveUserRowProps {
     readonly key: string;
     readonly username: Accessor<string>;
     readonly canReceiveUserRequest: Readonly<Record<UserRequestType, Accessor<boolean>>>;
