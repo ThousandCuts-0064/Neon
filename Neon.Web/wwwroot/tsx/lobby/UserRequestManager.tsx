@@ -1,6 +1,6 @@
 ﻿import { MountableElement, render } from "solid-js/web";
 import { Component, Accessor, createSignal, For, Setter } from "solid-js";
-import UserSignals from "signals/user-signals";
+import User from "models/user";
 import UserRequestType from "enums/user-request-type";
 import ActiveUserRow from "./ActiveUserRow";
 import IncomingUserRequestRow from "./IncomingUserRequestRow";
@@ -94,7 +94,7 @@ export default class UserRequestManager {
 
 
 type ActiveUser = {
-    readonly userSignals: UserSignals;
+    readonly userSignals: User;
 };
 
 interface ActiveUsersProps {
@@ -116,7 +116,7 @@ const ActiveUsers: Component<ActiveUsersProps> = ({ activeUsers, onUserRequestBu
 type IncomingUserRequest = {
     readonly createdAt: Date;
     readonly type: UserRequestType;
-    readonly userSignals: UserSignals;
+    readonly userSignals: User;
 };
 
 interface IncomingUserRequestsProps {
@@ -144,7 +144,7 @@ const IncomingUserRequests: Component<IncomingUserRequestsProps> = ({
 type OutgoingUserRequest = {
     readonly createdAt: Date;
     readonly type: UserRequestType;
-    readonly userSignals: UserSignals;
+    readonly userSignals: User;
     readonly onCancelButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
 };
 

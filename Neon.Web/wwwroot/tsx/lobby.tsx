@@ -15,7 +15,7 @@ import {
 } from "args/user-request-args";
 import { render } from "solid-js/web";
 import UserMessage from "./lobby/UserMessage";
-import UserSignals from "signals/user-signals";
+import User from "models/user";
 import UserRequestManager from "./lobby/UserRequestManager";
 
 const resource: Resource = JSON.parse(document
@@ -26,7 +26,7 @@ const userKey: string = document
     .querySelector(`meta[name="user-key"]`)!
     .getAttribute("content")!;
 
-const usersSignals = new Map<string, UserSignals>();
+const usersSignals = new Map<string, User>();
 
 const connection = new signalR
     .HubConnectionBuilder()
@@ -44,15 +44,25 @@ const onUserRequestButtonClick = (userRequestType: UserRequestType, responderKey
 };
 
 const onAcceptButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
-
+    connection.send(`Accept${userRequestType}Request`, {
+        requesterKey: requesterKey
+    });
 };
 
 const onDeclineButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
-
+    connection.send(`Decline${userRequestType}Request`, {
+        requesterKey: requesterKey
+    });
 };
 
-const onCancelButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
+const onCancelButtonClick = (userRequestType: UserRequestType, responderKey: string) => {
+    connection.send(`Cancel${userRequestType}Request`, {
+        responderKey: responderKey
+    });
 
+    usersSignals
+        .get(responderKey)!
+        .setCanReceiveUserRequest[userRequestType](true);
 };
 
 const userRequestManager = new UserRequestManager(
@@ -66,9 +76,35 @@ const userRequestManager = new UserRequestManager(
 );
 
 connection.on("Initialize", (args: InitializeArgs) => {
-    for (const activeUser in args.activeUsers) {
+    args.activeUsers.forEach(x => {
+        const userSignals = usersSignals.getOrSet(x.key, () => new User(x.key, x.username));
 
-    }
+        userRequestManager.OnUserActivated({ userSignals: userSignals });
+    });
+
+    args.friends.forEach(x => {
+        if (!usersSignals.has(x.key)) {
+            const userSignals = new User(x.key, x.username);
+
+            usersSignals.set(x.key, userSignals);
+        }
+    });
+
+    args.incomingUserRequests.forEach(x => {
+        if (!usersSignals.has(x.requesterKey)) {
+            const userSignals = new User(x.requesterKey, x.requesterUsername);
+
+            usersSignals.set(x.requesterKey, userSignals);
+        }
+    });
+
+    args.outgoingUserRequests.forEach(x => {
+        if (!usersSignals.has(x.responderKey)) {
+            const userSignals = new User(x.responderKey, x.responderUsername);
+
+            usersSignals.set(x.responderKey, userSignals);
+        }
+    });
 });
 
 const neonUserMessages = () => [...document.getElementsByClassName("neon-user-messages")];
@@ -81,33 +117,31 @@ connection.onclose(() => {
         return;
     }
 
-    neonUserMessages().forEach(x => {
-        render(
-            () => <UserMessage
-                usernameClass=""
-                usernamePrefix="["
-                username={resource.systemName}
-                usernameSuffix="]"
-                messageClass="neon-theme-front-warning"
-                message={resource.connectionLost} />,
-            x);
-    });
+    neonUserMessages().forEach(x => render(
+        () => <UserMessage
+            usernameClass=""
+            usernamePrefix="["
+            username={resource.systemName}
+            usernameSuffix="]"
+            messageClass="neon-theme-front-warning"
+            message={resource.connectionLost} />,
+        x)
+    );
 });
 
 connection.on("ConnectedFromAnotherSource", () => {
     suppressOnClose = true;
 
-    neonUserMessages().forEach(x => {
-        render(
-            () => <UserMessage
-                usernameClass=""
-                usernamePrefix="["
-                username={resource.systemName}
-                usernameSuffix="]"
-                messageClass="neon-theme-front-warning"
-                message={resource.connectedFromAnotherSource} />,
-            x);
-    });
+    neonUserMessages().forEach(x => render(
+        () => <UserMessage
+            usernameClass=""
+            usernamePrefix="["
+            username={resource.systemName}
+            usernameSuffix="]"
+            messageClass="neon-theme-front-warning"
+            message={resource.connectedFromAnotherSource} />,
+        x)
+    );
 });
 
 connection.on("SendMessage", (args: UserMessageArgs) => {
@@ -130,45 +164,42 @@ connection.on("SendMessage", (args: UserMessageArgs) => {
             break;
     }
 
-    neonUserMessages().forEach(x => {
-        render(
-            () => <UserMessage
-                usernameClass={usernameClass}
-                usernamePrefix={escapeHtml(args.usernamePrefix)}
-                username={args.username}
-                usernameSuffix={escapeHtml(args.usernameSuffix)}
-                messageClass={args.isImportant ? "neon-theme-front-accent" : "neon-theme-front-common"}
-                message={escapeHtml(args.message)} />,
-            x);
-    });
+    neonUserMessages().forEach(x => render(
+        () => <UserMessage
+            usernameClass={usernameClass}
+            usernamePrefix={escapeHtml(args.usernamePrefix)}
+            username={args.username}
+            usernameSuffix={escapeHtml(args.usernameSuffix)}
+            messageClass={args.isImportant ? "neon-theme-front-accent" : "neon-theme-front-common"}
+            message={escapeHtml(args.message)} />,
+        x)
+    );
 });
 
 connection.on("ExecutedCommand", (args: CommandMessageArgs) => {
-    neonUserMessages().forEach(x => {
-        render(
-            () => <UserMessage
-                usernameClass="neon-theme-front-contrast"
-                usernamePrefix={escapeHtml(args.usernamePrefix)}
-                username={args.username}
-                usernameSuffix={escapeHtml(args.usernameSuffix)}
-                messageClass="neon-theme-front-success"
-                message={escapeHtml(args.message)} />,
-            x);
-    });
+    neonUserMessages().forEach(x => render(
+        () => <UserMessage
+            usernameClass="neon-theme-front-contrast"
+            usernamePrefix={escapeHtml(args.usernamePrefix)}
+            username={args.username}
+            usernameSuffix={escapeHtml(args.usernameSuffix)}
+            messageClass="neon-theme-front-success"
+            message={escapeHtml(args.message)} />,
+        x)
+    );
 });
 
 connection.on("InvalidCommand", (args: CommandMessageArgs) => {
-    neonUserMessages().forEach(x => {
-        render(
-            () => <UserMessage
-                usernameClass="neon-theme-front-contrast"
-                usernamePrefix={escapeHtml(args.usernamePrefix)}
-                username={args.username}
-                usernameSuffix={escapeHtml(args.usernameSuffix)}
-                messageClass="neon-theme-front-danger"
-                message={escapeHtml(args.message)} />,
-            x);
-    });
+    neonUserMessages().forEach(x => render(
+        () => <UserMessage
+            usernameClass="neon-theme-front-contrast"
+            usernamePrefix={escapeHtml(args.usernamePrefix)}
+            username={args.username}
+            usernameSuffix={escapeHtml(args.usernameSuffix)}
+            messageClass="neon-theme-front-danger"
+            message={escapeHtml(args.message)} />,
+        x)
+    );
 });
 
 connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
@@ -181,7 +212,7 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
         return;
     }
 
-    const activeUser = new UserSignals(
+    const activeUser = new User(
         args.key,
         args.username,
         {
