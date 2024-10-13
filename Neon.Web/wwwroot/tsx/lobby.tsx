@@ -16,6 +16,7 @@ import {
 import { render } from "solid-js/web";
 import UserMessage from "./lobby/UserMessage";
 import User from "models/user";
+import Users from "models/users";
 import UserRequestManager from "./lobby/UserRequestManager";
 
 const resource: Resource = JSON.parse(document
@@ -26,7 +27,7 @@ const userKey: string = document
     .querySelector(`meta[name="user-key"]`)!
     .getAttribute("content")!;
 
-const usersSignals = new Map<string, User>();
+const users = new Users();
 
 const connection = new signalR
     .HubConnectionBuilder()
@@ -38,9 +39,7 @@ const onUserRequestButtonClick = (userRequestType: UserRequestType, responderKey
         responderKey: responderKey
     });
 
-    usersSignals
-        .get(responderKey)!
-        .setCanReceiveUserRequest[userRequestType](false);
+    users.mutate(responderKey, x => x.canReceive[userRequestType] = false);
 };
 
 const onAcceptButtonClick = (userRequestType: UserRequestType, requesterKey: string) => {
@@ -60,9 +59,7 @@ const onCancelButtonClick = (userRequestType: UserRequestType, responderKey: str
         responderKey: responderKey
     });
 
-    usersSignals
-        .get(responderKey)!
-        .setCanReceiveUserRequest[userRequestType](true);
+    users.mutate(responderKey, x => x.canReceive[userRequestType] = false);
 };
 
 const userRequestManager = new UserRequestManager(
@@ -79,7 +76,7 @@ connection.on("Initialize", (args: InitializeArgs) => {
     args.activeUsers.forEach(x => {
         const userSignals = usersSignals.getOrSet(x.key, () => new User(x.key, x.username));
 
-        userRequestManager.OnUserActivated({ userSignals: userSignals });
+        userRequestManager.OnUserActivated({ user: userSignals });
     });
 
     args.friends.forEach(x => {

@@ -3,13 +3,13 @@ import SvgTrade from "../../svg/request-type/trade.svg";
 import SvgFriend from "../../svg/request-type/friend.svg";
 import SvgCross from "../../svg/user-action/cross.svg";
 import UserRequestType from "enums/user-request-type";
-import { Component, Accessor, JSXElement } from "solid-js";
+import { Component, JSXElement } from "solid-js";
 
 interface OutgoingUserRequestRowProps {
     readonly createdAt: Date;
     readonly type: UserRequestType;
     readonly key: string;
-    readonly username: Accessor<string>;
+    readonly username: string;
     readonly onCancelButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
@@ -33,7 +33,7 @@ const OutgoingUserRequestRow: Component<OutgoingUserRequestRowProps> = ({
                 {renderUserRequestTypeSvg(type)}
             </div>
         </div>
-        <div class="neon-username">{username()}</div>
+        <div class="neon-username">{username}</div>
         <div class="neon-lobby-user-row-menu">
             <UserRequestButton
                 type={type}

@@ -1,5 +1,6 @@
 ﻿import { MountableElement, render } from "solid-js/web";
-import { Component, Accessor, createSignal, For, Setter } from "solid-js";
+import { Component, Accessor, For, Setter } from "solid-js";
+import { createStore, SetStoreFunction, produce } from "solid-js/store";
 import User from "models/user";
 import UserRequestType from "enums/user-request-type";
 import ActiveUserRow from "./ActiveUserRow";
@@ -7,9 +8,14 @@ import IncomingUserRequestRow from "./IncomingUserRequestRow";
 import OutgoingUserRequestRow from "./OutgoingUserRequestRow";
 
 export default class UserRequestManager {
-    private readonly setActiveUsers: Setter<Map<string, ActiveUser>>;
-    private readonly setIncomingUserRequests: Setter<Map<string, IncomingUserRequest>>;
-    private readonly setOutgoingUserRequests: Setter<Map<string, OutgoingUserRequest>>;
+    private readonly activeUsers: User[];
+    private readonly setActiveUsers: SetStoreFunction<User[]>;
+
+    private readonly incomingUserRequests: IncomingUserRequest[];
+    private readonly setIncomingUserRequests: SetStoreFunction<IncomingUserRequest[]>;
+
+    private readonly outgoingUserRequests: OutgoingUserRequest[];
+    private readonly setOutgoingUserRequests: SetStoreFunction<OutgoingUserRequest[]>;
 
     public constructor(
         activeUsersParent: MountableElement,
@@ -20,94 +26,85 @@ export default class UserRequestManager {
         onDeclineButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void,
         onCancelButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void
     ) {
-        const [activeUsers, setActiveUsers] = createSignal(new Map<string, ActiveUser>(), { equals: false });
-        const [incomingUserRequests, setIncomingUserRequests] = createSignal(new Map<string, IncomingUserRequest>(), { equals: false });
-        const [outgoingUserRequests, setOutgoingUserRequests] = createSignal(new Map<string, OutgoingUserRequest>(), { equals: false });
+        const [activeUsers, setActiveUsers] = createStore<User[]>([]);
+        const [incomingUserRequests, setIncomingUserRequests] = createStore<IncomingUserRequest[]>([]);
+        const [outgoingUserRequests, setOutgoingUserRequests] = createStore<OutgoingUserRequest[]>([]);
 
+        this.activeUsers = activeUsers;
         this.setActiveUsers = setActiveUsers;
+
+        this.incomingUserRequests = incomingUserRequests;
         this.setIncomingUserRequests = setIncomingUserRequests;
+
+        this.outgoingUserRequests = outgoingUserRequests;
         this.setOutgoingUserRequests = setOutgoingUserRequests;
 
         render(
             () => <ActiveUsers
-                activeUsers={() => [...activeUsers().values()]}
+                activeUsers={activeUsers}
                 onUserRequestButtonClick={onUserRequestButtonClick} />,
             activeUsersParent);
 
         render(
             () => <IncomingUserRequests
-                incomingUserRequests={() => [...incomingUserRequests().values()]}
+                incomingUserRequests={incomingUserRequests}
                 onAcceptButtonClick={onAcceptButtonClick}
                 onDeclineButtonClick={onDeclineButtonClick} />,
             incomingUserRequestsParent);
 
         render(
             () => <OutgoingUserRequests
-                outgoingUserRequests={() => [...outgoingUserRequests().values()]}
+                outgoingUserRequests={outgoingUserRequests}
                 onCancelButtonClick={onCancelButtonClick} />,
             outgoingUserRequestsParent);
     }
 
-    public OnUserActivated(activeUser: ActiveUser) {
-        this.setActiveUsers(x => x.set(
-            activeUser.userSignals.key,
-            activeUser));
+    public OnUserActivated(activeUser: User) {
+        this.setActiveUsers(produce(x => x.push(activeUser)));
     }
 
-    public OnUserDeactivated(activeUser: ActiveUser) {
-        this.setActiveUsers(x => {
-            x.delete(activeUser.userSignals.key);
+    public OnUserDeactivated(key: string) {
+        const index = this.activeUsers.findIndex(x => x.key === key);
 
-            return x;
-        });
+        this.setActiveUsers(produce(x => x.splice(index, 1)));
     }
 
     public OnUserRequestReceived(incomingUserRequest: IncomingUserRequest) {
-        this.setIncomingUserRequests(x => x.set(
-            `${incomingUserRequest.userSignals.key} ${incomingUserRequest.type}`,
-            incomingUserRequest));
+        this.setIncomingUserRequests(produce(x => x.push(incomingUserRequest)));
     }
 
-    public OnUserRequestResponded(incomingUserRequest: IncomingUserRequest) {
-        this.setIncomingUserRequests(x => {
-            x.delete(`${incomingUserRequest.userSignals.key} ${incomingUserRequest.type}`);
+    public OnUserRequestResponded(requesterKey: string, userRequestType: UserRequestType) {
+        const index = this.incomingUserRequests
+            .findIndex(x => x.user.key === requesterKey && x.type === userRequestType);
 
-            return x;
-        });
+        this.setIncomingUserRequests(produce(x => x.splice(index, 1)));
     }
 
     public OnUserRequestSent(outgoingUserRequest: OutgoingUserRequest) {
-        this.setOutgoingUserRequests(x => x.set(
-            `${outgoingUserRequest.userSignals.key} ${outgoingUserRequest.type}`,
-            outgoingUserRequest));
+        this.setOutgoingUserRequests(produce(x => x.push(outgoingUserRequest)));
     }
 
-    public OnUserRequestCanceled(outgoingUserRequest: OutgoingUserRequest) {
-        this.setOutgoingUserRequests(x => {
-            x.delete(`${outgoingUserRequest.userSignals.key} ${outgoingUserRequest.type}`);
+    public OnUserRequestCanceled(responderKey: string, userRequestType: UserRequestType) {
+        const index = this.outgoingUserRequests
+            .findIndex(x => x.user.key === responderKey && x.type === userRequestType);
 
-            return x;
-        });
+        this.setOutgoingUserRequests(produce(x => x.splice(index, 1)));
     }
 }
 
 
 
-type ActiveUser = {
-    readonly userSignals: User;
-};
-
 interface ActiveUsersProps {
-    readonly activeUsers: () => ActiveUser[];
+    readonly activeUsers: User[];
     readonly onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
 const ActiveUsers: Component<ActiveUsersProps> = ({ activeUsers, onUserRequestButtonClick }) => (
-    <For each={activeUsers()}>{x =>
+    <For each={activeUsers}>{x =>
         <ActiveUserRow
-            key={x.userSignals.key}
-            username={x.userSignals.username}
-            canReceiveUserRequest={x.userSignals.canReceiveUserRequest}
+            key={x.key}
+            username={x.username}
+            canReceive={x.canReceive}
             onUserRequestButtonClick={onUserRequestButtonClick} />
     }</For>);
 
@@ -116,11 +113,11 @@ const ActiveUsers: Component<ActiveUsersProps> = ({ activeUsers, onUserRequestBu
 type IncomingUserRequest = {
     readonly createdAt: Date;
     readonly type: UserRequestType;
-    readonly userSignals: User;
+    readonly user: User;
 };
 
 interface IncomingUserRequestsProps {
-    readonly incomingUserRequests: () => IncomingUserRequest[];
+    readonly incomingUserRequests: IncomingUserRequest[];
     readonly onAcceptButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
     readonly onDeclineButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
 }
@@ -129,12 +126,12 @@ const IncomingUserRequests: Component<IncomingUserRequestsProps> = ({
     incomingUserRequests,
     onAcceptButtonClick,
     onDeclineButtonClick }) => (
-    <For each={incomingUserRequests()}>{x =>
+    <For each={incomingUserRequests}>{x =>
         <IncomingUserRequestRow
             createdAt={x.createdAt}
             type={x.type}
-            key={x.userSignals.key}
-            username={x.userSignals.username}
+            key={x.user.key}
+            username={x.user.username}
             onAcceptButtonClick={onAcceptButtonClick}
             onDeclineButtonClick={onDeclineButtonClick} />
     }</For>);
@@ -144,21 +141,21 @@ const IncomingUserRequests: Component<IncomingUserRequestsProps> = ({
 type OutgoingUserRequest = {
     readonly createdAt: Date;
     readonly type: UserRequestType;
-    readonly userSignals: User;
+    readonly user: User;
     readonly onCancelButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
 };
 
 interface OutgoingUserRequestsProps {
-    readonly outgoingUserRequests: () => IncomingUserRequest[];
+    readonly outgoingUserRequests: IncomingUserRequest[];
     readonly onCancelButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
 const OutgoingUserRequests: Component<OutgoingUserRequestsProps> = ({ outgoingUserRequests, onCancelButtonClick }) => (
-    <For each={outgoingUserRequests()}>{x =>
+    <For each={outgoingUserRequests}>{x =>
         <OutgoingUserRequestRow
             createdAt={x.createdAt}
             type={x.type}
-            key={x.userSignals.key}
-            username={x.userSignals.username}
+            key={x.user.key}
+            username={x.user.username}
             onCancelButtonClick={onCancelButtonClick} />
     }</For>);
