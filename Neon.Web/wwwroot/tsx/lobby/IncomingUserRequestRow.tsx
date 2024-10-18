@@ -23,31 +23,25 @@ const renderUserRequestTypeSvg = (userRequestType: UserRequestType) => {
     }
 };
 
-const IncomingUserRequestRow: Component<IncomingUserRequestRowProps> = ({
-    createdAt,
-    type,
-    key,
-    username,
-    onAcceptButtonClick,
-    onDeclineButtonClick }) => (
+const IncomingUserRequestRow: Component<IncomingUserRequestRowProps> = props => (
     <div class="neon-lobby-user-row">
         <div class="neon-lobby-user-row-info">
             <div class="neon-theme-front-common">
-                {renderUserRequestTypeSvg(type)}
+                {renderUserRequestTypeSvg(props.type)}
             </div>
         </div>
-        <div class="neon-username">{username}</div>
+        <div class="neon-username">{props.username}</div>
         <div class="neon-lobby-user-row-menu">
             <UserResponseButton
-                type={type}
-                key={key}
-                onUserResponseButtonClick={onDeclineButtonClick}>
+                type={props.type}
+                key={props.key}
+                onUserResponseButtonClick={props.onDeclineButtonClick}>
                 <SvgCross />
             </UserResponseButton>
             <UserResponseButton
-                type={type}
-                key={key}
-                onUserResponseButtonClick={onAcceptButtonClick}>
+                type={props.type}
+                key={props.key}
+                onUserResponseButtonClick={props.onAcceptButtonClick}>
                 <SvgCheck />
             </UserResponseButton>
         </div>
@@ -63,14 +57,10 @@ interface UserResponseButtonProps {
     readonly children: JSXElement;
 }
 
-const UserResponseButton: Component<UserResponseButtonProps> = ({
-    type,
-    key,
-    onUserResponseButtonClick,
-    children }) => (
+const UserResponseButton: Component<UserResponseButtonProps> = props => (
     <button
         class="neon-theme-front-accent"
-        onClick={() => onUserResponseButtonClick(type, key)}>
-        {children}
+        onClick={() => props.onUserResponseButtonClick(props.type, props.key)}>
+        {props.children}
     </button>
 );

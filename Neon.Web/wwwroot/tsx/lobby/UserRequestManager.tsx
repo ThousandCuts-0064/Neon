@@ -99,13 +99,13 @@ interface ActiveUsersProps {
     readonly onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
-const ActiveUsers: Component<ActiveUsersProps> = ({ activeUsers, onUserRequestButtonClick }) => (
-    <For each={activeUsers}>{x =>
+const ActiveUsers: Component<ActiveUsersProps> = props => (
+    <For each={props.activeUsers}>{x =>
         <ActiveUserRow
             key={x.key}
             username={x.username}
             canReceive={x.canReceive}
-            onUserRequestButtonClick={onUserRequestButtonClick} />
+            onUserRequestButtonClick={props.onUserRequestButtonClick} />
     }</For>);
 
 
@@ -122,18 +122,15 @@ interface IncomingUserRequestsProps {
     readonly onDeclineButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
 }
 
-const IncomingUserRequests: Component<IncomingUserRequestsProps> = ({
-    incomingUserRequests,
-    onAcceptButtonClick,
-    onDeclineButtonClick }) => (
-    <For each={incomingUserRequests}>{x =>
+const IncomingUserRequests: Component<IncomingUserRequestsProps> = props => (
+    <For each={props.incomingUserRequests}>{x =>
         <IncomingUserRequestRow
             createdAt={x.createdAt}
             type={x.type}
             key={x.user.key}
             username={x.user.username}
-            onAcceptButtonClick={onAcceptButtonClick}
-            onDeclineButtonClick={onDeclineButtonClick} />
+            onAcceptButtonClick={props.onAcceptButtonClick}
+            onDeclineButtonClick={props.onDeclineButtonClick} />
     }</For>);
 
 
@@ -142,7 +139,6 @@ type OutgoingUserRequest = {
     readonly createdAt: Date;
     readonly type: UserRequestType;
     readonly user: User;
-    readonly onCancelButtonClick: (userRequestType: UserRequestType, requesterKey: string) => void;
 };
 
 interface OutgoingUserRequestsProps {
@@ -150,12 +146,12 @@ interface OutgoingUserRequestsProps {
     readonly onCancelButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
-const OutgoingUserRequests: Component<OutgoingUserRequestsProps> = ({ outgoingUserRequests, onCancelButtonClick }) => (
-    <For each={outgoingUserRequests}>{x =>
+const OutgoingUserRequests: Component<OutgoingUserRequestsProps> = props => (
+    <For each={props.outgoingUserRequests}>{x =>
         <OutgoingUserRequestRow
             createdAt={x.createdAt}
             type={x.type}
             key={x.user.key}
             username={x.user.username}
-            onCancelButtonClick={onCancelButtonClick} />
+            onCancelButtonClick={props.onCancelButtonClick} />
     }</For>);

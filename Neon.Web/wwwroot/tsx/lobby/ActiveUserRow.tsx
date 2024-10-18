@@ -12,33 +12,29 @@ export interface ActiveUserRowProps {
     readonly onUserRequestButtonClick: (userRequestType: UserRequestType, responderKey: string) => void;
 }
 
-const ActiveUserRow: Component<ActiveUserRowProps> = ({
-    key,
-    username,
-    canReceive,
-    onUserRequestButtonClick }) => (
+const ActiveUserRow: Component<ActiveUserRowProps> = props => (
     <div class="neon-lobby-user-row">
-        <div class="neon-username">{username}</div>
+        <div class="neon-username">{props.username}</div>
         <div class="neon-lobby-user-row-menu">
             <UserRequestButton
                 type={UserRequestType.Duel}
-                key={key}
-                canReceive={canReceive}
-                onUserRequestButtonClick={onUserRequestButtonClick}>
+                key={props.key}
+                canReceive={props.canReceive}
+                onUserRequestButtonClick={props.onUserRequestButtonClick}>
                 <SvgDuel />
             </UserRequestButton>
             <UserRequestButton
                 type={UserRequestType.Trade}
-                key={key}
-                canReceive={canReceive}
-                onUserRequestButtonClick={onUserRequestButtonClick}>
+                key={props.key}
+                canReceive={props.canReceive}
+                onUserRequestButtonClick={props.onUserRequestButtonClick}>
                 <SvgTrade />
             </UserRequestButton>
             <UserRequestButton
                 type={UserRequestType.Friend}
-                key={key}
-                canReceive={canReceive}
-                onUserRequestButtonClick={onUserRequestButtonClick}>
+                key={props.key}
+                canReceive={props.canReceive}
+                onUserRequestButtonClick={props.onUserRequestButtonClick}>
                 <SvgFriend />
             </UserRequestButton>
         </div>
@@ -57,16 +53,11 @@ interface UserRequestButtonProps {
 
 const getButtonColor = (isEnabled: boolean) => isEnabled ? ThemeColor.Accent : ThemeColor.Common;
 
-const UserRequestButton: Component<UserRequestButtonProps> = ({
-    type,
-    key,
-    canReceive,
-    onUserRequestButtonClick,
-    children }) => (
+const UserRequestButton: Component<UserRequestButtonProps> = props => (
     <button
-        class={`neon-theme-front-${getButtonColor(canReceive[type])}`}
-        onClick={() => onUserRequestButtonClick(type, key)}
-        disabled={!canReceive[type]}>
-        {children}
+        class={`neon-theme-front-${getButtonColor(props.canReceive[props.type])}`}
+        onClick={() => props.onUserRequestButtonClick(props.type, props.key)}
+        disabled={!props.canReceive[props.type]}>
+        {props.children}
     </button>
 );

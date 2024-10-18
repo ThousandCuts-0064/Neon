@@ -1,8 +1,10 @@
-﻿export default interface InitializeArgs {
-    readonly activeUsers: Array<ActiveUserModel>;
-    readonly friends: Array<FriendModel>;
-    readonly incomingUserRequests: Array<IncomingUserRequestModel>;
-    readonly outgoingUserRequests: Array<OtgoingUserRequestModel>;
+﻿import { UserRequestTypeInt } from "../enums/user-request-type";
+
+export default interface InitializeArgs {
+    readonly activeUsers: ActiveUserModel[];
+    readonly friends: FriendModel[];
+    readonly incomingUserRequests: IncomingUserRequestModel[];
+    readonly outgoingUserRequests: OtgoingUserRequestModel[];
 }
 
 interface ActiveUserModel {
@@ -16,21 +18,15 @@ interface FriendModel {
 }
 
 interface IncomingUserRequestModel {
-    readonly type: UserRequestType;
+    readonly type: UserRequestTypeInt;
     readonly requesterKey: string;
     readonly requesterUsername: string;
     readonly createdAt: Date;
 }
 
 interface OtgoingUserRequestModel {
-    readonly type: UserRequestType;
+    readonly type: UserRequestTypeInt;
     readonly responderKey: string;
     readonly responderUsername: string;
     readonly createdAt: Date;
-}
-
-enum UserRequestType {
-    Duel = 1,
-    Trade,
-    Friend
 }

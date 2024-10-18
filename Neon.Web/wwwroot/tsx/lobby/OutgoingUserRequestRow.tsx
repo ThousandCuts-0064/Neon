@@ -21,24 +21,19 @@ const renderUserRequestTypeSvg = (userRequestType: UserRequestType) => {
     }
 };
 
-const OutgoingUserRequestRow: Component<OutgoingUserRequestRowProps> = ({
-    createdAt,
-    type,
-    key,
-    username,
-    onCancelButtonClick }) => (
+const OutgoingUserRequestRow: Component<OutgoingUserRequestRowProps> = props => (
     <div class="neon-lobby-user-row">
         <div class="neon-lobby-user-row-info">
             <div class="neon-theme-front-common">
-                {renderUserRequestTypeSvg(type)}
+                {renderUserRequestTypeSvg(props.type)}
             </div>
         </div>
-        <div class="neon-username">{username}</div>
+        <div class="neon-username">{props.username}</div>
         <div class="neon-lobby-user-row-menu">
             <UserRequestButton
-                type={type}
-                key={key}
-                onUserRequestButtonClick={onCancelButtonClick}>
+                type={props.type}
+                key={props.key}
+                onUserRequestButtonClick={props.onCancelButtonClick}>
                 <SvgCross />
             </UserRequestButton>
         </div>
@@ -54,14 +49,10 @@ interface UserRequestButtonProps {
     readonly children: JSXElement;
 }
 
-const UserRequestButton: Component<UserRequestButtonProps> = ({
-    type,
-    key,
-    onUserRequestButtonClick,
-    children }) => (
+const UserRequestButton: Component<UserRequestButtonProps> = props => (
     <button
         class="neon-theme-front-accent"
-        onClick={() => onUserRequestButtonClick(type, key)}>
-        {children}
+        onClick={() => props.onUserRequestButtonClick(props.type, props.key)}>
+        {props.children}
     </button>
 );

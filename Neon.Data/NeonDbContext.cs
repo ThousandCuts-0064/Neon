@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Neon.Application;
 using Neon.Application.Interfaces;
 using Neon.Domain.Entities;
 using Neon.Domain.Entities.UserRequests;

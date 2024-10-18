@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Neon.Application;
 using Neon.Application.Interfaces;
 using Neon.Data;
 using Neon.Infrastructure.Configurations;

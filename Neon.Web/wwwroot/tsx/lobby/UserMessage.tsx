@@ -11,7 +11,10 @@ interface UserMessageProps {
 
 const UserMessage: Component<UserMessageProps> = props => (
     <li class="neon-user-message">
-        <span class={props.usernameClass}>{props.usernamePrefix}</span><span class={props.usernameClass}>{props.username}</span><span class={props.usernameClass}>{props.usernameSuffix}</span>
+        <span class={props.usernameClass}>{props.usernamePrefix}</span>
+        <span class={props.usernameClass}>{props.username}</span>
+        <span class={props.usernameClass}>{props.usernameSuffix}</span>
+        <span> </span>
         <span class={props.messageClass}>{props.message}</span>
     </li>
 );

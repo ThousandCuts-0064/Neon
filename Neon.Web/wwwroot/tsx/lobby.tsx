@@ -3,7 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import Resource from "resources/lobby-resource";
 import { escapeHtml } from "html";
 import UserRole from "enums/user-role";
-import UserRequestType from "enums/user-request-type";
+import UserRequestType, { parseUserRequestType } from "enums/user-request-type";
 import InitializeArgs from "args/initialize-args";
 import UserConnectionToggledArgs from "args/user-connection-toggle-args";
 import { UserMessageArgs, CommandMessageArgs } from "args/message-args";
@@ -74,33 +74,37 @@ const userRequestManager = new UserRequestManager(
 
 connection.on("Initialize", (args: InitializeArgs) => {
     args.activeUsers.forEach(x => {
-        const userSignals = usersSignals.getOrSet(x.key, () => new User(x.key, x.username));
+        const user = users.getOrSet(x.key, x.username);
 
-        userRequestManager.OnUserActivated({ user: userSignals });
+        userRequestManager.OnUserActivated(user);
     });
 
     args.friends.forEach(x => {
-        if (!usersSignals.has(x.key)) {
-            const userSignals = new User(x.key, x.username);
+        const user = users.getOrSet(x.key, x.username);
 
-            usersSignals.set(x.key, userSignals);
-        }
+        users.mutate(user.key, y => y.canReceive[UserRequestType.Friend] = false)
     });
 
     args.incomingUserRequests.forEach(x => {
-        if (!usersSignals.has(x.requesterKey)) {
-            const userSignals = new User(x.requesterKey, x.requesterUsername);
+        const user = users.getOrSet(x.requesterKey, x.requesterUsername);
 
-            usersSignals.set(x.requesterKey, userSignals);
-        }
+        userRequestManager.OnUserRequestReceived({
+            createdAt: x.createdAt,
+            type: parseUserRequestType(x.type),
+            user: user
+        });
     });
 
     args.outgoingUserRequests.forEach(x => {
-        if (!usersSignals.has(x.responderKey)) {
-            const userSignals = new User(x.responderKey, x.responderUsername);
+        const user = users.getOrSet(x.responderKey, x.responderUsername);
 
-            usersSignals.set(x.responderKey, userSignals);
-        }
+        users.mutate(user.key, y => y.canReceive[parseUserRequestType(x.type)] = false)
+
+        userRequestManager.OnUserRequestSent({
+            createdAt: x.createdAt,
+            type: parseUserRequestType(x.type),
+            user: user
+        });
     });
 });
 
@@ -204,22 +208,14 @@ connection.on("UserConnectionToggled", (args: UserConnectionToggledArgs) => {
         return;
 
     if (!args.isActive) {
-        usersSignals.delete(args.key);
+        userRequestManager.OnUserDeactivated(args.key);
 
         return;
     }
 
-    const activeUser = new User(
-        args.key,
-        args.username,
-        {
-            Duel: true,
-            Trade: true,
-            Friend: true,
-        }
-    );
+    const activeUser = new User(args.key, args.username);
 
-    usersSignals.set(args.key, activeUser);
+    userRequestManager.OnUserActivated(activeUser);
 });
 
 connection.on("DuelRequestSent", (args: UserRequestSentArgs) => {
@@ -312,25 +308,11 @@ neonUserInput.addEventListener("input", () => {
     }
 });
 
-neonUserForm.addEventListener("submit", () => {
+neonUserForm.addEventListener("submit", event => {
+    event.preventDefault();
+
     connection.send("HandleInput", neonUserInput.value);
 
     neonUserForm.reset();
     neonUserInput.classList.remove("neon-theme-front-warning", "neon-theme-front-accent");
-
-    return false;
-});
-
-$("#neon-lobby-incoming-user-requests").on("click", ".neon-lobby-user-row-menu button", function () {
-    const target = $(this);
-    const row = target.closest(".neon-lobby-user-row");
-    const userRequestType = row.find("[data-request-type]").attr("data-request-type");
-    const userRequestResponse = target.attr("data-request-response");
-
-
-    connection.send(`${userRequestResponse}${userRequestType}Request`, {
-        requesterKey: target.closest("[data-user-key]").attr("data-user-key")
-    });
-
-    row.remove();
 });
