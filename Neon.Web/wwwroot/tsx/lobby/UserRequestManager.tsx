@@ -57,6 +57,8 @@ export default class UserRequestManager {
                 outgoingUserRequests={outgoingUserRequests}
                 onCancelButtonClick={onCancelButtonClick} />,
             outgoingUserRequestsParent);
+
+        setInterval(() => console.log(activeUsers.length), 3000);
     }
 
     public OnUserActivated(activeUser: User) {

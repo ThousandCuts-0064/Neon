@@ -1,6 +1,6 @@
 ﻿import UserRequestType from "../enums/user-request-type";
 import User from "./user";
-import { createStore, SetStoreFunction, produce, createMutable } from "solid-js/store";
+import { createStore, SetStoreFunction, produce } from "solid-js/store";
 
 export default class Users {
     private users = new Map<string, User>();
@@ -20,7 +20,7 @@ export default class Users {
         if (value !== undefined)
             return value;
 
-        const [user, setUser] = createStore(createMutable(new User(key, username, canReceive)));
+        const [user, setUser] = createStore({ key, username, canReceive});
 
         this.users.set(key, user);
         this.usersSet.set(key, setUser);
